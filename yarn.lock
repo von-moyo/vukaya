@@ -799,6 +799,13 @@
   dependencies:
     tslib "^2.4.0"
 
+"@types/axios@^0.14.4":
+  version "0.14.4"
+  resolved "https://registry.yarnpkg.com/@types/axios/-/axios-0.14.4.tgz#174e3a05fe7677f13bc719f0d2a427f5defacedf"
+  integrity sha512-9JgOaunvQdsQ/qW2OPmE5+hCeUB52lQSolecrFrthct55QekhmXEwT203s20RL+UHtCQc15y3VXpby9E7Kkh/g==
+  dependencies:
+    axios "*"
+
 "@types/babel__core@^7.20.5":
   version "7.20.5"
   resolved "https://registry.npmjs.org/@types/babel__core/-/babel__core-7.20.5.tgz"
@@ -837,6 +844,11 @@
   resolved "https://registry.npmjs.org/@types/estree/-/estree-1.0.7.tgz"
   integrity sha512-w28IoSUCJpidD/TGviZwwMJckNESJZXFu7NBZ5YJ4mEUnNraUn9Pm8HSZm/jDF1pDWYKspWE7oVphigUPRakIQ==
 
+"@types/js-cookie@^3.0.6":
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/@types/js-cookie/-/js-cookie-3.0.6.tgz#a04ca19e877687bd449f5ad37d33b104b71fdf95"
+  integrity sha512-wkw9yd1kEXOPnvEeEV1Go1MmxtBJL0RR79aOTAApecWFVu7w0NNXNqhcWgvw2YgZDYadliXkl14pa3WXw5jlCQ==
+
 "@types/json-schema@^7.0.15":
   version "7.0.15"
   resolved "https://registry.npmjs.org/@types/json-schema/-/json-schema-7.0.15.tgz"
@@ -860,6 +872,13 @@
   integrity sha512-JeG0rEWak0N6Itr6QUx+X60uQmN+5t3j9r/OVDtWzFXKaj6kD1BwJzOksD0FF6iWxZlbE1kB0q9vtnU2ekqa1Q==
   dependencies:
     csstype "^3.0.2"
+
+"@types/swiper@^6.0.0":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@types/swiper/-/swiper-6.0.0.tgz#9934ecd569611b660a2a9bf200f25ce5ba4b4d63"
+  integrity sha512-QPZRgxZ+ivXXtzV43B3LxpXUIC7FE/EoKM+rtxngmgt2M7eeUYypZhyqZD8UxJtlBcUDw/ATGoVeSNpvBBrz2w==
+  dependencies:
+    swiper "*"
 
 "@typescript-eslint/eslint-plugin@8.33.0":
   version "8.33.0"
@@ -1019,7 +1038,7 @@ autoprefixer@^10.4.21:
     picocolors "^1.1.1"
     postcss-value-parser "^4.2.0"
 
-axios@^1.9.0:
+axios@*, axios@^1.9.0:
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.9.0.tgz#25534e3b72b54540077d33046f77e3b8d7081901"
   integrity sha512-re4CqKTJaURpzbLHtIi6XpDv20/CnpXOtjRY5/CU32L8gU8ek9UIivcfvSWvmKEngmVbrUtPpdDwWDWL7DNHvg==
@@ -2070,6 +2089,11 @@ react-hook-form@^7.56.4:
   resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.56.4.tgz#273f55d43fb24ace3e2b9409d0d5326306d7905e"
   integrity sha512-Rob7Ftz2vyZ/ZGsQZPaRdIefkgOSrQSPXfqBdvOPwJfoGnjwRJUs7EM7Kc1mcoDv3NOtqBzPGbcMB8CGn9CKgw==
 
+react-icons@^5.5.0:
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-5.5.0.tgz#8aa25d3543ff84231685d3331164c00299cdfaf2"
+  integrity sha512-MEFcXdkP3dLo8uumGI5xN3lDFNsRtrjbOEKDLD7yv76v4wpnEq2Lt2qeHaQOr34I/wPN3s3+N08WkQ+CW37Xiw==
+
 react-refresh@^0.17.0:
   version "0.17.0"
   resolved "https://registry.npmjs.org/react-refresh/-/react-refresh-0.17.0.tgz"
@@ -2207,6 +2231,11 @@ svg-parser@^2.0.4:
   version "2.0.4"
   resolved "https://registry.npmjs.org/svg-parser/-/svg-parser-2.0.4.tgz"
   integrity sha512-e4hG1hRwoOdRb37cIMSgzNsxyzKfayW6VOflrwvR+/bzrkyxY/31WkbgnQpgtrNp1SdpJvpUAGTa/ZoiPNDuRQ==
+
+swiper@*, swiper@^11.2.8:
+  version "11.2.8"
+  resolved "https://registry.yarnpkg.com/swiper/-/swiper-11.2.8.tgz#2b5d7da3093454c0a7bf090f1714fb4332142702"
+  integrity sha512-S5FVf6zWynPWooi7pJ7lZhSUe2snTzqLuUzbd5h5PHUOhzgvW0bLKBd2wv0ixn6/5o9vwc/IkQT74CRcLJQzeg==
 
 tailwind-merge@^3.3.0:
   version "3.3.0"
