@@ -2,9 +2,9 @@ import { createBrowserRouter } from "react-router-dom";
 import {
   NotFound,
   Login,
+  Home,
 } from "../pages";
 import { MainLayout } from "../components";
-import Home from "../pages/home";
 const router = createBrowserRouter([
   {
     path: "/login",

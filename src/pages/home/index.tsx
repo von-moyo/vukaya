@@ -78,8 +78,7 @@ const CentralCommandSection: React.FC = () => {
   );
 };
 
-// Main Landing Page Component
-const Home: React.FC = () => {
+export const Home: React.FC = () => {
   return (
     <div className="min-h-screen bg-white">
       <HeroSection />
@@ -96,5 +95,3 @@ const Home: React.FC = () => {
     </div>
   );
 };
-
-export default Home;

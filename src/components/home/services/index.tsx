@@ -88,17 +88,13 @@ const AdvisoryServices: React.FC = () => {
           boxShadow: 'inset 0 40px 30px -30px rgba(0, 0, 0, 0.3)',
         }}
       >
-        <div className='grid grid-cols-2 -mt-10'>
+        <div className='grid grid-cols-2 -mt-14'>
           <div>
             <div className="flex flex-wrap items-center max-w-4xl">
               {tealServices.slice(0, 4).map((service, index) => (
                 <div key={index} className="col-span-1 flex justify-center">
                   <Hexagon
-                    text={service}
-                    outerBorderColor="rgba(5, 68, 121, 0.1)"
-                    middleBorderColor="#0D9488"
-                    innerBorderColor="rgba(6, 182, 212, 0.4)"
-                    size="medium"
+                    subpage={{label: service, href: ''}} service={{hexColor: 'green'}}
                   />
                 </div>
               ))}
@@ -107,11 +103,7 @@ const AdvisoryServices: React.FC = () => {
               {tealServices.slice(4).map((service, index) => (
                 <div key={index + 4} className="col-span-1 flex justify-center">
                   <Hexagon
-                    text={service}
-                    outerBorderColor="rgba(5, 68, 121, 0.1)"
-                    middleBorderColor="#0D9488"
-                    innerBorderColor="rgba(6, 182, 212, 0.4)"
-                    size="medium"
+                    subpage={{label: service, href: ''}} service={{hexColor: 'green'}}
                   />
                 </div>
               ))}
@@ -122,11 +114,7 @@ const AdvisoryServices: React.FC = () => {
               {blueServices.slice(0, 4).map((service, index) => (
                 <div key={index} className="col-span-1 flex justify-center">
                   <Hexagon
-                    text={service}
-                    outerBorderColor="rgba(5, 68, 121, 0.1)"
-                    middleBorderColor="#1D4ED8"
-                    innerBorderColor="rgba(59, 130, 246, 0.4)"
-                    size="medium"
+                    subpage={{label: service, href: ''}} service={{hexColor: 'blue'}}
                   />
                 </div>
               ))}
@@ -135,11 +123,7 @@ const AdvisoryServices: React.FC = () => {
               {blueServices.slice(4).map((service, index) => (
                 <div key={index + 4} className="col-span-1 flex justify-center">
                   <Hexagon
-                    text={service}
-                    outerBorderColor="rgba(5, 68, 121, 0.1)"
-                    middleBorderColor="#1D4ED8"
-                    innerBorderColor="rgba(59, 130, 246, 0.4)"
-                    size="medium"
+                    subpage={{label: service, href: ''}} service={{hexColor: 'blue'}}
                   />
                 </div>
               ))}
