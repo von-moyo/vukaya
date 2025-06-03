@@ -180,7 +180,6 @@ export const Header = () => {
     >
       <div className="mx-[35px]">
         <div className="flex items-center justify-between h-20">
-          {/* Logo */}
           <Link to='/'>
             <motion.div
               className="flex items-center space-x-3 cursor-pointer"
@@ -191,8 +190,6 @@ export const Header = () => {
             </motion.div>
           </Link>
 
-
-          {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
             {navItems.map((item, index) => (
               <div

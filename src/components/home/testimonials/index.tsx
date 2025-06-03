@@ -46,13 +46,13 @@ export default function Testimoninals() {
           modules={[Pagination]}
           pagination={{
             clickable: true,
-            el: '.custom-pagination', // Custom pagination container
-            bulletClass: 'custom-bullet', // Custom bullet class
-            bulletActiveClass: 'custom-bullet-active' // Active bullet class
+            el: '.custom-pagination',
+            bulletClass: 'custom-bullet',
+            bulletActiveClass: 'custom-bullet-active'
           }}
-          centeredSlides={true}
-          slidesPerView={1.2}
-          spaceBetween={30}
+          centeredSlides={false}
+          slidesPerView={3}
+          spaceBetween={40}
           loop={true}
           breakpoints={{
             768: { slidesPerView: 1.5 },
@@ -60,15 +60,14 @@ export default function Testimoninals() {
           }}
           className="!overflow-visible h-full flex flex-col"
         >
-          {/* Wrapper div for vertical centering */}
           <div className="flex-1 flex items-center">
             {testimonials.map((item, index) => (
-              <SwiperSlide key={index} className="h-auto flex items-center">
+              <SwiperSlide key={index} className="h-auto flex items-center my-auto">
                 <motion.div
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6 }}
-                  className="relative mx-auto my-auto max-w-xl text-center scale-90 swiper-slide-active:scale-100 transition-transform duration-300"
+                  className={`${index === 0 ? "swiper-slide-active:scale-100" : "scale-75"} relative mx-auto my-auto max-w-xl text-center swiper-slide-active:scale-100 transition-transform duration-300`}
                   style={{
                     borderRadius: '10px',
                     padding: '60px',

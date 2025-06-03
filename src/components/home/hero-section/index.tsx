@@ -2,21 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
 export const HeroSection = () => {
-  const [isHovered, setIsHovered] = useState(true);
-  const containerVariants = {
-    initial: { width: 80 },
-    hover: { width: 240, transition: { duration: 0.3, ease: "easeOut" } },
-  };
-
-  const textVariants = {
-    initial: { opacity: 0, x: -20 },
-    hover: { opacity: 1, x: 0, transition: { duration: 0.2 } },
-  };
-
-  const iconVariants = {
-    initial: { x: 0 },
-    hover: { x: -10, transition: { duration: 0.3 } },
-  };
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
     <section className="relative w-full h-[60dvh] overflow-hidden">
@@ -128,37 +114,25 @@ export const HeroSection = () => {
       {/* Sticky Menu */}
       <div className="fixed right-0 top-1/2 z-30 transform -translate-y-1/2">
         <div className="flex flex-col space-y-1">
-          {/* <motion.div
-            className="relative overflow-hidden"
+
+          <motion.div
+            className="relative overflow-hidden flex"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
             initial={{ width: 80 }}
-            whileHover={{ width: 320 }}
+            animate={{ width: isHovered ? 180 : 80 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
             style={{
-              clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
-              height: '60px'
+              height: "60px",
             }}
           >
-            <motion.a
-              href="https://platform.fortified.io/login"
-              className="absolute inset-0 bg-blue-600 hover:bg-blue-700 flex items-center px-4 transition-colors duration-300"
-              style={{
-                clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)'
-              }}
+            <div className='bg-orange-600 w-[30px] h-[30px] top-1/2 transform -translate-y-1/2 rotate-45 absolute ml-8'></div>
+            <a
+              href="https://fortifiedhealthsecurity.com/security-incident/"
+              className="absolute inset-0 bg-orange-600 hover:bg-orange-700 flex items-center px-4 transition-colors duration-300"
             >
-              <motion.span
-                className="text-white font-medium text-sm mr-4"
-                initial={{ opacity: 0, x: -20 }}
-                whileHover={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.3, delay: 0.1 }}
-              >
-                Fortified Central Command
-              </motion.span>
-              
               <motion.div
-                className="ml-auto"
-                initial={{ x: 0 }}
-                whileHover={{ x: -10 }}
-                transition={{ duration: 0.3 }}
+                className="mr-4"
               >
                 <svg
                   className="w-6 h-6 text-white"
@@ -166,14 +140,22 @@ export const HeroSection = () => {
                   stroke="currentColor"
                   viewBox="0 0 24 24"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  <circle cx="12" cy="12" r="10" strokeWidth={2} fill="none" />
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2" strokeWidth={2} />
+                  <path d="M9 9l6 6m0-6l-6 6" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} />
                 </svg>
               </motion.div>
-            </motion.a>
-          </motion.div> */}
-
-          {/* Security Incident */}
+              <motion.span
+                className="text-white font-medium text-sm mr-4 whitespace-nowrap"
+                animate={{
+                  opacity: isHovered ? 1 : 0,
+                  x: isHovered ? 0 : -20,
+                }}
+                transition={{ duration: 0.2 }}
+              >
+                Fortified Central Command
+              </motion.span>
+            </a>
+          </motion.div>
 
           <motion.div
             className="relative overflow-hidden flex"

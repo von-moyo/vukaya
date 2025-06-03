@@ -44,7 +44,7 @@ const footerSections = [
 
 const Footer = () => {
   return (
-    <footer className="bg-white text-sm text-gray-800 border-t mt-10">
+    <footer className="bg-white text-sm text-gray-800 mt-10">
       <div className="md:max-w-screen-xl mx-auto px-4 py-10 flex flex-col md:flex-row justify-between gap-10 flex-wrap">
         {/* Left Section */}
         <div className="md:w-64">
@@ -91,7 +91,7 @@ const Footer = () => {
       </div>
 
       {/* Footer Bottom */}
-      <div className="border-t text-xs text-center text-gray-600 py-4 px-4">
+      <div className="text-xs text-center text-gray-600 py-4 px-4">
         <p>
           © Copyright 2024 Fortified Health Security, Inc. All rights reserved.{" "}
           <a href="#" className="hover:underline">
