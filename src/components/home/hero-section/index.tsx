@@ -36,7 +36,7 @@ export const HeroSection = () => {
             type="video/mp4"
           />
         </video>
-        <style jsx>{`
+        <style>{`
           @media (max-width: 640px) {
             .bg:before {
               content: "";
