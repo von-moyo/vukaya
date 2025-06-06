@@ -5,17 +5,17 @@ import { motion } from "framer-motion";
 
 const testimonials = [
   {
-    text: "The time and cost savings, improved efficiencies, and the confidence gained from better protecting our ‘house’ have delivered the return on investment we’d hoped for. However, what sets Fortified apart is how they conduct their business. We’ve dealt with vendors who disappear after implementing their service or solution, but that’s not the case with Fortified. We have ongoing communication with multiple team members who genuinely care about helping us safeguard our organization, patients, and community. It’s a true partnership.",
+    text: "The time and cost savings, improved efficiencies, and the confidence gained from better protecting our ‘house’ have delivered the return on investment we’d hoped for. However, what sets Qorwyn apart is how they conduct their business. We’ve dealt with vendors who disappear after implementing their service or solution, but that’s not the case with Qorwyn. We have ongoing communication with multiple team members who genuinely care about helping us safeguard our organization, patients, and community. It’s a true partnership.",
     author: "Ann Wright, Director of IT and Informatics",
     org: "OrthoNebraska Hospital",
   },
   {
-    text: "Partnering with Fortified and our incredible VISO has given me peace of mind. We’re not only doing the right things to protect our hospital and our patients, but we’re also building confidence and trust in the process, which is vital. The strides we’ve made since joining forces with Fortified have been nothing short of revolutionary, and I can’t express enough how much of a positive impact they’ve had within our organization.",
+    text: "Partnering with Qorwyn and our incredible VISO has given me peace of mind. We’re not only doing the right things to protect our hospital and our patients, but we’re also building confidence and trust in the process, which is vital. The strides we’ve made since joining forces with Qorwyn have been nothing short of revolutionary, and I can’t express enough how much of a positive impact they’ve had within our organization.",
     author: "CIO",
     org: "Health System",
   },
   {
-    text: "With Fortified, I don’t have to sit there and explain repeatedly why I can’t do something or why we can’t patch a certain vulnerability related to a medical device. They already know the answer. In fact, many times they guide me on what we should do so that we don’t inadvertently break something critical to serving patients. Having a partner with that experience and expertise is priceless.",
+    text: "With Qorwyn, I don’t have to sit there and explain repeatedly why I can’t do something or why we can’t patch a certain vulnerability related to a medical device. They already know the answer. In fact, many times they guide me on what we should do so that we don’t inadvertently break something critical to serving patients. Having a partner with that experience and expertise is priceless.",
     author: "ISO",
     org: "Health System",
   },
@@ -38,7 +38,7 @@ export default function Testimoninals() {
       <div className="relative z-10 max-w-6xl mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800">
-            What It’s Like <br /> Working With <span className="text-[#2ea38f]">Fortified</span>
+            What It’s Like <br /> Working With <span className="text-[#2ea38f]">Qorwyn</span>
           </h2>
         </div>
 

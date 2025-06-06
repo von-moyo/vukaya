@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { StickyMenu } from '../sticky-menu';
 
 export const HeroSection = () => {
-  const [isHovered, setIsHovered] = useState(false);
-
   return (
-    <section className="relative w-full h-[60dvh] overflow-hidden">
+    <section className="relative w-full sm:h-[60dvh] h-auto sm:pb-0 pb-[250px] overflow-hidden">
       <div className="bg bg-desktop absolute inset-0">
         <div className="img-bg absolute inset-0">
           <img
             src="https://fortifiedhealthsecurity.com/wp-content/uploads/2024/01/FHC_Hero_V1cp.png"
-            alt="Fortified Health Security Background"
+            alt="Qorwyn Health Security Background"
             className="img-fluid w-full h-full object-cover object-center"
             style={{
               '--smush-placeholder-width': '1426px',
@@ -27,7 +26,7 @@ export const HeroSection = () => {
           autoPlay
           loop
           playsInline
-          className="absolute right-0 top-0 w-full h-full object-cover"
+          className="absolute right-0 sm:top-0 top-[35%] w-full sm:h-full h-[65%] object-cover"
           style={{
             objectPosition: 'top 50% right 18%'
           }}
@@ -36,34 +35,49 @@ export const HeroSection = () => {
             src="https://fortifiedhealthsecurity.com/wp-content/uploads/2024/03/Security_V4cp_UpdatedVein.mp4"
             type="video/mp4"
           />
-          Your browser does not support the video tag.
         </video>
+        <style jsx>{`
+          @media (max-width: 640px) {
+            .bg:before {
+              content: "";
+              width: 530%;
+              left: 0;
+              bottom: 100%;
+              position: absolute;
+              z-index: 2;
+              transform: rotate(0);
+              background: radial-gradient(circle, #03182a 0%, #03182b 100%);
+              box-shadow: 0px 250px 20px 7px #021729;
+              height: 300px;
+            }
+          }
+        `}</style>
       </div>
 
-      <div className="relative z-10 flex items-center h-full">
+      <div className="relative z-10 flex sm:items-center h-full">
         <div className="container mx-auto lg:px-6">
-          <div className="flex items-center justify-between h-full">
+          <div className="flex sm:flex-row sm:items-center justify-between h-full sm:ml-0 ml-8 sm:mt-0 mt-8">
             <div className="w-full lg:w-1/2 text-left">
               <motion.h1
-                className="text-5xl lg:text-6xl xl:text-7xl text-white mb-8"
+                className="sm:text-5xl  text-4xl lg:text-6xl xl:text-7xl text-white sm:mb-8 mb-6 max-w-[50%]"
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
               >
-                Your<br />
-                Healthcare<br />
+                Your
+                Healthcare
                 Cybersecurity<br />
                 <span className="text-[#2ea38f] font-bold">Partner</span>
               </motion.h1>
 
               <motion.p
-                className="text-lg lg:text-sm text-gray-200 mb-8 leading-relaxed max-w-[clamp(240px,21vw,440px)]"
+                className="text-xs sm:text-sm lg:text-base text-gray-200 mb-8 leading-relaxed sm:max-w-[55%] max-w-[75%]"
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
               >
                 Customized services that strengthen cybersecurity resiliency, protect patients, and defend against threats. Discover why{' '}
-                <span className="text-[#2ea38f] font-semibold">Fortified Health Security</span>{' '}
+                <span className="text-[#2ea38f] font-semibold">Qorwyn Health Security</span>{' '}
                 is the MSSP partner of choice for healthcare systems in the U.S. and across the globe.
               </motion.p>
 
@@ -73,7 +87,7 @@ export const HeroSection = () => {
                 transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
               >
                 <motion.button
-                  className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg text-xs cursor-pointer font-bold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl"
+                  className="bg-[#BE4623] hover:bg-[#95381D] text-white px-4 py-3 rounded-[5px]  text-[10px] sm:text-xs cursor-pointer font-bold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl"
                   whileHover={{
                     scale: 1.05,
                     boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1)"
@@ -85,7 +99,6 @@ export const HeroSection = () => {
                 </motion.button>
               </motion.div>
             </div>
-
           </div>
         </div>
       </div>
@@ -111,96 +124,7 @@ export const HeroSection = () => {
         </svg>
       </div>
 
-      {/* Sticky Menu */}
-      <div className="fixed right-0 top-1/2 z-30 transform -translate-y-1/2">
-        <div className="flex flex-col space-y-1">
-
-          <motion.div
-            className="relative overflow-hidden flex"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            initial={{ width: 80 }}
-            animate={{ width: isHovered ? 180 : 80 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-            style={{
-              height: "60px",
-            }}
-          >
-            <div className='bg-orange-600 w-[30px] h-[30px] top-1/2 transform -translate-y-1/2 rotate-45 absolute ml-8'></div>
-            <a
-              href="https://fortifiedhealthsecurity.com/security-incident/"
-              className="absolute inset-0 bg-orange-600 hover:bg-orange-700 flex items-center px-4 transition-colors duration-300"
-            >
-              <motion.div
-                className="mr-4"
-              >
-                <svg
-                  className="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2" strokeWidth={2} />
-                  <path d="M9 9l6 6m0-6l-6 6" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} />
-                </svg>
-              </motion.div>
-              <motion.span
-                className="text-white font-medium text-sm mr-4 whitespace-nowrap"
-                animate={{
-                  opacity: isHovered ? 1 : 0,
-                  x: isHovered ? 0 : -20,
-                }}
-                transition={{ duration: 0.2 }}
-              >
-                Fortified Central Command
-              </motion.span>
-            </a>
-          </motion.div>
-
-          <motion.div
-            className="relative overflow-hidden flex"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            initial={{ width: 80 }}
-            animate={{ width: isHovered ? 180 : 80 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-            style={{
-              height: "60px",
-            }}
-          >
-            <div className='bg-orange-600 w-[30px] h-[30px] top-1/2 transform -translate-y-1/2 rotate-45 absolute ml-8'></div>
-            <a
-              href="https://fortifiedhealthsecurity.com/security-incident/"
-              className="absolute inset-0 bg-orange-600 hover:bg-orange-700 flex items-center px-4 transition-colors duration-300"
-            >
-              <motion.div
-                className="mr-4"
-              >
-                <svg
-                  className="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2" strokeWidth={2} />
-                  <path d="M9 9l6 6m0-6l-6 6" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} />
-                </svg>
-              </motion.div>
-              <motion.span
-                className="text-white font-medium text-sm mr-4 whitespace-nowrap"
-                animate={{
-                  opacity: isHovered ? 1 : 0,
-                  x: isHovered ? 0 : -20,
-                }}
-                transition={{ duration: 0.2 }}
-              >
-                Security Incident
-              </motion.span>
-            </a>
-          </motion.div>
-        </div>
-      </div>
-
+      <StickyMenu />
     </section>
   );
 };

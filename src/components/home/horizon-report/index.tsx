@@ -2,7 +2,7 @@ import React from "react";
 
 export default function HorizonReportSection() {
   return (
-<section className="relative flex items-center bg-gradient-to-r from-cyan-950 py-24 px-4 md:px-12 lg:px-24 text-white">
+<section className="relative flex items-center bg-gradient-to-r lg:from-cyan-950 py-24 px-4 md:px-12 lg:px-24 text-white">
   <div className="absolute inset-0 z-0">
     <div 
       className="w-full h-full bg-cover bg-center"
@@ -19,22 +19,22 @@ export default function HorizonReportSection() {
       <img
         src="https://fortifiedhealthsecurity.com/wp-content/uploads/2025/01/2025_HorizonReport_cover-791x1024.jpg"
         alt="2025 Horizon Report Cover"
-        className="w-3/4 md:w-2/3 lg:w-full h-full shadow-xl"
+        className="w-2/3 lg:w-full h-full shadow-xl lg:mr-0 mr-auto lg:ml-0 ml-[3%]"
       />
     </div>
 
-    <div className="space-y-6 text-center lg:text-left text-white font-light">
-      <h2 className="text-3xl md:text-6xl">
-        Fortified Horizon <br /> Reports
+    <div className="space-y-6 text-left text-white font-light lg:pl-0 pl-[3%]">
+      <h2 className="text-5xl xl:text-6xl text-[#414141]">
+        Qorwyn Horizon <br className="lg:block hidden"/> Reports
       </h2>
-      <p className="text-lg md:text-[32px] w-[90%]">
+      <p className="text-lg md:text-[32px] w-[90%] text-[#414141]">
         Our industry-leading bi-annual publication on healthcare cybersecurity news, trends, and guidance.
       </p>
       <a
         href="https://fortifiedhealthsecurity.com/horizon-reports/"
         target="_blank"
         rel="noopener noreferrer"
-        className="bg-[#BE4623] hover:bg-orange-700 text-white px-4 py-4 rounded-lg text-xs cursor-pointer font-bold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl"
+        className="bg-[#BE4623] hover:bg-orange-700 text-white px-4 lg:py-4 py-3 rounded-lg text-xs cursor-pointer font-bold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl"
       >
         Download the Latest Report
       </a>

@@ -18,7 +18,7 @@ const footerSections = [
     ],
   },
   {
-    title: "WHY FORTIFIED",
+    title: "WHY QORWYN",
     links: ["Central Command", "Our Approach", "Awards", "Case Studies"],
   },
   {
@@ -50,7 +50,7 @@ const Footer = () => {
         <div className="md:w-64">
           <img src={LogoIcon} alt='logo icon' className='mb-4 w-full h-auto' />
           <p className="mb-2 text-blue-900">
-            connect@fortifiedhealthsecurity.com
+            connect@qorwynhealthsecurity.com
           </p>
           <p className="text-teal-700">
             120 Brentwood Commons Way
@@ -60,7 +60,7 @@ const Footer = () => {
             Brentwood, TN 37027
           </p>
           <a
-            href="https://www.linkedin.com/company/fortified-health-security"
+            href="https://www.linkedin.com/company/qorwyn-health-security"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block mt-4 text-teal-600 hover:text-teal-800 text-2xl"
@@ -93,7 +93,7 @@ const Footer = () => {
       {/* Footer Bottom */}
       <div className="text-xs text-center text-gray-600 py-4 px-4">
         <p>
-          © Copyright 2024 Fortified Health Security, Inc. All rights reserved.{" "}
+          © Copyright 2024 Qorwyn Health Security, Inc. All rights reserved.{" "}
           <a href="#" className="hover:underline">
             Contact Us
           </a>{" "}
@@ -111,9 +111,9 @@ const Footer = () => {
           </a>
         </p>
         <p className="mt-2">
-          Fortified Health Security is healthcare’s recognized leader in
+          Qorwyn Health Security is healthcare’s recognized leader in
           cybersecurity – protecting patient data and reducing risk throughout
-          the Fortified healthcare ecosystem.
+          the Qorwyn healthcare ecosystem.
         </p>
       </div>
     </footer>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules';
+import { FaAssistiveListeningSystems } from 'react-icons/fa';
 
 const AwardsCarousel: React.FC = () => {
   const awards = [
@@ -16,28 +17,29 @@ const AwardsCarousel: React.FC = () => {
   ];
 
   return (
-    <div className="flex">
-      <div className="flex item-center text-center w-[15%] bg-[#054479] py-8">
-        <h2 className="text-2xl font-bold text-white grid place-content-center">Awarded for Excellence</h2>
+    <div className="flex lg:flex-row flex-col">
+      <div className="flex item-center text-center justify-center bg-[#054479] py-8 lg:w-[15%] mr-[3%] w-full">
+        <h2 className="sm:text-2xl text-3xl font-bold text-white grid place-content-center">Awarded for <br className="sm:hidden block" /> Excellence</h2>
       </div>
-      <div className="block-content w-[85%] py-4">
+      <div className="block-content lg:w-[82%] w-full sm:py-4 py-12">
         <Swiper
           modules={[Navigation, Autoplay]}
           spaceBetween={20}
           slidesPerView={6}
-          // navigation
           autoplay={{ delay: 3000, disableOnInteraction: false }}
           loop
           breakpoints={{
-            640: { slidesPerView: 6 },
-            480: { slidesPerView: 2 },
-            320: { slidesPerView: 1 },
+            1400: { slidesPerView: 6 },
+            1200: { slidesPerView: 5 },
+            1000: { slidesPerView: 4 },
+            640: { slidesPerView: 3 },
+            320: { slidesPerView: 2 },
           }}
         >
           {awards.map((award, index) => (
             <SwiperSlide key={index} className="grid place-content-center h-full my-auto">
               <div className="img w-full grid place-content-center">
-                <img src={award.src} alt={award.alt} className="object-contain max-h-26 max-w-full" />
+                <img src={award.src} alt={award.alt} className="object-contain max-h-26 max-w-[80%] sm:mx-0 mx-[5%]" />
               </div>
             </SwiperSlide>
           ))}
@@ -47,4 +49,4 @@ const AwardsCarousel: React.FC = () => {
   );
 };
 
-export default AwardsCarousel;
+export default AwardsCarousel

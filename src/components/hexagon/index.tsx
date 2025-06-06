@@ -1,22 +1,8 @@
+/* eslint-disable react-refresh/only-export-components */
 import React from "react";
 import { HexBlueIcon, HexGreenIcon } from "../../assets/icons";
 
-interface Subpage {
-  label: string;
-  href: string;
-}
-
-interface Service {
-  hexColor: 'green' | 'blue';
-}
-
-interface HexagonProps {
-  subpage: Subpage;
-  service: Service;
-}
-
-export const Hexagon: React.FC<HexagonProps> = ({ subpage, service }) => {
-function formatWordsToLines(text: string): string {
+export const formatWordsToLines = (text: string): string => {
   const words = text.split(' ');
   const lines: string[] = [];
 
@@ -38,6 +24,22 @@ function formatWordsToLines(text: string): string {
   return lines.join('\n');
 }
 
+
+interface Subpage {
+  label: string;
+  href: string;
+}
+
+interface Service {
+  hexColor: 'green' | 'blue';
+}
+
+interface HexagonProps {
+  subpage: Subpage;
+  service: Service;
+}
+
+export const Hexagon: React.FC<HexagonProps> = ({ subpage, service }) => {
 
   return (
     <li key={subpage.label} className="lg:px-[clamp(4px,0.3125vw,6px)] lg:w-1/4">
