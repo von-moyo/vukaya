@@ -48,7 +48,7 @@ const Footer = () => {
       <div className="md:max-w-screen-xl mx-auto px-4 py-10 flex flex-col md:flex-row justify-between gap-10 flex-wrap">
         {/* Left Section */}
         <div className="md:w-64">
-          <img src={LogoIcon} alt='logo icon' className='mb-4 w-full h-auto' />
+          <img src={LogoIcon} alt='logo icon' className='mb-4 md:w-full w-[256px] h-auto' />
           <p className="mb-2 text-blue-900">
             connect@qorwynhealthsecurity.com
           </p>
