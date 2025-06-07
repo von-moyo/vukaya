@@ -4,6 +4,10 @@ import {
   Login,
   Home,
   WhoWeServe,
+  HealthcareOrganization,
+  HealthcareTechnnology,
+  ProviderGroups,
+  HealthPlans,
 } from "../pages";
 import { MainLayout } from "../components";
 const router = createBrowserRouter([
@@ -23,24 +27,20 @@ const router = createBrowserRouter([
         element: <WhoWeServe />,
       },
       {
-        path: "/who-we-serve/healthcare-organizations",
-        element: <Home />,
+        path: "/who-we-serve/hospitals-health-systems",
+        element: <HealthcareOrganization />,
       },
       {
-        path: "/who-we-serve/financial-services",
-        element: <Home />,
+        path: "/who-we-serve/healthcare-technology-medical-devices-biotech",
+        element: <HealthcareTechnnology />,
       },
       {
-        path: "/who-we-serve/manufacturing",
-        element: <Home />,
+        path: "/who-we-serve/provider-groups",
+        element: <ProviderGroups />,
       },
       {
-        path: "/who-we-serve/government-agencies",
-        element: <Home />,
-      },
-      {
-        path: "/who-we-serve/technology-companies",
-        element: <Home />,
+        path: "/who-we-serve/health-plans",
+        element: <HealthPlans />,
       },
       {
         path: "*",

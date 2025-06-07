@@ -21,7 +21,7 @@ export default function HeroSection({
   gradientOverlay = "linear-gradient(to right, #03182b 0%, #218688 33%, rgba(45,163,143,0) 100%)",
   title,
   paragraphs,
-  titleClassName = "text-5xl xl:text-6xl",
+  titleClassName = "text-5xl xl:text-[56px]",
   paragraphClassName = "text-base",
   sectionClassName = "relative flex items-center px-7 md:px-12 md:px-24 text-white",
   containerClassName = "relative z-10 max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-[2.2fr_3fr] gap-10 items-center py-14 sm:py-30",

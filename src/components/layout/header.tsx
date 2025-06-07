@@ -78,11 +78,10 @@ export const Header = () => {
       href: '/who-we-serve',
       hasDropdown: true,
       items: [
-        'Healthcare Organizations',
-        'Financial Services',
-        'Manufacturing',
-        'Technology Companies',
-        'Government Agencies'
+        'Hospitals & Health Systems',
+        'Healthcare Technology,\n Medical Devices & Biotech',
+        'Provider Groups',
+        'Health Plans',
       ]
     },
     {
@@ -90,10 +89,10 @@ export const Header = () => {
       href: '/why-qorwyn',
       hasDropdown: true,
       items: [
+        'Central Commans',
         'Our Approach',
-        'Success Stories',
-        'Industry Expertise',
-        'Compliance Support'
+        'Awards',
+        'Case Stories',
       ]
     },
     {
@@ -101,11 +100,10 @@ export const Header = () => {
       href: '/resources',
       hasDropdown: true,
       items: [
+        'Horizon Reports',
         'Blog',
-        'White Papers',
-        'Case Studies',
-        'Webinars',
-        'Industry Reports'
+        'Threat Bulletins',
+        'Cyber Survivor',
       ]
     },
     {
@@ -113,10 +111,9 @@ export const Header = () => {
       href: '/events',
       hasDropdown: true,
       items: [
-        'Upcoming Events',
-        'Past Events',
-        'Webinar Series',
-        'Conference Speaking'
+        'Conferences and Shows',
+        'Roundtables',
+        'Webinars',
       ]
     },
     {
@@ -124,10 +121,12 @@ export const Header = () => {
       href: '/who-we-are',
       hasDropdown: true,
       items: [
-        'About Us',
-        'Leadership Team',
-        'Careers',
-        'Company Culture'
+        'Leadership',
+        'In The News',
+        'Board of Directors',
+        'Press Releases',
+        'Advisory Board',
+        'Join Our Team'
       ]
     },
     { name: 'Contact Us', href: '/contact-us', hasDropdown: false }

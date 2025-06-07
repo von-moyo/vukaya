@@ -4,7 +4,7 @@ import { StickyMenu } from '../sticky-menu';
 
 export const HeroSection = () => {
   return (
-    <section className="relative w-full sm:h-[60dvh] h-auto sm:pb-0 pb-[250px] overflow-hidden">
+    <section className="relative w-full sm:max-h-[863px] h-auto sm:pb-0 pb-[250px] overflow-hidden">
       <div className="bg bg-desktop absolute inset-0">
         <div className="img-bg absolute inset-0">
           <img
@@ -54,7 +54,7 @@ export const HeroSection = () => {
         `}</style>
       </div>
 
-      <div className="relative z-10 flex sm:items-center h-full">
+      <div className="relative z-10 flex sm:items-center h-full py-0 sm:py-34 lg:py-40">
         <div className="container mx-auto lg:px-6">
           <div className="flex sm:flex-row sm:items-center justify-between h-full sm:ml-0 ml-8 sm:mt-0 mt-8">
             <div className="w-full lg:w-1/2 text-left">

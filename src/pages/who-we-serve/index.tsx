@@ -23,10 +23,10 @@ export const WhoWeServe: React.FC = () => {
           "Fortified helps lighten the load of safeguarding patients by assisting with risk identification and strategic planning, bolstering threat management and defense resources, and cultivating resiliency.",
         ]}
         backgroundPosition='right 50vw bottom -240px'
-        textContainerClassName='grid lg:grid-cols-2 gap-[10%]'
-        containerClassName='relative z-10 max-w-[100%] ml-auto grid grid-cols-1 gap-10 items-center py-24'
+        textContainerClassName='grid lg:grid-cols-[2.9fr_3fr] gap-[5%]'
+        containerClassName='relative z-10 max-w-[100%] ml-auto grid grid-cols-1 gap-10 items-center py-24 xl:pl-[4%]'
         gradientOverlay=''
-        titleClassName='text-5xl xl:text-6xl text-[#414141] my-auto'
+        titleClassName='text-5xl xl:text-[56px] text-[#414141] my-auto'
         paragraphClassName='text-[#414141]'
         cta
         ctaClassName='w-fit button mt-4 inline-block bg-[#054479] text-white px-10 py-3 rounded-md sm:rounded-xl uppercase text-sm font-semibold'
@@ -38,9 +38,9 @@ export const WhoWeServe: React.FC = () => {
           "Healthcare technology companies face the daunting task of protecting sensitive data and systems while simultaneously providing multiple use cases and flexible configurations to support different client needs. And if recent broad-scale attacks are any indication, addressing vulnerabilities and maintaining vigilant update and patching cadences will continue to be a primary challenge.",
           "At Qorwyn, we offer comprehensive healthcare cybersecurity services tailored to the unique challenges and risk profiles of healthcare technology, medical device, and biotech companies. Our approach helps clients balance rapid innovation and ease of integration with robust cybersecurity measures to reduce risk."
         ]}
-        containerClassName='relative z-10 lg:max-w-[55%] max-w-full ml-auto grid grid-cols-1 gap-10 items-center py-26 sm:py-30'
+        containerClassName='relative z-10 lg:max-w-[50%] max-w-full ml-auto grid grid-cols-1 gap-10 items-center py-26 sm:py-30'
         gradientOverlay='linear-gradient(90deg, transparent 0%, #2DA38F 62%, #011D19 100%)'
-        titleClassName='text-5xl xl:text-6xl font-[900]'
+        titleClassName='text-5xl xl:text-[56px] font-[900]'
         cta
         ctaClassName='w-fit button mt-4 inline-block bg-[#BE4623] text-white px-10 py-3 rounded-md sm:rounded-xl uppercase text-sm font-semibold'
       />
@@ -52,10 +52,10 @@ export const WhoWeServe: React.FC = () => {
           "Fortified helps address these risks by bolstering data transfer security, ensuring regulatory compliance, and providing robust defense mechanisms against cyber threats in these critical care settings.",
         ]}
         backgroundPosition='right 50vw bottom -240px'
-        textContainerClassName='grid lg:grid-cols-2 gap-[10%]'
+        textContainerClassName='grid lg:grid-cols-[2fr_3fr] gap-[10%]'
         containerClassName='relative z-10 max-w-[100%] ml-auto grid grid-cols-1 gap-10 items-center py-24'
         gradientOverlay=''
-        titleClassName='text-5xl xl:text-6xl text-[#414141] my-auto'
+        titleClassName='text-5xl xl:text-[56px] text-[#414141] my-auto'
         paragraphClassName='text-[#414141]'
         cta
         ctaClassName='w-fit button mt-4 inline-block bg-[#054479] text-white px-10 py-3 rounded-md sm:rounded-xl uppercase text-sm font-semibold'
@@ -69,7 +69,7 @@ export const WhoWeServe: React.FC = () => {
         ]}
         containerClassName='relative z-10 lg:max-w-[55%] max-w-full ml-auto grid grid-cols-1 gap-10 items-center py-20 sm:py-30'
         gradientOverlay='linear-gradient(90deg, transparent 0%, #2DA38F 62%, #011D19 100%)'
-        titleClassName='text-5xl xl:text-6xl font-[900]'
+        titleClassName='text-5xl xl:text-[56px] font-[900]'
         cta
         ctaClassName='w-fit button mt-4 inline-block bg-[#BE4623] text-white px-10 py-3 rounded-md sm:rounded-xl uppercase text-sm font-semibold'
       />
