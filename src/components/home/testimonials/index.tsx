@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useRef, useState } from 'react';
+import SwiperCore from 'swiper';
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination } from "swiper/modules";
+import { Pagination, Autoplay } from "swiper/modules";
 import { motion } from "framer-motion";
 
 const testimonials = [
@@ -21,73 +22,98 @@ const testimonials = [
   },
 ];
 
-export default function Testimoninals() {
+export default function Testimonials() {
+  const swiperRef = useRef<SwiperCore | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
   return (
-    <section className="relative py-20 overflow-hidden shadow-lg"
+    <section
+      className="relative pt-12  pb-20 md:py-20 overflow-hidden bg-cover bg-center bg-no-repeat"
       style={{
         backgroundImage: `url('https://fortifiedhealthsecurity.com/wp-content/themes/fortifiedhealthsecurity/assets/images/pattern-hd.png')`,
         backgroundPosition: 'center -100px',
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
         boxShadow: 'inset 0 40px 30px -30px rgba(0, 0, 0, 0.3)',
       }}
     >
-      <div className="absolute inset-0">
-      </div>
+      <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent"></div>
 
-      <div className="relative z-10 max-w-6xl mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800">
-            What It’s Like <br /> Working With <span className="text-[#2ea38f]">Qorwyn</span>
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-8 md:mb-12">
+          <h2 className="text-5xl font-[900] text-[#414141] tracking-tight">
+            What It’s Like <br className="md:hidden" /> Working With <span className="text-teal-600">Qorwyn</span>
           </h2>
         </div>
 
         <Swiper
-          modules={[Pagination]}
+          modules={[Pagination, Autoplay]}
           pagination={{
             clickable: true,
-            el: '.custom-pagination',
             bulletClass: 'custom-bullet',
-            bulletActiveClass: 'custom-bullet-active'
+            bulletActiveClass: 'custom-bullet-active',
+            horizontalClass: 'horizontal'
           }}
-          centeredSlides={false}
-          slidesPerView={3}
-          spaceBetween={40}
-          loop={true}
+          centeredSlides={true}
+          initialSlide={1}
+          slidesPerView={1}
+          spaceBetween={20}
+          loop={false}
           breakpoints={{
-            768: { slidesPerView: 1.5 },
-            1024: { slidesPerView: 3 },
+            640: {
+              slidesPerView: 1,
+              spaceBetween: 20,
+            },
+            768: {
+              slidesPerView: 1.5,
+              spaceBetween: 30,
+            },
+            1024: {
+              slidesPerView: 3,
+              spaceBetween: 40,
+            },
           }}
-          className="!overflow-visible h-full flex flex-col"
+          onSwiper={(swiper) => (swiperRef.current = swiper)}
+          onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
+          className="!overflow-visible"
         >
-          <div className="flex-1 flex items-center">
-            {testimonials.map((item, index) => (
-              <SwiperSlide key={index} className="h-auto flex items-center my-auto">
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6 }}
-                  className={`${index === 0 ? "swiper-slide-active:scale-100" : "scale-75"} relative mx-auto my-auto max-w-xl text-center swiper-slide-active:scale-100 transition-transform duration-300`}
-                  style={{
-                    borderRadius: '10px',
-                    padding: '60px',
-                    background: 'linear-gradient(to bottom, #fff 0%, #fff 50%, #D1F2EC 100%)',
-                    boxShadow: '10px 10px 16px 10px rgba(112, 112, 112, 0.2)',
-                    margin: '-5px',
-                  }}
-                >
-                  <p className="text-lg font-medium italic mb-6 text-[#414141]">"{item.text}"</p>
-                  <p className="font-semibold">– {item.author}</p>
-                  <p className="text-sm text-[#414141]">{item.org}</p>
-                </motion.div>
-              </SwiperSlide>
-            ))}
-          </div>
+          {testimonials.map((item, index) => (
+            <SwiperSlide key={index} className="flex items-center justify-center">
+              <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className={`${index === activeIndex ? "swiper-slide-active:scale-100" : "scale-85"} w-full max-w-md sm:max-w-lg lg:max-w-xl h-[400px] sm:h-[550px] lg:h-[600px] p-6 sm:p-8 lg:p-10 bg-gradient-to-b from-white to-teal-50 rounded-xl shadow-2xl transform transition-transform duration-300 swiper-slide-active:scale-100 swiper-slide:scale-90 mx-auto flex flex-col justify-center`}
+              >
+                <p className="text-base sm:text-lg lg:text-xl font-medium italic text-gray-600 mb-6 text-center line-clamp-15">"{item.text}"</p>
+                <p className="font-semibold text-gray-800 text-center">– {item.author}</p>
+                <p className="text-sm text-gray-500 text-center">{item.org}</p>
 
-          {/* Custom pagination container - positioned further below */}
-          <div className="custom-pagination mt-10 !relative" />
+              </motion.div>
+            </SwiperSlide>
+          ))}
+          <div className="custom-pagination mt-8 flex justify-center space-x-2" />
         </Swiper>
       </div>
+
+      <style>{`
+        .custom-bullet {
+          display: inline-block;
+          width: 12px;
+          height: 12px;
+          margin-right: 20px;
+          background: #d1d5db;
+          border-radius: 50%;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+        .custom-bullet-active {
+          background: #2ea38f;
+          transform: scale(1.5);
+        }
+        .horizontal {
+          margin-top-30px;
+          bottom: -60px !important;
+        }
+      `}</style>
     </section>
   );
 }

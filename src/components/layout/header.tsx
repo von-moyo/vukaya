@@ -20,6 +20,7 @@ export const Header = () => {
   const [openDropdowns, setOpenDropdowns] = useState<any>({});
   const { isMobile } = useMobile({ size: 640 });
   const [expandedItem, setExpandedItem] = useState<string | null>(null);
+  
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
@@ -35,9 +36,14 @@ export const Header = () => {
     }));
   };
 
+  const toSlug = (text: string) => {
+    return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  };
+
   const navItems = [
     {
       name: 'Our Services',
+      href: '/our-services',
       hasDropdown: true,
       sections: [
         {
@@ -69,6 +75,7 @@ export const Header = () => {
     },
     {
       name: 'Who We Serve',
+      href: '/who-we-serve',
       hasDropdown: true,
       items: [
         'Healthcare Organizations',
@@ -80,6 +87,7 @@ export const Header = () => {
     },
     {
       name: 'Why Qorwyn',
+      href: '/why-qorwyn',
       hasDropdown: true,
       items: [
         'Our Approach',
@@ -90,6 +98,7 @@ export const Header = () => {
     },
     {
       name: 'Resources',
+      href: '/resources',
       hasDropdown: true,
       items: [
         'Blog',
@@ -101,6 +110,7 @@ export const Header = () => {
     },
     {
       name: 'Events',
+      href: '/events',
       hasDropdown: true,
       items: [
         'Upcoming Events',
@@ -111,6 +121,7 @@ export const Header = () => {
     },
     {
       name: 'Who We Are',
+      href: '/who-we-are',
       hasDropdown: true,
       items: [
         'About Us',
@@ -119,7 +130,7 @@ export const Header = () => {
         'Company Culture'
       ]
     },
-    { name: 'Contact Us', hasDropdown: false }
+    { name: 'Contact Us', href: '/contact-us', hasDropdown: false }
   ];
 
   const menuItems: MenuItem[] = [
@@ -236,22 +247,23 @@ export const Header = () => {
                 onMouseEnter={() => handleMouseEnter(index)}
                 onMouseLeave={handleMouseLeave}
               >
-                <motion.button
-                  className="flex items-center text-white xl:text-[19px] lg:text-base transition-colors duration-200 py-2 cursor-pointer"
-                  whileHover={{
-                    fontWeight: 600,
-                    scale: 1.05
-                  }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <span>{item.name}</span>
-                </motion.button>
+                <Link to={item.href}>
+                  <motion.button
+                    className="flex items-center text-white xl:text-[19px] lg:text-base transition-colors duration-200 py-2 cursor-pointer"
+                    whileHover={{
+                      fontWeight: 600,
+                      scale: 1.05
+                    }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <span>{item.name}</span>
+                  </motion.button>
+                </Link>
 
                 {/* Dropdown Menu */}
                 <AnimatePresence>
                   {item.hasDropdown && activeDropdown === index && (
                     <div className='relative'>
-                      {/* Arrow */}
                       <motion.div
                         variants={dropdownVariants}
                         initial="hidden"
@@ -260,7 +272,6 @@ export const Header = () => {
                         className="absolute top-[22px] left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white border-l border-t border-gray-100 rotate-45 z-[999999]"
                       ></motion.div>
 
-                      {/* Dropdown Container */}
                       <motion.div
                         className={`absolute top-[20px] mt-2 bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden z-50 ${item.sections
                           ? 'left-1/2 transform -translate-x-1/2 w-max min-w-[22rem] max-w-[600px]'
@@ -273,7 +284,6 @@ export const Header = () => {
                       >
                         <div className="py-4 relative z-20 ">
                           {item.sections ? (
-                            // Multi-section dropdown (like Our Services)
                             <div className="flex">
                               {item.sections.map((section, sectionIndex) => (
                                 <motion.div
@@ -287,9 +297,9 @@ export const Header = () => {
                                     ease: "easeOut"
                                   }}
                                 >
-                                  <h3 className="text-lg font-bold text-gray-800 mb-2 pb-2 border-b border-gray-100">
+                                  <a href={`/our-services/?tab=${toSlug(section.title)}`} className="text-lg font-bold text-gray-800 mb-2 pb-2 border-b border-gray-100">
                                     {section.title}
-                                  </h3>
+                                  </a>
                                   <ul className="space-y-1">
                                     {section.items.map((subItem, subIndex) => (
                                       <motion.li
@@ -299,18 +309,19 @@ export const Header = () => {
                                         animate="visible"
                                         custom={subIndex}
                                       >
-                                        <motion.a
-                                          href="#"
-                                          className="block text-[#414141] px-3 py-[3px] rounded-md transition-all duration-200 text-sm font-medium"
-                                          whileHover={{
-                                            x: 5,
-                                            backgroundColor: "#f0fdfa",
-                                            color: "#0d9488"
-                                          }}
-                                          transition={{ duration: 0.2 }}
-                                        >
-                                          {subItem}
-                                        </motion.a>
+                                        <Link to={`/${toSlug(section.title)}/${toSlug(subItem)}`}>
+                                          <motion.div
+                                            className="block text-[#414141] px-3 py-[3px] rounded-md transition-all duration-200 text-sm font-medium cursor-pointer"
+                                            whileHover={{
+                                              x: 5,
+                                              backgroundColor: "#f0fdfa",
+                                              color: "#0d9488"
+                                            }}
+                                            transition={{ duration: 0.2 }}
+                                          >
+                                            {subItem}
+                                          </motion.div>
+                                        </Link>
                                       </motion.li>
                                     ))}
                                   </ul>
@@ -329,18 +340,19 @@ export const Header = () => {
                                     animate="visible"
                                     custom={subIndex}
                                   >
-                                    <motion.a
-                                      href="#"
-                                      className="block text-[#414141] px-4 py-[3px] rounded-md transition-all duration-200 text-sm font-medium"
-                                      whileHover={{
-                                        x: 5,
-                                        backgroundColor: "#f0fdfa",
-                                        color: "#0d9488"
-                                      }}
-                                      transition={{ duration: 0.2 }}
-                                    >
-                                      {subItem}
-                                    </motion.a>
+                                    <Link to={`/${toSlug(item.name)}/${toSlug(subItem)}`}>
+                                      <motion.div
+                                        className="block text-[#414141] px-4 py-[3px] rounded-md transition-all duration-200 text-sm font-medium cursor-pointer"
+                                        whileHover={{
+                                          x: 5,
+                                          backgroundColor: "#f0fdfa",
+                                          color: "#0d9488"
+                                        }}
+                                        transition={{ duration: 0.2 }}
+                                      >
+                                        {subItem}
+                                      </motion.div>
+                                    </Link>
                                   </motion.li>
                                 ))}
                               </ul>
@@ -400,7 +412,7 @@ export const Header = () => {
             animate="visible"
             exit="hidden"
           >
-            <div className="space-y-4 h-[calc(100dvh-80px)] flex flex-col justify-between">
+            <div className="space-y-4 h-[calc(100dvh-80px)] flex flex-col justify-between overflow-y-auto">
               <div className='px-10'>
                 {navItems.map((item, index) => {
                   const isDropdownOpen = openDropdowns[index] || false;
@@ -408,32 +420,38 @@ export const Header = () => {
                   return (
                     <div key={item.name}>
                       {/* Parent item with toggle */}
-                      <motion.button
-                        className="w-full flex justify-between items-center text-left text-white py-2 font-semibold transition-colors duration-200 cursor-pointer"
-                        onClick={() => item.hasDropdown && toggleDropdown(index)}
-                        whileHover={item.hasDropdown ? { x: 5 } : {}}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <span>{item.name}</span>
-                        {item.hasDropdown && (
-                          <motion.svg
-                            className="w-6 h-6"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
-                            animate={{ rotate: isDropdownOpen ? 180 : 0 }}
-                            transition={{ duration: 0.3 }}
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M19 9l-7 7-7-7"
-                            />
-                          </motion.svg>
-                        )}
-                      </motion.button>
+                      <Link to={item.href}>
+                        <motion.button
+                          className="w-full flex justify-between items-center text-left text-white py-2 font-semibold transition-colors duration-200 cursor-pointer"
+                          onClick={() => item.hasDropdown && toggleDropdown(index)}
+                          whileHover={item.hasDropdown ? { x: 5 } : {}}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <span>{item.name}</span>
+                          {item.hasDropdown && (
+                            <motion.svg
+                              className="w-6 h-6"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                              xmlns="http://www.w3.org/2000/svg"
+                              animate={{ rotate: isDropdownOpen ? 180 : 0 }}
+                              transition={{ duration: 0.3 }}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                toggleDropdown(index);
+                              }}
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M19 9l-7 7-7-7"
+                              />
+                            </motion.svg>
+                          )}
+                        </motion.button>
+                      </Link>
 
                       {/* Dropdown content */}
                       {item.hasDropdown && (
@@ -457,26 +475,41 @@ export const Header = () => {
                                       duration: 0.3
                                     }}
                                   >
-                                    <h4 className="font-medium text-white">{section.title}</h4>
-
+                                    <h4 className="font-medium text-white mb-2">{section.title}</h4>
+                                    {section.items.map((subItem, subIndex) => (
+                                      <Link key={subIndex} to={`/${toSlug(section.title)}/${toSlug(subItem)}`}>
+                                        <motion.div
+                                          className="block text-sm text-white py-1 ml-2 transition-colors duration-200 cursor-pointer"
+                                          initial={{ opacity: 0, x: -10 }}
+                                          animate={{ opacity: 1, x: 0 }}
+                                          transition={{
+                                            delay: subIndex * 0.05,
+                                            duration: 0.3
+                                          }}
+                                          whileHover={{ x: 3 }}
+                                        >
+                                          {subItem}
+                                        </motion.div>
+                                      </Link>
+                                    ))}
                                   </motion.div>
                                 ))
                               ) : (
                                 item.items?.map((subItem, subIndex) => (
-                                  <motion.a
-                                    key={subIndex}
-                                    href="#"
-                                    className="block text-sm text-white py-1 ml-2 transition-colors duration-200 cursor-pointer"
-                                    initial={{ opacity: 0, x: -10 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{
-                                      delay: subIndex * 0.05,
-                                      duration: 0.3
-                                    }}
-                                    whileHover={{ x: 3 }}
-                                  >
-                                    {subItem}
-                                  </motion.a>
+                                  <Link key={subIndex} to={`/${toSlug(subItem)}`}>
+                                    <motion.div
+                                      className="block text-sm text-white py-1 ml-2 transition-colors duration-200 cursor-pointer"
+                                      initial={{ opacity: 0, x: -10 }}
+                                      animate={{ opacity: 1, x: 0 }}
+                                      transition={{
+                                        delay: subIndex * 0.05,
+                                        duration: 0.3
+                                      }}
+                                      whileHover={{ x: 3 }}
+                                    >
+                                      {subItem}
+                                    </motion.div>
+                                  </Link>
                                 ))
                               )}
                             </motion.div>
@@ -488,39 +521,47 @@ export const Header = () => {
                 })}
               </div>
 
-                <ul className="">
-                  {menuItems.map((item) => {
-                    return (
-                      <li key={item.id} className="menu-item relative h-14 w-full flex justify-end">
-                        <motion.a
-                          href={item.href}
-                          className="relative flex items-center h-14 text-white text-sm font-bold uppercase w-full"
-                          style={{ fontFamily: 'Avenir, sans-serif' }}
-                          onMouseEnter={() => setExpandedItem(item.id)}
-                          onMouseLeave={() => setExpandedItem(null)}
-                          transition={{ duration: 0.3, ease: "easeInOut" }}
+              <div className='px-10 flex gap-8'>
+                <Search className='text-white cursor-pointer' />
+                <input
+                  placeholder="Search"
+                  className="w-full border-b border-white placeholder:font-[900] focus:outline-none"
+                />
+              </div>
+
+              <ul className="flex md:flex-row flex-col">
+                {menuItems.map((item) => {
+                  return (
+                    <li key={item.id} className="menu-item relative h-14 w-full flex justify-end">
+                      <motion.a
+                        href={item.href}
+                        className="relative flex items-center h-14 text-white text-sm font-bold uppercase w-full"
+                        style={{ fontFamily: 'Avenir, sans-serif' }}
+                        onMouseEnter={() => setExpandedItem(item.id)}
+                        onMouseLeave={() => setExpandedItem(null)}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                      >
+                        <div
+                          className="absolute inset-0 bg-gradient-to-r z-10"
+                          style={{
+                            background: item.bgGradient,
+                          }}
+                        />
+                        <div
+                          className=" w-16 h-14 flex items-center justify-center text-white text-3xl font-normal z-20"
                         >
-                          <div
-                            className="absolute inset-0 bg-gradient-to-r z-10"
-                            style={{
-                              background: item.bgGradient,
-                            }}
-                          />
-                          <div
-                            className=" w-16 h-14 flex items-center justify-center text-white text-3xl font-normal z-20"
-                          >
-                            {item.icon}
-                          </div>
-                          <span
-                            className={`relative z-30 text-center ${item.id === 'security-incident' ? 'line-clamp-1' : 'line-clamp-2'} opacity-100`}
-                          >
-                            {item.text}
-                          </span>
-                        </motion.a>
-                      </li>
-                    );
-                  })}
-                </ul>
+                          {item.icon}
+                        </div>
+                        <span
+                          className={`relative z-30 text-center ${item.id === 'security-incident' ? 'line-clamp-1' : 'line-clamp-2'} opacity-100`}
+                        >
+                          {item.text}
+                        </span>
+                      </motion.a>
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
           </motion.div>
         )}

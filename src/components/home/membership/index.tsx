@@ -13,11 +13,11 @@ const MembershipsCarousel = () => {
   ];
 
   return (
-    <div className="flex">
-      <div className="flex item-center justify-center text-center w-[15%] bg-[#054479] py-8">
+    <div className="flex lg:flex-row flex-col">
+      <div className="flex item-center text-center justify-center bg-[#054479] py-8 lg:w-[15%] mr-[3%] w-full">
         <h2 className="text-2xl font-bold text-white grid place-content-center">Memberships</h2>
       </div>
-      <div className="block-content w-[85%] py-4">
+      <div className="block-content lg:w-[82%] w-full sm:py-4 py-12">
         <Swiper
           modules={[Navigation, Autoplay]}
           spaceBetween={60}
@@ -25,9 +25,11 @@ const MembershipsCarousel = () => {
           autoplay={{ delay: 3000, disableOnInteraction: false }}
           loop
           breakpoints={{
-            640: { slidesPerView: 4 },
-            480: { slidesPerView: 2 },
-            320: { slidesPerView: 1 },
+            1400: { slidesPerView: 6 },
+            1200: { slidesPerView: 5 },
+            1000: { slidesPerView: 4 },
+            640: { slidesPerView: 3 },
+            320: { slidesPerView: 2 },
           }}
         >
           {memberships.map((membership, index) => (

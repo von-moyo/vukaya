@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { formatWordsToLines } from '../../hexagon';
 import { useMobile } from '../../../hooks/useMobile';
+import SwiperCore from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 
@@ -12,6 +13,7 @@ interface HexagonProps {
   size?: 'small' | 'medium' | 'large' | 'extralarge';
   hasCounter?: boolean;
   counterValue?: number;
+  swipe?: boolean;
 }
 
 const HexagonSVG: React.FC<{ bgColor: string }> = ({ bgColor }) => (
@@ -74,28 +76,35 @@ const Hexagon: React.FC<HexagonProps> = ({
   subText,
   size = 'small',
   hasCounter,
-  counterValue
+  counterValue,
+  swipe
 }) => {
-  const sizeClasses = {
-    small: 'w-24 h-24 md:w-32 md:h-32',
-    medium: 'w-32 h  md:w-48 md:h-48',
-    large: 'w-60 h-60',
-    extralarge: 'w-90 h-90'
-  };
 
-  const textSizeClasses = {
-    small: 'text-xs md:text-sm',
-    medium: 'text-sm md:text-base',
-    large: 'text-base lg:text-lg xl:text-xl',
-    extralarge: 'text-base lg:text-lg xl:text-xl',
-  };
+  const { isMobile: isMobile600 } = useMobile({ size: 600 });
+  const { isMobile: isMobile500 } = useMobile({ size: 500 });
+  const { isMobile: isMobile400 } = useMobile({ size: 400 });
+  const { isMobile: isMobile300 } = useMobile({ size: 300 });
 
-  const mainTextSizeClasses = {
-    small: 'text-lg md:text-xl',
-    medium: 'text-xl md:text-2xl',
-    large: 'text-2xl lg:text-3xl xl:text-4xl',
-    extralarge: 'text-2xl lg:text-3xl xl:text-4xl'
-  };
+const sizeClasses = {
+  small: 'w-24 h-24 md:w-32 md:h-32',
+  medium: 'w-32 h-32 md:w-48 md:h-48',
+  large: `w-60 h-60 ${isMobile600 ? '!w-40 !h-40' : ''} ${isMobile500 ? '!w-35 !h-35' : ''} ${isMobile400 ? '!w-30 !h-30' : ''} ${isMobile300 ? '!w-25 !h-25' : ''}`,
+  extralarge: `w-96 h-96`
+};
+
+const textSizeClasses = {
+  small: 'text-xs md:text-sm',
+  medium: 'text-sm md:text-base',
+  large: `text-base lg:text-lg xl:text-xl ${isMobile600 ? '!text-sm' : ''} ${isMobile500 ? '!text-xs' : ''} ${isMobile400 ? '!text-xs' : ''} ${isMobile300 ? '!text-xxs' : ''}`,
+  extralarge: `text-xl ${!isMobile600 ? 'text-lg' : ''} ${isMobile500 ? '!text-base' : ''} ${isMobile400 ? '!text-sm' : ''} ${isMobile300 ? '!text-xs' : ''}`
+};
+
+const mainTextSizeClasses = {
+  small: 'text-lg md:text-xl',
+  medium: 'text-xl md:text-2xl',
+  large: `text-2xl lg:text-3xl xl:text-4xl ${isMobile600 ? '!text-lg' : ''} ${isMobile500 ? '!text-base' : ''} ${isMobile400 ? '!text-sm' : ''} ${isMobile300 ? '!text-xs' : ''}`,
+  extralarge: `text-3xl ${isMobile600 ? '!text-xl' : ''} ${isMobile500 ? '!text-lg' : ''} ${isMobile400 ? '!text-base' : ''} ${isMobile300 ? '!text-sm' : ''}`
+};
 
   const renderValue = () => {
     if (hasCounter && typeof counterValue === 'number') {
@@ -111,7 +120,7 @@ const Hexagon: React.FC<HexagonProps> = ({
         );
       }
     }
-    return typeof mainText === "string" ? formatWordsToLines(mainText) : mainText;
+    return typeof mainText === "string" && !swipe ? formatWordsToLines(mainText) : mainText;
 
   };
 
@@ -198,7 +207,7 @@ const QorwynStats: React.FC = () => {
     >
 
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row">
-        <div className="mb-8 md:mb-0 md:w-1/3 z-10  md:p-0 p-8">
+        <div className="sm:mb-8 md:mb-0 md:w-1/3 z-10  md:p-0 p-8">
           <h3 className="text-[#2ea38f] font-[900] tracking-wider uppercase mb-4">
             FORTIFIED BY THE NUMBERS
           </h3>
@@ -234,8 +243,8 @@ const QorwynStats: React.FC = () => {
             </div>
           ))}
         </div>
-
         <HexagonSwiper />
+
       </div>
     </div>
   );
@@ -245,7 +254,9 @@ export default QorwynStats;
 
 const HexagonSwiper = () => {
   const { isMobile } = useMobile({ size: 768 }); // md breakpoint at 768px
-
+  const { isMobile: isMobile500 } = useMobile({ size: 500 });
+  const { isMobile: isMobile400 } = useMobile({ size: 400 });
+  const { isMobile: isMobile300 } = useMobile({ size: 300 });
   const swiperData = [
     {
       bgColor: '#054479',
@@ -302,48 +313,100 @@ const HexagonSwiper = () => {
       suffix: '%'
     }
   ];
+  const swiperRef = useRef<SwiperCore | null>(null);
+
+    const handlePrevClick = () => {
+    if (swiperRef.current) {
+      swiperRef.current.slidePrev();
+    }
+  };
+
+  const handleNextClick = () => {
+    if (swiperRef.current) {
+      swiperRef.current.slideNext();
+    }
+  };
 
   if (!isMobile) return null;
 
   return (
-    <div className="d-md-none">
+    <div className={`d-md-none -mt-[20px] relative pb-[80px] ${isMobile500 ? '-ml-[48vw]' : ' -ml-[28vw]'} `}>
       <Swiper
         modules={[Navigation, Pagination]}
-        spaceBetween={10}
         slidesPerView={3}
+        initialSlide={1}
         centeredSlides={true}
+        spaceBetween={isMobile500 ? 100 : -110}
         grabCursor={true}
-        navigation={{
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev'
+        onSwiper={(swiper) => {
+          swiperRef.current = swiper;
         }}
-        className="stats-blocks swiper-coverflow swiper-3d"
-        style={{ height: '450px' }}
+        className="stats-blocks"
       >
         {swiperData.map((data, index) => (
-          <SwiperSlide key={index} className="relative flex items-center justify-center">
+          <SwiperSlide key={index} className="relative flex items-center justify-center my-auto">
             {({ isActive }) => (
-              <div className={` ${!isActive && 'mt-[58px]'}`}>
+              <div
+                className={`w-[80vw] h-[80vw] transition-all duration-300 ease-in-out flex items-center justify-center ${isActive ? "swiper-slide-active:scale-120" : "scale-60 -z-[3]"
+                  }`}
+              >
                 <Hexagon
                   bgColor={data.bgColor}
                   textColor={data.textColor}
                   mainText={data.mainText}
                   subText={data.subText}
-                  size={isActive ? 'extralarge' : 'large'}
+                  size={'extralarge'}
                   hasCounter={data.hasCounter}
                   counterValue={data.counterValue}
+                  swipe={true}
                 />
               </div>
-
             )}
           </SwiperSlide>
         ))}
       </Swiper>
-      <div className="swiper-buttons flex justify-center gap-8 mt-5 absolute translate-x-1/2 left-[50%] bottom-15 z-50">
-        <div className="swiper-button-prev bg-gradient-to-r from-blue-500 to-green-500 text-white rounded-full !w-16 !h-16 flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity">
-        </div>
-        <div className="swiper-button-next bg-gradient-to-r from-blue-500 to-green-500 text-white rounded-full !w-16 !h-16 flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity">
-        </div>
+      <div className={`flex justify-center gap-8 mt-5  ${isMobile500 ? '-mr-[48vw]' : ' -mr-[28vw]'}`}>
+        <button
+          onClick={handlePrevClick}
+          className="bg-gradient-to-r from-blue-500 to-green-500 text-white rounded-full w-12 h-12 flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity shadow-lg hover:shadow-xl transform hover:scale-105 transition-transform duration-200"
+          aria-label="Previous slide"
+        >
+          {/* Left Chevron */}
+          <svg 
+            width="20" 
+            height="20" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            className="transform"
+          >
+            <polyline points="15,18 9,12 15,6"></polyline>
+          </svg>
+        </button>
+        
+        <button
+          onClick={handleNextClick}
+          className="bg-gradient-to-r from-blue-500 to-green-500 text-white rounded-full w-12 h-12 flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity shadow-lg hover:shadow-xl transform hover:scale-105 transition-transform duration-200"
+          aria-label="Next slide"
+        >
+          {/* Right Chevron */}
+          <svg 
+            width="20" 
+            height="20" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            className="transform"
+          >
+            <polyline points="9,18 15,12 9,6"></polyline>
+          </svg>
+        </button>
       </div>
     </div>
   );
