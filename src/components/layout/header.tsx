@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Menu, Search, X } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { ChevronDownIcon, Heart, Menu, ShoppingBag, User, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LogoIcon } from '../../assets/images';
 import { Link } from 'react-router-dom';
 import { useMobile } from '../../hooks/useMobile';
+import { Search } from '../search';
+import { SearchModal } from '../search-modal';
+import { useClickOutside } from '../../hooks';
 
 interface MenuItem {
   id: string;
@@ -15,19 +17,12 @@ interface MenuItem {
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [openDropdowns, setOpenDropdowns] = useState<any>({});
   const { isMobile } = useMobile({ size: 640 });
-  const [expandedItem, setExpandedItem] = useState<string | null>(null);
-  
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const modalRef = useRef(null);
+  const buttonRef = useRef(null);
+  useClickOutside(modalRef, buttonRef, () => setIsMenuOpen(false));
 
   const toggleDropdown = (index: any) => {
     setOpenDropdowns((prev: any) => ({
@@ -36,117 +31,35 @@ export const Header = () => {
     }));
   };
 
-  const toSlug = (text: string) => {
-    return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-  };
-
   const navItems = [
     {
-      name: 'Our Services',
-      href: '/our-services',
-      hasDropdown: true,
-      sections: [
-        {
-          title: 'Advisory Services',
-          items: [
-            'Virtual CISO Services',
-            'Security Risk Assessment Services',
-            'Third-Party Risk Management',
-            'Incident Response Services',
-            'Advanced Penetration Testing & Red Team Services',
-            'Managed Security Awareness Training Program',
-            'Expertise on Demand'
-          ]
-        },
-        {
-          title: 'Threat Defense',
-          items: [
-            'Managed XDR',
-            'Managed Endpoint Detection & Response',
-            'Managed SIEM',
-            'Emergency Response',
-            'Managed Connected Medical Device Security',
-            'Vulnerability Threat Management',
-            'Attack Surface Monitoring',
-            'Managed Phishing Services'
-          ]
-        }
-      ]
+      name: 'HOME',
+      href: '/',
     },
     {
-      name: 'Who We Serve',
-      href: '/who-we-serve',
+      name: 'CATALOG',
+      href: 'https://vukaya.com/collections/all',
+    },
+    {
+      name: 'BLOG',
+      href: 'https://vukaya.com/blogs/news',
+    },
+    {
+      name: 'ABOUT US',
+      href: 'https://vukaya.com/pages/about-us',
       hasDropdown: true,
       items: [
-        'Hospitals & Health Systems',
-        'Healthcare Technology,\n Medical Devices & Biotech',
-        'Provider Groups',
-        'Health Plans',
+        { label: 'Our Team', link: 'https://vukaya.com/pages/our-team' }
       ]
     },
     {
-      name: 'Why Qorwyn',
-      href: '/why-qorwyn',
-      hasDropdown: true,
-      items: [
-        'Central Commans',
-        'Our Approach',
-        'Awards',
-        'Case Stories',
-      ]
+      name: 'FAQS',
+      href: 'https://vukaya.com/pages/faqs',
     },
     {
-      name: 'Resources',
-      href: '/resources',
-      hasDropdown: true,
-      items: [
-        'Horizon Reports',
-        'Blog',
-        'Threat Bulletins',
-        'Cyber Survivor',
-      ]
+      name: 'CONTACT',
+      href: 'https://vukaya.com/pages/contact',
     },
-    {
-      name: 'Events',
-      href: '/events',
-      hasDropdown: true,
-      items: [
-        'Conferences and Shows',
-        'Roundtables',
-        'Webinars',
-      ]
-    },
-    {
-      name: 'Who We Are',
-      href: '/who-we-are',
-      hasDropdown: true,
-      items: [
-        'Leadership',
-        'In The News',
-        'Board of Directors',
-        'Press Releases',
-        'Advisory Board',
-        'Join Our Team'
-      ]
-    },
-    { name: 'Contact Us', href: '/contact-us', hasDropdown: false }
-  ];
-
-  const menuItems: MenuItem[] = [
-    {
-      id: 'qorwyn-command',
-      text: 'Qorwyn Central Command',
-      href: 'https://platform.fortified.io/login',
-      icon: '→',
-      bgGradient: 'linear-gradient(to right, #03223d 0%, #054479 100%)'
-    },
-    {
-      id: 'security-incident',
-      text: 'Security Incident',
-      href: 'https://fortifiedhealthsecurity.com/security-incident/',
-      icon: '⚠',
-      bgGradient: 'linear-gradient(to right, #923216 0%, #be4623 100%)'
-    }
   ];
 
   const handleMouseEnter = (index: any) => {
@@ -180,22 +93,15 @@ export const Header = () => {
   };
 
   const mobileMenuVariants = {
-    hidden: {
-      opacity: 0,
-      height: 0,
-      transition: {
-        duration: 0.2,
-        ease: "easeInOut"
-      }
-    },
-    visible: {
-      opacity: 1,
-      height: "auto",
-      transition: {
-        duration: 0.3,
-        ease: "easeInOut"
-      }
-    }
+    hidden: { x: '-300px', opacity: 0 },
+    visible: { x: 0, opacity: 1, transition: { duration: 0.3 } },
+    exit: { x: '-300px', opacity: 0, transition: { duration: 0.3 } },
+  };
+
+  const overlayVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { duration: 0.3 } },
+    exit: { opacity: 0, transition: { duration: 0.3 } },
   };
 
   const itemVariants = {
@@ -213,49 +119,41 @@ export const Header = () => {
 
   return (
     <motion.header
-      className={`fixed top-0 left-0 right-0 z-50 h-[91px] ${isMobile && isMenuOpen ? 'bg-[#2EA38F]' : ''}`}
-      style={{
-        background: isMenuOpen
-          ? undefined
-          : isMobile ? 'linear-gradient(to right, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.98) 34%, rgba(45, 163, 143, 0.98) 64%, rgba(14, 132, 116, 0.98) 100%)' :
-            'linear-gradient(to right, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.98) 13%, rgba(45, 163, 143, 0.98) 34%, rgba(14, 132, 116, 0.98) 100%)'
-      }}
-      animate={{
-        boxShadow: isScrolled ? '0 10px 25px rgba(0, 0, 0, 0.1)' : '0 0px 0px rgba(0, 0, 0, 0)',
-        backdropFilter: isScrolled ? 'blur(10px)' : 'blur(0px)'
-      }}
+      className={`sticky top-0 z-50 lg:h-[86px] h-[72px] bg-white border-b sm:px-[2%] px-[5%]  ${isMobile && isMenuOpen ? 'bg-[#2EA38F]' : ''}`}
       transition={{ duration: 0.3, ease: "easeOut" }}
     >
-      <div className="flex items-center justify-between h-20">
+      <div className="flex items-center h-full w-full sm:justify-normal justify-between">
+        <Menu className="w-5 h-5 text-[#808080] cursor-pointer sm:hidden flex" onClick={() => setIsMenuOpen(!isMenuOpen)} />
         {!isMenuOpen && <Link to='/'>
           <motion.div
-            className="flex items-center space-x-3 cursor-pointer"
+            className="flex items-center cursor-pointer"
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.2 }}
           >
-            <img src={LogoIcon} alt='logo icon' className='h-12 sm:h-20 ml-5' />
+            <img src='/logo.avif' alt='logo icon' className='w-[125px]' />
           </motion.div>
         </Link>}
 
-        <div className={`flex items-center gap-8 ${isMenuOpen ? 'w-full' : 'w-[80%]'} lg:justify-between justify-end`}>
-          <nav className="hidden lg:flex items-center justify-between w-full mr-[4%]">
+        <div className={`sm:flex hidden items-center gap-8 ml-[9%] ${isMenuOpen ? 'w-full' : 'w-[85%]'} lg:justify-between justify-end`}>
+          <nav className="flex items-center gap-[2.65%] w-full lg:justify-normal justify-end">
             {navItems.map((item, index) => (
               <div
                 key={item.name}
-                className="relative"
+                className="relative lg:block hidden"
                 onMouseEnter={() => handleMouseEnter(index)}
                 onMouseLeave={handleMouseLeave}
               >
                 <Link to={item.href}>
                   <motion.button
-                    className="flex items-center text-white xl:text-[19px] lg:text-base transition-colors duration-200 py-2 cursor-pointer"
+                    className={`flex items-center text-[#333333] lg:text-base font-bold transition-colors duration-200 py-2 cursor-pointer uppercase ${item.hasDropdown && 'pb-8 mt-5.5'}`}
                     whileHover={{
                       fontWeight: 600,
+                      color: 'red',
                       scale: 1.05
                     }}
                     transition={{ duration: 0.2 }}
                   >
-                    <span>{item.name}</span>
+                    <span className='whitespace-nowrap'>{item.name}</span> {item.hasDropdown && <ChevronDownIcon className='w-4 ml-1' />}
                   </motion.button>
                 </Link>
 
@@ -264,99 +162,37 @@ export const Header = () => {
                   {item.hasDropdown && activeDropdown === index && (
                     <div className='relative'>
                       <motion.div
-                        variants={dropdownVariants}
-                        initial="hidden"
-                        animate="visible"
-                        exit="hidden"
-                        className="absolute top-[22px] left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white border-l border-t border-gray-100 rotate-45 z-[999999]"
-                      ></motion.div>
-
-                      <motion.div
-                        className={`absolute top-[20px] mt-2 bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden z-50 ${item.sections
-                          ? 'left-1/2 transform -translate-x-1/2 w-max min-w-[22rem] max-w-[600px]'
-                          : 'left-1/2 transform -translate-x-1/2 w-max min-w-80'
-                          }`}
+                        className={`absolute top-0 bg-white border border-[#e2e2e2] overflow-hidden z-50 -left-4 w-44`}
                         variants={dropdownVariants}
                         initial="hidden"
                         animate="visible"
                         exit="hidden"
                       >
-                        <div className="py-4 relative z-20 ">
-                          {item.sections ? (
-                            <div className="flex">
-                              {item.sections.map((section, sectionIndex) => (
-                                <motion.div
-                                  key={section.title}
-                                  className="px-6 py-2 min-w-64"
-                                  initial={{ opacity: 0, x: -20 }}
-                                  animate={{ opacity: 1, x: 0 }}
-                                  transition={{
-                                    delay: sectionIndex * 0.1,
-                                    duration: 0.3,
-                                    ease: "easeOut"
-                                  }}
-                                >
-                                  <a href={`/our-services/?tab=${toSlug(section.title)}`} className="text-lg font-bold text-gray-800 mb-2 pb-2 border-b border-gray-100">
-                                    {section.title}
-                                  </a>
-                                  <ul className="space-y-1">
-                                    {section.items.map((subItem, subIndex) => (
-                                      <motion.li
-                                        key={subIndex}
-                                        variants={itemVariants}
-                                        initial="hidden"
-                                        animate="visible"
-                                        custom={subIndex}
-                                      >
-                                        <Link to={`/${toSlug(section.title)}/${toSlug(subItem)}`}>
-                                          <motion.div
-                                            className="block text-[#414141] px-3 py-[3px] rounded-md transition-all duration-200 text-sm font-medium cursor-pointer"
-                                            whileHover={{
-                                              x: 5,
-                                              backgroundColor: "#f0fdfa",
-                                              color: "#0d9488"
-                                            }}
-                                            transition={{ duration: 0.2 }}
-                                          >
-                                            {subItem}
-                                          </motion.div>
-                                        </Link>
-                                      </motion.li>
-                                    ))}
-                                  </ul>
-                                </motion.div>
-                              ))}
-                            </div>
-                          ) : (
-                            // Single section dropdown
-                            <div className="px-4 py-4">
-                              <ul className="grid grid-cols-2">
-                                {item.items?.map((subItem, subIndex) => (
-                                  <motion.li
-                                    key={subIndex}
-                                    variants={itemVariants}
-                                    initial="hidden"
-                                    animate="visible"
-                                    custom={subIndex}
+                        <div className="p-4">
+                          <ul className="grid grid-cols-2">
+                            {item.items?.map((subItem, subIndex) => (
+                              <motion.li
+                                key={subIndex}
+                                variants={itemVariants}
+                                initial="hidden"
+                                animate="visible"
+                                custom={subIndex}
+                              >
+                                <Link to={`${subItem.link}`}>
+                                  <motion.div
+                                    className="block text-[#414141] transition-all duration-200 text-sm font-medium cursor-pointer whitespace-nowrap"
+                                    whileHover={{
+                                      x: 5,
+                                      color: "red"
+                                    }}
+                                    transition={{ duration: 0.2 }}
                                   >
-                                    <Link to={`/${toSlug(item.name)}/${toSlug(subItem)}`}>
-                                      <motion.div
-                                        className="block text-[#414141] px-4 py-[3px] rounded-md transition-all duration-200 text-sm font-medium cursor-pointer"
-                                        whileHover={{
-                                          x: 5,
-                                          backgroundColor: "#f0fdfa",
-                                          color: "#0d9488"
-                                        }}
-                                        transition={{ duration: 0.2 }}
-                                      >
-                                        {subItem}
-                                      </motion.div>
-                                    </Link>
-                                  </motion.li>
-                                ))}
-                              </ul>
-                            </div>
-                          )}
+                                    {subItem.label}
+                                  </motion.div>
+                                </Link>
+                              </motion.li>
+                            ))}
+                          </ul>
                         </div>
                       </motion.div>
                     </div>
@@ -364,82 +200,79 @@ export const Header = () => {
                 </AnimatePresence>
               </div>
             ))}
-            <Search className='text-white cursor-pointer' />
+            <Menu className="w-5 h-5 text-[#808080] cursor-pointer lg:hidden flex" onClick={() => setIsMenuOpen(!isMenuOpen)} />
+            <Search placeholder='Find our product' className='ml-[1%] w-[37%] xl:flex hidden' />
+            <SearchModal placeholder='Find our product' className='flx justify-items-end lg:w-[20%]' />
+            <User className='text-[#808080] w-5 h-5 hover:text-red-500 cursor-pointer shrink-0' />
+            <span className='flex gap-1 items-center text-[#808080] hover:text-red-500 cursor-pointer shrink-0'>
+              <Heart className='w-5 h-5' />
+              <span className='font-bold '>(0)</span>
+            </span>
+            <span className='flex gap-1 items-center text-[#808080] hover:text-red-500 cursor-pointer shrink-0'>
+              <ShoppingBag className='w-5 h-5' />
+              <span className='font-bold '>(0)</span>
+            </span>
           </nav>
-
-          <motion.button
-            className="lg:hidden p-2 rounded-md transition-colors duration-200"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-          >
-            <AnimatePresence mode="wait">
-              {isMenuOpen ? (
-                <motion.div
-                  key="close"
-                  initial={{ rotate: -90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: 90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <X className="w-10 h-10 cursor-pointer text-white" />
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="menu"
-                  initial={{ rotate: 90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: -90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <Menu className="w-10 h-10 text-white cursor-pointer" />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.button>
         </div>
+        <div className='sm:hidden flex relative cursor-pointer'>
+          <span className='text-[11px] font-bold text-white bg-red-500 w-4 h-4 grid place-content-center absolute rounded-full -right-1 -top-1'>0</span>
+          <ShoppingBag className='w-5 h-5 text-[#808080]' />
+        </div>
+
       </div>
 
       {/* Mobile Menu */}
       <AnimatePresence>
         {isMenuOpen && (
-          <motion.div
-            className="lg:hidden bg-[#2EA38F] text-white shadow-lg overflow-hidden"
-            variants={mobileMenuVariants}
-            initial="hidden"
-            animate="visible"
-            exit="hidden"
-          >
-            <div className="space-y-4 h-[calc(100dvh-80px)] flex flex-col justify-between overflow-y-auto">
-              <div className='px-10'>
+          <>
+            {/* Overlay */}
+            <motion.div
+              className="fixed inset-0 bg-black/60 z-40 lg:hidden"
+              variants={overlayVariants}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              onClick={() => setIsMenuOpen(false)}
+            />
+
+            {/* Sidebar */}
+            <motion.div
+              ref={modalRef}
+              className="fixed top-0 left-0 w-[300px] h-[100dvh] bg-white text-[#333333] shadow-lg overflow-hidden z-50 lg:hidden font-manrope"
+              variants={mobileMenuVariants}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+            >
+              <div className="h-[calc(100dvh-80px)] flex flex-col overflow-y-auto">
+                <div className='flex justify-items-end gap-1 py-[9.3px] px-4 border-b border-[#e2e2e2]'>
+                  <X stroke-width={1} size={24} className="text-[#333333] cursor-pointer ml-auto" onClick={() => { setIsMenuOpen(false); }} />
+                </div>
+                <div className='flex items-center gap-2 py-[9.3px] px-4 border-b border-[#e2e2e2] font-medium text-[15px]'>
+                  <Menu className="w-6 h-auto text-[#333333] cursor-pointer" />  Menu
+                </div>
                 {navItems.map((item, index) => {
                   const isDropdownOpen = openDropdowns[index] || false;
 
                   return (
                     <div key={item.name}>
-                      {/* Parent item with toggle */}
-                      <Link to={item.href}>
-                        <motion.button
-                          className="w-full flex justify-between items-center text-left text-white py-2 font-semibold transition-colors duration-200 cursor-pointer"
-                          onClick={() => item.hasDropdown && toggleDropdown(index)}
-                          whileHover={item.hasDropdown ? { x: 5 } : {}}
-                          transition={{ duration: 0.2 }}
-                        >
-                          <span>{item.name}</span>
-                          {item.hasDropdown && (
+                      <div className="w-full flex justify-between items-center text-left text-[#333333] py-[9.3px] px-4 border-b border-[#e2e2e2] font-semibold transition-colors duration-200 cursor-pointer">
+                        {item.hasDropdown ? (
+                          <motion.button
+                            className="w-full flex justify-between items-center text-left cursor-pointer"
+                            onClick={() => toggleDropdown(index)}
+                            whileHover={{ x: 5 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <Link to={item.href}>{item.name}</Link>
                             <motion.svg
-                              className="w-6 h-6"
+                              className="w-4 h-auto"
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
                               xmlns="http://www.w3.org/2000/svg"
                               animate={{ rotate: isDropdownOpen ? 180 : 0 }}
                               transition={{ duration: 0.3 }}
-                              onClick={(e) => {
-                                e.preventDefault();
-                                toggleDropdown(index);
-                              }}
                             >
                               <path
                                 strokeLinecap="round"
@@ -448,69 +281,41 @@ export const Header = () => {
                                 d="M19 9l-7 7-7-7"
                               />
                             </motion.svg>
-                          )}
-                        </motion.button>
-                      </Link>
+                          </motion.button>
+                        ) : (
+                          <Link to={item.href} className="w-full flex justify-between items-center text-left">
+                            <span>{item.name}</span>
+                          </Link>
+                        )}
+                      </div>
 
                       {/* Dropdown content */}
                       {item.hasDropdown && (
                         <AnimatePresence>
                           {isDropdownOpen && (
                             <motion.div
-                              className="ml-4 mt-2"
+                              className=""
                               initial={{ opacity: 0, height: 0 }}
-                              animate={{ opacity: 1, height: "auto" }}
+                              animate={{ opacity: 1, height: 'auto' }}
                               exit={{ opacity: 0, height: 0 }}
                               transition={{ duration: 0.3 }}
                             >
-                              {item.sections ? (
-                                item.sections.map((section, sectionIndex) => (
+                              {item.items?.map((subItem, subIndex) => (
+                                <Link key={subIndex} to={subItem.link}>
                                   <motion.div
-                                    key={section.title}
+                                    className="block text-[#333333] py-[9.3px] pl-6 pr-4 border-b border-[#e2e2e2] transition-colors duration-200 cursor-pointer"
                                     initial={{ opacity: 0, x: -10 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{
-                                      delay: sectionIndex * 0.1,
-                                      duration: 0.3
+                                      delay: subIndex * 0.05,
+                                      duration: 0.3,
                                     }}
+                                    whileHover={{ x: 3 }}
                                   >
-                                    <h4 className="font-medium text-white mb-2">{section.title}</h4>
-                                    {section.items.map((subItem, subIndex) => (
-                                      <Link key={subIndex} to={`/${toSlug(section.title)}/${toSlug(subItem)}`}>
-                                        <motion.div
-                                          className="block text-sm text-white py-1 ml-2 transition-colors duration-200 cursor-pointer"
-                                          initial={{ opacity: 0, x: -10 }}
-                                          animate={{ opacity: 1, x: 0 }}
-                                          transition={{
-                                            delay: subIndex * 0.05,
-                                            duration: 0.3
-                                          }}
-                                          whileHover={{ x: 3 }}
-                                        >
-                                          {subItem}
-                                        </motion.div>
-                                      </Link>
-                                    ))}
+                                    {subItem.label}
                                   </motion.div>
-                                ))
-                              ) : (
-                                item.items?.map((subItem, subIndex) => (
-                                  <Link key={subIndex} to={`/${toSlug(subItem)}`}>
-                                    <motion.div
-                                      className="block text-sm text-white py-1 ml-2 transition-colors duration-200 cursor-pointer"
-                                      initial={{ opacity: 0, x: -10 }}
-                                      animate={{ opacity: 1, x: 0 }}
-                                      transition={{
-                                        delay: subIndex * 0.05,
-                                        duration: 0.3
-                                      }}
-                                      whileHover={{ x: 3 }}
-                                    >
-                                      {subItem}
-                                    </motion.div>
-                                  </Link>
-                                ))
-                              )}
+                                </Link>
+                              ))}
                             </motion.div>
                           )}
                         </AnimatePresence>
@@ -519,50 +324,8 @@ export const Header = () => {
                   );
                 })}
               </div>
-
-              <div className='px-10 flex gap-8'>
-                <Search className='text-white cursor-pointer' />
-                <input
-                  placeholder="Search"
-                  className="w-full border-b border-white placeholder:font-[900] focus:outline-none"
-                />
-              </div>
-
-              <ul className="flex md:flex-row flex-col">
-                {menuItems.map((item) => {
-                  return (
-                    <li key={item.id} className="menu-item relative h-14 w-full flex justify-end">
-                      <motion.a
-                        href={item.href}
-                        className="relative flex items-center h-14 text-white text-sm font-bold uppercase w-full"
-                        style={{ fontFamily: 'Avenir, sans-serif' }}
-                        onMouseEnter={() => setExpandedItem(item.id)}
-                        onMouseLeave={() => setExpandedItem(null)}
-                        transition={{ duration: 0.3, ease: "easeInOut" }}
-                      >
-                        <div
-                          className="absolute inset-0 bg-gradient-to-r z-10"
-                          style={{
-                            background: item.bgGradient,
-                          }}
-                        />
-                        <div
-                          className=" w-16 h-14 flex items-center justify-center text-white text-3xl font-normal z-20"
-                        >
-                          {item.icon}
-                        </div>
-                        <span
-                          className={`relative z-30 text-center ${item.id === 'security-incident' ? 'line-clamp-1' : 'line-clamp-2'} opacity-100`}
-                        >
-                          {item.text}
-                        </span>
-                      </motion.a>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          </motion.div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </motion.header>

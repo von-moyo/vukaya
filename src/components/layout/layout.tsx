@@ -10,7 +10,7 @@ const MainLayout = () => {
       <Header />
       <div
         ref={scrollRef}
-        className="w-full h-[calc(100dvh-90px)] mt-[90px] overflow-y-auto scrollbar-none border-t border-gray-200"
+        className="w-full overflow-y-auto scrollbar-none"
       >
         <Suspense fallback={"Loading..."}>
           <Outlet />

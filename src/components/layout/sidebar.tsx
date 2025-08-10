@@ -1,7 +1,6 @@
 import React, { useRef } from "react";
 import { NavLink } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { adminNavLinks, guestNavLinks } from "../../constants/nav-items";
 import { useClickOutside } from "../../hooks";
 
 interface SideBarProps {
@@ -11,7 +10,6 @@ interface SideBarProps {
 }
 
 export const SideBar: React.FC<SideBarProps> = ({ className = "", isMobileMenuOpen, setIsMobileMenuOpen }) => {
-  const userNavLinks = adminNavLinks;
   const sideBarRef = useRef(null);
   useClickOutside(sideBarRef, sideBarRef, () =>
     setIsMobileMenuOpen(false)
@@ -21,7 +19,7 @@ export const SideBar: React.FC<SideBarProps> = ({ className = "", isMobileMenuOp
     <>
       <div ref={sideBarRef} className={`hidden lg:flex flex-col justify-between bg-white px-4 py-4 md:px-7 md:py-6 fixed sm:top-[90px] top-[69px] z-50 sm:h-[calc(100vh-88px)] h-[calc(100vh-85px)] lg:px-7 ${className}`}>
         <ul className="flex-1 space-y-0 overflow-y-auto">
-          {userNavLinks.map((n) => (
+          {/* {userNavLinks.map((n) => (
             <li key={n.name}>
               <NavLink
                 to={n.href}
@@ -40,7 +38,7 @@ export const SideBar: React.FC<SideBarProps> = ({ className = "", isMobileMenuOp
                 </span>
               </NavLink>
             </li>
-          ))}
+          ))} */}
         </ul>
       </div>
 
@@ -55,7 +53,7 @@ export const SideBar: React.FC<SideBarProps> = ({ className = "", isMobileMenuOp
             className={`fixed right-0 left-auto z-50 lg:hidden flex flex-col justify-between bg-white px-4 py-4 md:px-7 md:py-6 sm:top-[90px] top-[66px] sm:h-[calc(100vh-90px)] h-[calc(100vh-66px)] lg:px-7 shadow-[-5px_0_5px_-5px_rgba(0,0,0,0.1)] ${className}`}
           >
             <ul className="flex-1 overflow-y-auto">
-              {userNavLinks.map((n) => (
+              {/* {userNavLinks.map((n) => (
                 <li key={n.name} onClick={() => setIsMobileMenuOpen(false)}>
                   <NavLink
                     to={n.href}
@@ -74,7 +72,7 @@ export const SideBar: React.FC<SideBarProps> = ({ className = "", isMobileMenuOp
                     </span>
                   </NavLink>
                 </li>
-              ))}
+              ))} */}
 
             </ul>
 

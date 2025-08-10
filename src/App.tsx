@@ -5,8 +5,8 @@ import { Toaster } from 'sonner'
 const App = () => {
   return (
     <>
-          <RouterProvider router={router} />
-          <Toaster richColors className='text-left' position='bottom-center' />
+      <RouterProvider router={router} />
+      <Toaster richColors className='text-left' position='bottom-center' />
     </>
   )
 }

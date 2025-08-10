@@ -10,7 +10,7 @@
 @custom-variant dark (&:is(.dark *)); 
 
 body {
-  font-family: "Avenir", sans-serif;
+  font-family: 'Manrope', sans-serif !important;
 }
 
 .scrollbar-none {

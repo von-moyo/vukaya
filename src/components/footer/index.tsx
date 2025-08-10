@@ -1,7 +1,4 @@
-// components/Footer.tsx
-import React from "react";
 import { FaLinkedin } from "react-icons/fa";
-import { LogoIcon } from "../../assets/images";
 
 const footerSections = [
   {
@@ -18,7 +15,7 @@ const footerSections = [
     ],
   },
   {
-    title: "WHY QORWYN",
+    title: "WHY VUKAYA",
     links: ["Central Command", "Our Approach", "Awards", "Case Studies"],
   },
   {
@@ -48,9 +45,9 @@ const Footer = () => {
       <div className="md:max-w-screen-xl mx-auto px-4 py-10 flex flex-col md:flex-row justify-between gap-10 flex-wrap">
         {/* Left Section */}
         <div className="md:w-64">
-          <img src={LogoIcon} alt='logo icon' className='mb-4 md:w-full w-[256px] h-auto' />
+          {/* <img src={LogoIcon} alt='logo icon' className='mb-4 md:w-full w-[256px] h-auto' /> */}
           <p className="mb-2 text-blue-900">
-            connect@qorwynhealthsecurity.com
+            connect@vukayahealthsecurity.com
           </p>
           <p className="text-teal-700">
             120 Brentwood Commons Way
@@ -60,7 +57,7 @@ const Footer = () => {
             Brentwood, TN 37027
           </p>
           <a
-            href="https://www.linkedin.com/company/qorwyn-health-security"
+            href="https://www.linkedin.com/company/vukaya-health-security"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block mt-4 text-teal-600 hover:text-teal-800 text-2xl"
@@ -93,7 +90,7 @@ const Footer = () => {
       {/* Footer Bottom */}
       <div className="text-xs text-center text-gray-600 py-4 px-4">
         <p>
-          © Copyright 2024 Qorwyn Health Security, Inc. All rights reserved.{" "}
+          © Copyright 2024 Vukaya Health Security, Inc. All rights reserved.{" "}
           <a href="#" className="hover:underline">
             Contact Us
           </a>{" "}
@@ -111,9 +108,9 @@ const Footer = () => {
           </a>
         </p>
         <p className="mt-2">
-          Qorwyn Health Security is healthcare’s recognized leader in
+          Vukaya Health Security is healthcare’s recognized leader in
           cybersecurity – protecting patient data and reducing risk throughout
-          the Qorwyn healthcare ecosystem.
+          the Vukaya healthcare ecosystem.
         </p>
       </div>
     </footer>
