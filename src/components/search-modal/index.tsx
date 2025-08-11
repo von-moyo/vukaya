@@ -72,7 +72,7 @@ const SearchModal: React.FC<SearchProps> = ({
         className={`rounded-md transition-colors cursor-pointer ${className}`}
         aria-label="Open search"
       >
-        <SearchIcon className="h-5 w-5 text-[#808080]" />
+        <SearchIcon className="h-5 w-5 text-[#808080] ml-auto" />
       </button>
 
       {/* Modal Overlay */}

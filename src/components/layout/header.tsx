@@ -119,7 +119,7 @@ export const Header = () => {
 
   return (
     <motion.header
-      className={`sticky top-0 z-50 lg:h-[86px] h-[72px] bg-white border-b sm:px-[2%] px-[5%]  ${isMobile && isMenuOpen ? 'bg-[#2EA38F]' : ''}`}
+      className={`sticky top-0 z-50 lg:h-[86px] h-[72px] bg-white sm:px-[2.38%] px-[5%]  ${isMobile && isMenuOpen ? 'bg-[#2EA38F]' : ''}`}
       transition={{ duration: 0.3, ease: "easeOut" }}
     >
       <div className="flex items-center h-full w-full sm:justify-normal justify-between">
@@ -130,12 +130,12 @@ export const Header = () => {
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.2 }}
           >
-            <img src='/logo.avif' alt='logo icon' className='w-[125px]' />
+            <img src='/logo.avif' alt='logo icon' className='w-[128px]' />
           </motion.div>
         </Link>}
 
-        <div className={`sm:flex hidden items-center gap-8 ml-[9%] ${isMenuOpen ? 'w-full' : 'w-[85%]'} lg:justify-between justify-end`}>
-          <nav className="flex items-center gap-[2.65%] w-full lg:justify-normal justify-end">
+        <div className={`sm:flex hidden items-center gap-8 ml-[8.3%] ${isMenuOpen ? 'w-full' : 'w-[85%]'} lg:justify-between justify-end`}>
+          <nav className="flex items-center gap-[2.78%] w-full lg:justify-normal justify-end">
             {navItems.map((item, index) => (
               <div
                 key={item.name}
@@ -202,7 +202,7 @@ export const Header = () => {
             ))}
             <Menu className="w-5 h-5 text-[#808080] cursor-pointer lg:hidden flex" onClick={() => setIsMenuOpen(!isMenuOpen)} />
             <Search placeholder='Find our product' className='ml-[1%] w-[37%] xl:flex hidden' />
-            <SearchModal placeholder='Find our product' className='flx justify-items-end lg:w-[20%]' />
+            <SearchModal placeholder='Find our product' className='xl:hidden flex justify-items-end lg:w-[20%]' />
             <User className='text-[#808080] w-5 h-5 hover:text-red-500 cursor-pointer shrink-0' />
             <span className='flex gap-1 items-center text-[#808080] hover:text-red-500 cursor-pointer shrink-0'>
               <Heart className='w-5 h-5' />
