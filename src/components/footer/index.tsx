@@ -41,15 +41,15 @@ const footerSections = [
 
 const Footer = () => {
   return (
-    <footer className="bg-white text-sm text-gray-800 mt-10">
+    <footer className="bg-[#333333] text-sm text-white mt-10">
       <div className="md:max-w-screen-xl mx-auto px-4 py-10 flex flex-col md:flex-row justify-between gap-10 flex-wrap">
         {/* Left Section */}
         <div className="md:w-64">
-          {/* <img src={LogoIcon} alt='logo icon' className='mb-4 md:w-full w-[256px] h-auto' /> */}
-          <p className="mb-2 text-blue-900">
+          <img src='/logo-white.avif' alt='logo icon' className='w-[128px] h-auto mb-4' />
+          <p className="mb-2 text-white-900">
             connect@vukayahealthsecurity.com
           </p>
-          <p className="text-teal-700">
+          <p className="text-white-700">
             120 Brentwood Commons Way
             <br />
             Building 4, Suite 500
@@ -60,7 +60,7 @@ const Footer = () => {
             href="https://www.linkedin.com/company/vukaya-health-security"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block mt-4 text-teal-600 hover:text-teal-800 text-2xl"
+            className="inline-block mt-4 text-white hover:text-white-800 text-2xl"
           >
             <FaLinkedin />
           </a>
@@ -70,10 +70,10 @@ const Footer = () => {
         <div className="flex flex-wrap gap-10 flex-1">
           {footerSections.map((section) => (
             <div key={section.title} className="min-w-[140px]">
-              <h3 className="font-bold mb-2 uppercase text-sm text-gray-800">
+              <h3 className="font-bold mb-2 uppercase text-sm text-[#ff0030]">
                 {section.title}
               </h3>
-              <ul className="space-y-1 text-gray-700">
+              <ul className="space-y-1 text-white">
                 {section.links.map((link) => (
                   <li key={link}>
                     <a href="#" className="hover:text-teal-700">
@@ -88,7 +88,7 @@ const Footer = () => {
       </div>
 
       {/* Footer Bottom */}
-      <div className="text-xs text-center text-gray-600 py-4 px-4">
+      <div className="text-xs text-center text-white py-4 px-4">
         <p>
           © Copyright 2024 Vukaya Health Security, Inc. All rights reserved.{" "}
           <a href="#" className="hover:underline">
