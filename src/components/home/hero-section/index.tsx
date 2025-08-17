@@ -17,8 +17,8 @@ interface HeroSlide {
 const heroSlides: HeroSlide[] = [
   {
     id: 1,
-    subheading: "AI Trained on over 2000 strains",
-    heading: "CRAFTED FROM STRAIN EFFECTS",
+    subheading: "Whether you're vibing post-sesh, mid-float, or just zoning out — this sound is tuned to enhance your high.",
+    heading: "Welcome to sound designed for elevated minds.",
     buttonText: "ORDER NOW",
     buttonLink: "https://vukaya.com/collections/all",
     image: Banner1,
@@ -97,7 +97,7 @@ const HeroCarousel: React.FC = () => {
         <button
           onClick={prevSlide}
           disabled={isAnimating}
-          className="p-3 rounded-full border border-[#80808033] transition-all duration-300 cursor-pointer hover:bg-red-500 hover:p-5 hover:bottom-4"
+          className="w-16 h-16 grid place-content-center hover:w-20 hover:h-20 rounded-full border border-[#80808033] transition-all duration-300 cursor-pointer hover:bg-[#c00202] hover:bottom-4 flex-shrink-0"
         >
           <ArrowLeft className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
         </button>
@@ -105,7 +105,7 @@ const HeroCarousel: React.FC = () => {
         <button
           onClick={nextSlide}
           disabled={isAnimating}
-          className="p-3 rounded-full border border-[#80808033] transition-all duration-300 cursor-pointer hover:bg-red-500 hover:p-5 hover:bottom-4"
+          className="w-16 h-16 grid place-content-center hover:w-20 hover:h-20 rounded-full border border-[#80808033] transition-all duration-300 cursor-pointer hover:bg-[#c00202] hover:bottom-4 flex-shrink-0"
         >
           <ArrowRight className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
         </button>
@@ -128,7 +128,7 @@ const HeroCarousel: React.FC = () => {
         </div>
       </div>
 
-      <div className="relative z-10 h-full flex md:items-center items-start md:pt-0 pt-10 xl:px-[9%] lg:px-[5%] md:px-[9%] px-[5%]">
+      <div className={`relative z-10 h-full flex md:items-center items-start md:pt-0 pt-10 ${currentSlide === 0 ? 'xl:px-[5%]' : 'xl:px-[9%]'} lg:px-[5%] md:px-[9%] px-[5%]`}>
         <AnimatePresence mode="wait">
           <motion.div
             key={currentSlide}
@@ -147,7 +147,7 @@ const HeroCarousel: React.FC = () => {
               }
             }}
           >
-            <div className={`lg:space-y-8 md:space-y-7 space-y-4 md:w-[50%] lg:w-[41.67%] ${currentSlide === 1 && 'ml-auto'}`}>
+            <div className={`lg:space-y-8 md:space-y-7 space-y-4 md:w-[50%] lg:w-[41.67%] ${currentSlide === 1 && 'ml-auto'} ${currentSlide === 0 && 'lg:w-[60%] md:w-[80%] ml-auto'}`}>
               <motion.p
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -169,7 +169,7 @@ const HeroCarousel: React.FC = () => {
                   ease: "easeOut",
                   delay: 1.2
                 }}
-                className="text-white text-[30px] sm:text-[40px] lg:text-[60px] xl:text-[90px] font-black tracking-tight lg:leading-none leading-[120%] md:text-left text-center"
+                className="text-white text-[30px] sm:text-[40px] lg:text-[60px] xl:text-[90px] font-black tracking-tight lg:leading-none leading-[120%] md:text-left text-center uppercase"
               >
                 {currentSlideData.heading}
                 {/* {currentSlideData.heading.split(' ').map((word, index) => (

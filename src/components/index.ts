@@ -3,3 +3,6 @@ export * from './search';
 export * from './home';
 export * from './footer';
 export * from './search-modal';
+export * from './mobile-app';
+export * from './toggle';
+export * from './bar-chart';

@@ -3,7 +3,7 @@ import { Phone } from '../../../assets';
 
 const CannabisSection = () => {
   return (
-    <div className="mx-auto xl:max-w-[1140px] lg:max-w-[980px] md:max-w-[720px] md:px-0 px-6 py-6 flex flex-col lg:flex-row sm:gap-[4%] gap-[10px] items-center justify-between">
+    <div className="mx-auto xl:max-w-[1140px] lg:max-w-[980px] md:max-w-[720px] md:px-0 px-6 pt-6 pb-24 flex flex-col lg:flex-row sm:gap-[4%] gap-[10px] items-center justify-between">
       {/* Left Column - Headline */}
       <div className="lg:w-1/2 ">
         <img src={Phone} alt={`phone image`} className='w-full h-auto' />
