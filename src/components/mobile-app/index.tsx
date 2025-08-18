@@ -1,10 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Home, Search, Sliders, BookOpen, User, Star, Play, Pause, Volume2, Headphones, X, SkipBack, SkipForward, ArrowLeft, MoreVertical, Timer, Zap, Cast } from 'lucide-react';
+import { Home, Search, Sliders, BookOpen, User, Star, Play, Pause, Headphones, X, SkipBack, SkipForward, ArrowLeft, MoreVertical, Timer, Zap, Cast } from 'lucide-react';
 import { Toggle } from '../toggle';
 import { Battery, Signal, Wifi } from '../../assets';
 import { useClickOutside } from '../../hooks';
 import { CustomBarChart } from '../bar-chart';
-import { set } from 'react-hook-form';
 
 const MobileApp = () => {
   const [activeTab, setActiveTab] = useState('Home');
