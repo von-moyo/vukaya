@@ -2,7 +2,7 @@ import { MobileApp } from "../../mobile-app";
 
 const MobileSimulator = () => {
   return (
-    <div className="mx-auto xl:max-w-[1140px] lg:max-w-[980px] md:max-w-[720px] md:px-0 px-6 pb-6 pt-20 flex flex-col lg:flex-row sm:gap-[4%] gap-[60px] items-center justify-between">
+    <div className="mx-auto xl:max-w-[1140px] lg:max-w-[980px] md:max-w-[720px] md:px-0 px-6 pb-6 pt-20 flex flex-col-reverse lg:flex-row sm:gap-[4%] gap-[60px] items-center justify-between">
       <div className="lg:w-1/2 lg:mt-0 mt-16 lg:mb-0 mb-20">
         <p className='text-sm uppercase font-extrabold'>wellness & sound</p>
         <h5 className='xl:text-[32px] md:text-[28px] mt-1 mb-8 leading-[110%] font-medium'>
@@ -17,13 +17,14 @@ const MobileSimulator = () => {
       </div>
 
       <div className="lg:w-1/2 grid place-content-center">
+        <h4 className="text-center font-semibold mb-4 lg:hidden">Try out our mobile app now!</h4>
         <div className="relative inline-block">
           <img
             src="/Mockup.svg"
             alt="phone image"
             className="w-auto h-[600px] cursor-pointer"
           />
-          <div className="absolute top-[1.5%] h-[97%] left-[4.2%] w-[91.5%] overflow-y-auto scrollbar-none bg-[#181A20] rounded-[30px] cursor-pointer text-xs text-white">
+          <div className="absolute top-[1.5%] h-[97%] left-[4.2%] w-[91.5%] overflow-y-auto scrollbar-none bg-[#181A20] rounded-[40px] cursor-pointer text-xs text-white">
             <MobileApp />
           </div>
         </div>

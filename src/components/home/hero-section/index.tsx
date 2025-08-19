@@ -128,7 +128,7 @@ const HeroCarousel: React.FC = () => {
         </div>
       </div>
 
-      <div className={`relative z-10 h-full flex md:items-center items-start md:pt-0 pt-10 ${currentSlide === 0 ? 'xl:px-[5%]' : 'xl:px-[9%]'} lg:px-[5%] md:px-[9%] px-[5%]`}>
+      <div className={`relative z-10 lg:h-full h-fit flex md:items-center items-start md:pt-0 pt-[50%] ${currentSlide === 0 ? 'xl:px-[5%]' : 'xl:px-[9%]'} lg:px-[5%] md:px-[9%] px-[5%]`}>
         <AnimatePresence mode="wait">
           <motion.div
             key={currentSlide}

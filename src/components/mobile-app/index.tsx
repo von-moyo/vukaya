@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Home, Search, Sliders, BookOpen, User, Star, Play, Pause, Headphones, X, SkipBack, SkipForward, ArrowLeft, MoreVertical, Timer, Zap, Cast } from 'lucide-react';
+import { Home, Search, Sliders, BookOpen, User, Star, Pause, Headphones, X, ArrowLeft, MoreVertical, PlayIcon } from 'lucide-react';
 import { Toggle } from '../toggle';
-import { Battery, Signal, Wifi } from '../../assets';
+import { BackwardsTen, Battery, Clock, ForwardsTen, Meter, Next, Play, Previous, Select, ShareScreen, Signal, Wifi, FourAm, GetOverIt, KeepingItReal, LeVibe, OverIt, OwnTheNight } from '../../assets';
 import { useClickOutside } from '../../hooks';
 import { CustomBarChart } from '../bar-chart';
 
@@ -81,8 +81,6 @@ const MobileApp = () => {
   const hours = now.getHours().toString().padStart(2, '0');
   const minutes = now.getMinutes().toString().padStart(2, '0');
   const time = `${hours}:${minutes}`;
-
-  // Sample audio URL - you can replace with actual audio files
   const sampleAudioUrl = "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav";
 
   const strainTags = [
@@ -136,34 +134,79 @@ const MobileApp = () => {
     }
   ];
 
+  // const freshlyRolledBeats = [
+  //   {
+  //     title: 'Amasosha',
+  //     artist: 'SHAYA',
+  //     bgColor: 'bg-gradient-to-br from-orange-500 to-red-600',
+  //     audioUrl: sampleAudioUrl
+  //   },
+  //   {
+  //     title: 'That heat',
+  //     artist: 'SHAYA',
+  //     bgColor: 'bg-gradient-to-br from-orange-500 to-red-600',
+  //     audioUrl: sampleAudioUrl
+  //   },
+  //   {
+  //     title: 'Chill Vibes',
+  //     artist: 'Lo-Fi Collective',
+  //     bgColor: 'bg-gradient-to-br from-purple-500 to-pink-500',
+  //     audioUrl: sampleAudioUrl
+  //   },
+  //   {
+  //     title: 'Ocean Waves',
+  //     artist: 'Nature Sounds',
+  //     bgColor: 'bg-gradient-to-br from-blue-500 to-teal-500',
+  //     audioUrl: sampleAudioUrl
+  //   }
+  // ];
+
   const freshlyRolledBeats = [
-    {
-      title: 'Amasosha',
-      artist: 'SHAYA',
-      bgColor: 'bg-gradient-to-br from-orange-500 to-red-600',
-      audioUrl: sampleAudioUrl
-    },
-    {
-      title: 'That heat',
-      artist: 'SHAYA',
-      bgColor: 'bg-gradient-to-br from-orange-500 to-red-600',
-      audioUrl: sampleAudioUrl
-    },
-    {
-      title: 'Chill Vibes',
-      artist: 'Lo-Fi Collective',
-      bgColor: 'bg-gradient-to-br from-purple-500 to-pink-500',
-      audioUrl: sampleAudioUrl
-    },
-    {
-      title: 'Ocean Waves',
-      artist: 'Nature Sounds',
-      bgColor: 'bg-gradient-to-br from-blue-500 to-teal-500',
-      audioUrl: sampleAudioUrl
-    }
-  ];
+  {
+    title: '4am',
+    artist: 'Unknown',
+    bgColor: 'bg-gradient-to-br from-orange-500 to-red-600',
+    audioUrl: FourAm,
+  },
+  {
+    title: 'Get Over It',
+    artist: 'Unknown',
+    bgColor: 'bg-gradient-to-br from-purple-500 to-pink-500',
+    audioUrl: GetOverIt,
+  },
+  {
+    title: 'Keeping It Real',
+    artist: 'Unknown',
+    bgColor: 'bg-gradient-to-br from-blue-500 to-teal-500',
+    audioUrl: KeepingItReal,
+  },
+  {
+    title: 'Le Vibe',
+    artist: 'Unknown',
+    bgColor: 'bg-gradient-to-br from-pink-500 to-yellow-500',
+    audioUrl: LeVibe,
+  },
+  {
+    title: 'Over It',
+    artist: 'Unknown',
+    bgColor: 'bg-gradient-to-br from-green-500 to-emerald-500',
+    audioUrl: OverIt,
+  },
+  {
+    title: 'Own the Night',
+    artist: 'Unknown',
+    bgColor: 'bg-gradient-to-br from-indigo-500 to-purple-500',
+    audioUrl: OwnTheNight,
+  },
+];
 
   const litHitsOfTheWeek = [
+    {
+      title: 'Starboy',
+      artist: 'The Weeknd, Daft Punk',
+      bgColor: 'bg-gradient-to-br from-orange-500 to-red-600',
+      audioUrl: sampleAudioUrl
+    },
     {
       title: 'Un dos Tres',
       artist: 'IRAWO',
@@ -235,7 +278,6 @@ const MobileApp = () => {
     { name: 'Funk Pulse', color: 'bg-yellow-500', image: 'nour-album' }
   ];
 
-  // Audio control functions
   const playSong = (song: any) => {
     if (audioRef.current && song.audioUrl) {
       setCurrentSong(song);
@@ -286,7 +328,6 @@ const MobileApp = () => {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
-  // Audio event listeners
   useEffect(() => {
     const audio = audioRef.current;
     if (audio) {
@@ -518,35 +559,35 @@ const MobileApp = () => {
   );
 
   const renderNowPlayingScreen = () => (
-    <div className="absolute inset-0 bg-gradient-to-b from-green-900 via-green-800 to-black z-50 h-[515px]">
+    <div className="absolute inset-0 bg-gradient-to-b from-green-900 via-green-800 to-black z-50 h-[560px]">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 pt-12">
-        <ArrowLeft className="w-6 h-6 text-white cursor-pointer" onClick={() => setShowNowPlaying(false)} />
-        <div className="text-center">
-          <h2 className="text-white text-sm">Playing from playlist</h2>
-          <p className="text-green-400 text-xs">Cannabis Vibes</p>
+      <div className="flex items-center justify-between p-4 pt-6">
+        <ArrowLeft className="w-5 h-auto text-white cursor-pointer" onClick={() => setShowNowPlaying(false)} />
+        <div className="text-center mt-2">
+          <h2 className="text-white text-xs">Playing from playlist</h2>
+          <p className="text-green-400 text-[10px]">Cannabis Vibes</p>
         </div>
-        <MoreVertical className="w-6 h-6 text-white" />
+        <MoreVertical className="w-auto h-4.5 text-white" />
       </div>
 
       {/* Album Art */}
-      <div className="flex justify-center p-8">
-        <div className="w-72 h-72 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl relative overflow-hidden flex items-center justify-center border-4 border-purple-500">
+      <div className="flex justify-center pb-4">
+        <div className="w-[90%] h-40 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl relative overflow-hidden flex items-center justify-center  ">
           <div className="text-center">
-            <div className="text-white font-bold text-4xl mb-4">STARBOY</div>
-            <div className="text-yellow-400 font-bold text-lg">THE WEEKND</div>
+            <div className="text-white font-bold text-xl mb-4">{currentSong?.title || 'Starboy'}</div>
+            <div className="text-yellow-400 font-bold text-lg">{currentSong?.artist || 'The Weeknd'}</div>
           </div>
         </div>
       </div>
 
       {/* Song Info */}
       <div className="text-center px-8 mb-8">
-        <h1 className="text-white text-2xl font-bold mb-2">{currentSong?.title || 'Starboy'}</h1>
-        <p className="text-gray-300 text-lg">{currentSong?.artist || 'The Weeknd, Daft Punk'}</p>
+        <h1 className="text-white text-lg font-bold mb-1">{currentSong?.title || 'Starboy'}</h1>
+        <p className="text-gray-300 text-sm">{currentSong?.artist || 'The Weeknd, Daft Punk'}</p>
       </div>
 
       {/* Progress Bar */}
-      <div className="px-8 mb-8">
+      <div className="px-4 mb-8">
         <div className="w-full bg-gray-600 rounded-full h-1 mb-2">
           <div
             className="bg-green-500 h-1 rounded-full transition-all duration-1000"
@@ -560,35 +601,29 @@ const MobileApp = () => {
       </div>
 
       {/* Controls */}
-      <div className="flex items-center justify-center gap-8 px-8 mb-8">
-        <SkipBack className="w-8 h-8 text-white cursor-pointer" />
-        <div className="w-6 h-6 border border-white rounded-full flex items-center justify-center cursor-pointer">
-          <div className="w-2 h-2 border-l-2 border-white transform rotate-180"></div>
-          <span className="text-white text-xs ml-1">10</span>
-        </div>
-        <button
-          onClick={togglePlayPause}
-          className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center cursor-pointer hover:bg-green-600 transition-colors"
-        >
-          {isPlaying ? (
-            <Pause className="w-8 h-8 text-black fill-current" />
-          ) : (
-            <Play className="w-8 h-8 text-black fill-current ml-1" />
-          )}
-        </button>
-        <div className="w-6 h-6 border border-white rounded-full flex items-center justify-center cursor-pointer">
-          <div className="w-2 h-2 border-r-2 border-white"></div>
-          <span className="text-white text-xs ml-1">10</span>
-        </div>
-        <SkipForward className="w-8 h-8 text-white cursor-pointer" />
+      <div className="flex items-center justify-between px-8 mb-8">
+        <img src={Previous} alt="previous icon" className="w-5 h-5 text-black fill-current cursor-pointer" />
+        <img src={BackwardsTen} alt="backwards icon" className="w-6 h-6 text-black fill-current cursor-pointer" />
+        {!isPlaying ?
+          <img onClick={togglePlayPause} src={Play} alt="Pause" className="w-12 h-12 text-black fill-current cursor-pointer" />
+          : (
+            <button
+              onClick={togglePlayPause}
+              className="w-12 h-12 flex-shrink-0 bg-green-500 rounded-full flex items-center justify-center cursor-pointer hover:bg-green-600 transition-colors"
+            >
+
+              <Pause className="w-6 h-6 text-black fill-current cursor-pointer" />
+            </button>)}
+        <img src={ForwardsTen} alt="forwards icon" className="w-6 h-6 text-black fill-current cursor-pointer" />
+        <img src={Next} alt="next icon" className="w-5 h-5 text-black fill-current cursor-pointer" />
       </div>
 
       {/* Additional Controls */}
-      <div className="flex items-center justify-center gap-12 px-8">
-        <Zap className="w-6 h-6 text-white cursor-pointer" />
-        <Timer className="w-6 h-6 text-white cursor-pointer" />
-        <Cast className="w-6 h-6 text-white cursor-pointer" />
-        <MoreVertical className="w-6 h-6 text-white cursor-pointer" />
+      <div className="flex items-center justify-between px-8">
+        <img src={Meter} alt="meter icon" className="w-4 h-4 text-black fill-current cursor-pointer" />
+        <img src={Clock} alt="clock icon" className="w-4 h-4 text-black fill-current cursor-pointer" />
+        <img src={ShareScreen} alt="scree share icon" className="w-4 h-4 text-black fill-current cursor-pointer" />
+        <img src={Select} alt="select icon" className="w-4 h-4 text-black fill-current cursor-pointer" />
       </div>
     </div>
   );
@@ -622,7 +657,7 @@ const MobileApp = () => {
           <div className="text-white text-4xl">🪷</div>
         ) : (
           <div className="w-16 h-16 bg-white/20 rounded-lg flex items-center justify-center">
-            <Play className="w-6 h-6 text-white fill-current" />
+            <PlayIcon className="w-6 h-6 text-white fill-current" />
           </div>
         )}
       </div>
@@ -804,7 +839,7 @@ const MobileApp = () => {
           <div className="flex items-center gap-3">
             <div className="w-6 h-6 flex items-center justify-center">
               <div className="w-4 h-3 border border-white rounded-sm flex items-center justify-center">
-                <Play className="w-2 h-2 text-white fill-current" />
+                <PlayIcon className="w-2 h-2 text-white fill-current" />
               </div>
             </div>
             <span className="text-white text-base font-medium">Playlists</span>
@@ -1004,7 +1039,7 @@ const MobileApp = () => {
     <div className='relative bg-[#181A20] text-white max-w-md mx-auto'>
       <audio ref={audioRef} />
 
-      <div className='bg-[#181A20] sticky top-0 z-50 rounded-top-[30px] pl-[7%] pr-[5%] pt-1.5 flex justify-between items-center'>
+      <div className={`bg-[#181A20] sticky top-0 z-50 rounded-top-[40px] pl-[7%] pr-[5%] pt-1.5 flex justify-between items-center ${showNowPlaying && 'bg-gradient-to-b bg-green-900'}`}>
         <div className='font-bold'>{time}</div>
         <div className='flex gap-1.5'>
           <div className='flex font-bold items-center gap-[1px]'>
@@ -1019,36 +1054,32 @@ const MobileApp = () => {
       <div className="relative">
         {showNowPlaying ? renderNowPlayingScreen() : (
           <>
-            {/* Content Area */}
             {activeTab === 'Home' ? renderHomeContent() : renderOtherContent(activeTab)}
 
-            {/* Fixed Bottom Music Player */}
-            {/* {currentSong && (
-              <div className="fixed bottom-16 left-0 right-0 bg-gradient-to-r from-purple-600 to-pink-600 mx-4 rounded-xl p-3 flex items-center gap-3 cursor-pointer" onClick={() => setShowNowPlaying(true)}>
-                <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg flex items-center justify-center flex-shrink-0">
+            {currentSong && (
+              <div className='bg-gray-800 px-3 py-1.5 absolute w-full bottom-[42px] flex items-center bg-gradient-to-r from-purple-600 to-pink-600' onClick={() => setShowNowPlaying(true)}>
+                <div className="w-6 h-6 bg-gradient-to-br mr-3 from-orange-500 to-red-600 rounded-sm flex items-center justify-center flex-shrink-0">
                   <span className="text-white font-bold text-xs">
                     {currentSong.artist?.substring(0, 2) || 'SH'}
                   </span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h4 className="text-white font-medium text-sm truncate">{currentSong.title}</h4>
-                  <p className="text-white/80 text-xs truncate">{currentSong.artist}</p>
+                  <h4 className="text-white font-medium text-[11px] truncate">{currentSong.title}</h4>
+                  <p className="text-white/80 text-[8px] truncate">{currentSong.artist}</p>
                 </div>
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     togglePlayPause();
                   }}
-                  className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center"
+                  className="w-fit h-fit flex-shrink-0 flex items-center justify-center cursor-pointer hover:scale-110 transition-all mr-2"
                 >
-                  {isPlaying ? (
-                    <Pause className="w-4 h-4 text-white fill-current" />
-                  ) : (
-                    <Play className="w-4 h-4 text-white fill-current ml-0.5" />
-                  )}
+                  {!isPlaying ?
+                    <PlayIcon className="w-4 h-4 text-[#ffffffa7] cursor-pointer" /> : <Pause className="w-4 h-4 text-[#ffffffa7] cursor-pointer" />}
                 </button>
+
                 <X
-                  className="w-5 h-5 text-white/60 cursor-pointer"
+                  className="w-4 h-4 text-white/60 cursor-pointer hover:scale-110 transition-all"
                   onClick={(e) => {
                     e.stopPropagation();
                     setCurrentSong(null);
@@ -1059,9 +1090,9 @@ const MobileApp = () => {
                   }}
                 />
               </div>
-            )} */}
 
-            {/* Bottom Navigation */}
+            )}
+
             <div className="bg-[#1a1a1a] border-t border-gray-800">
               <div className="flex justify-around items-center pt-1 pb-3">
                 {navItems.map((item, index) => {
@@ -1084,9 +1115,7 @@ const MobileApp = () => {
               <div className="h-1 bg-white rounded-full mx-auto w-[40%] mb-2"></div>
             </div>
 
-            {/* Mood Modal */}
             {modalOpen && renderMoodModal()}
-            {/* Cannabis Sound Modal */}
             {soundModalOpen && renderCannabisSound()}
           </>
         )}

@@ -224,7 +224,7 @@ export const Header = () => {
 
       {/* Mobile Bottom Navigation */}
       <motion.div
-        className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 sm:hidden block"
+        className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-[99999] sm:hidden block"
         initial={{ y: 100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.3, ease: "easeOut" }}

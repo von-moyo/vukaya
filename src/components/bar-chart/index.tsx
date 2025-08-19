@@ -1,7 +1,7 @@
-import type React from 'react';
+import React from 'react';
 import { BarChart, Bar, XAxis, YAxis } from 'recharts';
 
-const CustomBarChart: React.FC<{ data: any }> = ({ data }) => {
+const CustomBarChart: React.FC<{ data: any }> = React.memo(({ data }) => {
   return (
     <BarChart width={250} height={200} data={data} className='-ml-[50px]' barSize={5} barCategoryGap={20}>
       <XAxis
@@ -23,10 +23,10 @@ const CustomBarChart: React.FC<{ data: any }> = ({ data }) => {
         }}
         style={{ fontSize: '10px' }}
       />
-      <Bar dataKey="max" fill="#90EE90" isAnimationActive={false} radius={[10, 10, 10, 10]} className="value-bar"  />
+      <Bar dataKey="max" fill="#90EE90" isAnimationActive={false} radius={[10, 10, 10, 10]} className="value-bar" />
       <Bar dataKey="value" fill="#9370DB" radius={[10, 10, 10, 10]} />
     </BarChart>
   );
-};
+});
 
 export { CustomBarChart };
