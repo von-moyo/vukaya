@@ -6,3 +6,4 @@ import OverIt from "./over it.mp3";
 import OwnTheNight from "./own the night.mp3";
 
 export { FourAm, GetOverIt, KeepingItReal, LeVibe, OverIt, OwnTheNight };
+export * from "./eq-versions";

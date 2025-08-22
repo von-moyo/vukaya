@@ -6,3 +6,4 @@ export * from './search-modal';
 export * from './mobile-app';
 export * from './toggle';
 export * from './bar-chart';
+export * from './email-modal';

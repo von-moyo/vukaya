@@ -1,22 +1,57 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Home, Search, Sliders, BookOpen, User, Star, Pause, Headphones, X, ArrowLeft, MoreVertical, PlayIcon } from 'lucide-react';
-import { Toggle } from '../toggle';
-import { BackwardsTen, Battery, Clock, ForwardsTen, Meter, Next, Play, Previous, Select, ShareScreen, Signal, Wifi, FourAm, GetOverIt, KeepingItReal, LeVibe, OverIt, OwnTheNight } from '../../assets';
+import { Home, Search, Sliders, BookOpen, User, Star, Pause, Headphones, X, ArrowLeft, MoreVertical, PlayIcon, BellDotIcon, BellIcon } from 'lucide-react';
+import { IconBattery, IconSignal, IconWifi } from '../icons';
+import {
+  FouramImage, OwnTheNightImage, KeepingItRealImage, LeVibeImage, FourAm, GetOverIt, KeepingItReal, LeVibe, OverIt, OwnTheNight, BackwardsTen, Battery, Clock, ForwardsTen, Meter, Next, Play, Previous, Select, ShareScreen, Signal, Wifi, FourAmIndica,
+  FourAmHybrid,
+  GetOverItIndica,
+  GetOverItHybrid,
+  KeepingItRealHybrid,
+  KeepingItRealIndica,
+  KeepingItRealSativa,
+  LeVibeHybrid,
+  LeVibeIndica,
+  LeVibeSativa,
+  OverItHybrid,
+  OverItSativa,
+  OwnTheNightHybrid,
+  OwnTheNightIndica,
+  OwnTheNightSativa,
+} from '../../assets';
 import { useClickOutside } from '../../hooks';
 import { CustomBarChart } from '../bar-chart';
+import { Toggle } from '../toggle';
+
+const mockAudio = "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav";
 
 const MobileApp = () => {
   const [activeTab, setActiveTab] = useState('Home');
   const [modalOpen, setModalOpen] = useState(true);
   const [soundModalOpen, setSoundModalOpen] = useState(false);
   const [isOnNotification, setIsOnNotification] = useState(true);
-  const [isOnDarkMode, setIsOnDarkMode] = useState(false);
+  const [isOnDarkMode, setIsOnDarkMode] = useState(false); // Changed to false for light mode
   const [currentSong, setCurrentSong] = useState<any>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [showNowPlaying, setShowNowPlaying] = useState(false);
-  const [eqActiveTab, setEqActiveTab] = useState('Soundscape');
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [currentTime, setCurrentTime] = useState<number>(0);
+  const [duration, setDuration] = useState<number>(0);
+  const [showNowPlaying, setShowNowPlaying] = useState<boolean>(false);
+  const [eqActiveTab, setEqActiveTab] = useState<string>('Soundscape');
+  const [demoStep, setDemoStep] = useState(0); // 0: none, 1: click first song, 2: click Sound (EQ), 3: click cannabis type, 4: thank you modal
+  const [showThankYouModal, setShowThankYouModal] = useState(false);
+
+  const theme = {
+    bg: isOnDarkMode ? 'bg-[#181A20]' : 'bg-gray-50',
+    cardBg: isOnDarkMode ? 'bg-gray-800' : 'bg-gray-100',
+    modalBg: isOnDarkMode ? 'bg-gray-900' : 'bg-white',
+    text: isOnDarkMode ? 'text-white' : 'text-gray-900',
+    textSecondary: isOnDarkMode ? 'text-gray-300' : 'text-gray-600',
+    textTertiary: isOnDarkMode ? 'text-gray-400' : 'text-gray-500',
+    border: isOnDarkMode ? 'border-gray-800' : 'border-gray-200',
+    input: isOnDarkMode ? 'bg-gray-800' : 'bg-gray-100',
+    shadow: isOnDarkMode ? '' : 'shadow-sm',
+    modalOverlay: isOnDarkMode ? 'bg-black/40' : 'bg-black/20'
+  };
+
   const indicaData = [
     { name: '31', max: 100, value: 80 },
     { name: '62', max: 100, value: 75 },
@@ -57,18 +92,7 @@ const MobileApp = () => {
   ];
 
   const [eqValues, setEqValues] = useState(indicaData);
-  const [selectedCannabisType, setSelectedCannabisType] = useState('Sativa');
-
-  useEffect(() => {
-    if (selectedCannabisType === "Indica") {
-      setEqValues(indicaData);
-    } else if (selectedCannabisType === "Sativa") {
-      setEqValues(sattivaData);
-    } else if (selectedCannabisType === "Hybrid") {
-      setEqValues(hybridData);
-    }
-  }, [selectedCannabisType]);
-
+  const [selectedCannabisType, setSelectedCannabisType] = useState<string>('');
 
   const audioRef = useRef<any>(null);
   const modalRef = useRef<any>(null);
@@ -81,7 +105,6 @@ const MobileApp = () => {
   const hours = now.getHours().toString().padStart(2, '0');
   const minutes = now.getMinutes().toString().padStart(2, '0');
   const time = `${hours}:${minutes}`;
-  const sampleAudioUrl = "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav";
 
   const strainTags = [
     '3D Cbd',
@@ -134,119 +157,122 @@ const MobileApp = () => {
     }
   ];
 
-  // const freshlyRolledBeats = [
-  //   {
-  //     title: 'Amasosha',
-  //     artist: 'SHAYA',
-  //     bgColor: 'bg-gradient-to-br from-orange-500 to-red-600',
-  //     audioUrl: sampleAudioUrl
-  //   },
-  //   {
-  //     title: 'That heat',
-  //     artist: 'SHAYA',
-  //     bgColor: 'bg-gradient-to-br from-orange-500 to-red-600',
-  //     audioUrl: sampleAudioUrl
-  //   },
-  //   {
-  //     title: 'Chill Vibes',
-  //     artist: 'Lo-Fi Collective',
-  //     bgColor: 'bg-gradient-to-br from-purple-500 to-pink-500',
-  //     audioUrl: sampleAudioUrl
-  //   },
-  //   {
-  //     title: 'Ocean Waves',
-  //     artist: 'Nature Sounds',
-  //     bgColor: 'bg-gradient-to-br from-blue-500 to-teal-500',
-  //     audioUrl: sampleAudioUrl
-  //   }
-  // ];
-
   const freshlyRolledBeats = [
-  {
-    title: '4am',
-    artist: 'Unknown',
-    bgColor: 'bg-gradient-to-br from-orange-500 to-red-600',
-    audioUrl: FourAm,
-  },
-  {
-    title: 'Get Over It',
-    artist: 'Unknown',
-    bgColor: 'bg-gradient-to-br from-purple-500 to-pink-500',
-    audioUrl: GetOverIt,
-  },
-  {
-    title: 'Keeping It Real',
-    artist: 'Unknown',
-    bgColor: 'bg-gradient-to-br from-blue-500 to-teal-500',
-    audioUrl: KeepingItReal,
-  },
-  {
-    title: 'Le Vibe',
-    artist: 'Unknown',
-    bgColor: 'bg-gradient-to-br from-pink-500 to-yellow-500',
-    audioUrl: LeVibe,
-  },
-  {
-    title: 'Over It',
-    artist: 'Unknown',
-    bgColor: 'bg-gradient-to-br from-green-500 to-emerald-500',
-    audioUrl: OverIt,
-  },
-  {
-    title: 'Own the Night',
-    artist: 'Unknown',
-    bgColor: 'bg-gradient-to-br from-indigo-500 to-purple-500',
-    audioUrl: OwnTheNight,
-  },
-];
+    {
+      title: "4am",
+      artist: "Unknown",
+      image: FouramImage,
+      audioUrl: FourAm,
+      audioUrls: {
+        indica: FourAmIndica,
+        hybrid: FourAmHybrid,
+        // no sativa version in your files
+      },
+    },
+    {
+      title: "Get Over It",
+      artist: "Unknown",
+      image: null,
+      audioUrl: GetOverIt,
+      audioUrls: {
+        indica: GetOverItIndica,
+        hybrid: GetOverItHybrid,
+        // no sativa version in your files
+      },
+    },
+    {
+      title: "Keeping It Real",
+      artist: "Unknown",
+      image: KeepingItRealImage,
+      audioUrl: KeepingItReal,
+      audioUrls: {
+        indica: KeepingItRealIndica,
+        sativa: KeepingItRealSativa,
+        hybrid: KeepingItRealHybrid,
+      },
+    },
+    {
+      title: "Le Vibe",
+      artist: "Unknown",
+      image: LeVibeImage,
+      audioUrl: LeVibe,
+      audioUrls: {
+        indica: LeVibeIndica,
+        sativa: LeVibeSativa,
+        hybrid: LeVibeHybrid,
+      },
+    },
+    {
+      title: "Over It",
+      artist: "Unknown",
+      image: null,
+      audioUrl: OverIt,
+      audioUrls: {
+        sativa: OverItSativa,
+        hybrid: OverItHybrid,
+        // no indica version in your files
+      },
+    },
+    {
+      title: "Own the Night",
+      artist: "Unknown",
+      image: OwnTheNightImage,
+      audioUrl: OwnTheNight,
+      audioUrls: {
+        indica: OwnTheNightIndica,
+        sativa: OwnTheNightSativa,
+        hybrid: OwnTheNightHybrid,
+      },
+    },
+  ];
 
   const litHitsOfTheWeek = [
     {
       title: 'Starboy',
       artist: 'The Weeknd, Daft Punk',
       bgColor: 'bg-gradient-to-br from-orange-500 to-red-600',
-      audioUrl: sampleAudioUrl
+      audioUrl: mockAudio
     },
     {
       title: 'Un dos Tres',
       artist: 'IRAWO',
       bgColor: 'bg-gradient-to-br from-orange-600 via-red-500 to-yellow-500',
-      audioUrl: sampleAudioUrl
+      audioUrl: mockAudio
     },
     {
       title: 'Yara',
       artist: 'IRAWO',
       bgColor: 'bg-gradient-to-br from-orange-600 via-red-500 to-yellow-500',
-      audioUrl: sampleAudioUrl
+      audioUrl: mockAudio
     },
     {
       title: 'Fire Track',
       artist: 'Hot Artist',
       bgColor: 'bg-gradient-to-br from-red-500 to-pink-500',
-      audioUrl: sampleAudioUrl
+      audioUrl: mockAudio
     },
     {
       title: 'Weekly Hit',
       artist: 'Top Chart',
       bgColor: 'bg-gradient-to-br from-purple-500 to-blue-500',
-      audioUrl: sampleAudioUrl
+      audioUrl: mockAudio
     }
   ];
 
   const yourHistory = [
-    { title: 'Un dos Tres', artist: 'IRAWO', bgColor: 'bg-gradient-to-br from-orange-600 via-red-500 to-yellow-500', audioUrl: sampleAudioUrl },
-    { title: 'Yara', artist: 'IRAWO', bgColor: 'bg-gradient-to-br from-orange-600 via-red-500 to-yellow-500', audioUrl: sampleAudioUrl },
-    { title: 'Fire Track', artist: 'Hot Artist', bgColor: 'bg-gradient-to-br from-red-500 to-pink-500', audioUrl: sampleAudioUrl },
-    { title: 'Weekly Hit', artist: 'Top Chart', bgColor: 'bg-gradient-to-br from-purple-500 to-blue-500', audioUrl: sampleAudioUrl },
-    { title: 'Fire Track', artist: 'Hot Artist', bgColor: 'bg-gradient-to-br from-red-500 to-pink-500', audioUrl: sampleAudioUrl },
-    { title: 'Weekly Hit', artist: 'Top Chart', bgColor: 'bg-gradient-to-br from-purple-500 to-blue-500', audioUrl: sampleAudioUrl }
+    { title: 'Un dos Tres', artist: 'IRAWO', bgColor: 'bg-gradient-to-br from-orange-600 via-red-500 to-yellow-500', audioUrl: mockAudio },
+    { title: 'Yara', artist: 'IRAWO', bgColor: 'bg-gradient-to-br from-orange-600 via-red-500 to-yellow-500', audioUrl: mockAudio },
+    { title: 'Fire Track', artist: 'Hot Artist', bgColor: 'bg-gradient-to-br from-red-500 to-pink-500', audioUrl: mockAudio },
+    { title: 'Weekly Hit', artist: 'Top Chart', bgColor: 'bg-gradient-to-br from-purple-500 to-blue-500', audioUrl: mockAudio },
+    { title: 'Fire Track', artist: 'Hot Artist', bgColor: 'bg-gradient-to-br from-red-500 to-pink-500', audioUrl: mockAudio },
+    { title: 'Weekly Hit', artist: 'Top Chart', bgColor: 'bg-gradient-to-br from-purple-500 to-blue-500', audioUrl: mockAudio }
   ];
 
   const bluntBangers = [
-    { title: 'Summer Chill', artist: 'Beach Vibes', bgColor: 'bg-gradient-to-br from-yellow-400 to-orange-500', audioUrl: sampleAudioUrl },
-    { title: 'Lotus Dreams', artist: 'Zen Garden', bgColor: 'bg-gradient-to-br from-green-400 to-teal-600', audioUrl: sampleAudioUrl },
-    { title: 'Night Mood', artist: 'Dark Beats', bgColor: 'bg-gradient-to-br from-purple-600 to-pink-500', audioUrl: sampleAudioUrl },
-    { title: 'Energy Flow', artist: 'Power House', bgColor: 'bg-gradient-to-br from-red-500 to-orange-600', audioUrl: sampleAudioUrl }
+    { title: 'Summer Chill', artist: 'Beach Vibes', bgColor: 'bg-gradient-to-br from-yellow-400 to-orange-500', audioUrl: mockAudio },
+    { title: 'Lotus Dreams', artist: 'Zen Garden', bgColor: 'bg-gradient-to-br from-green-400 to-teal-600', audioUrl: mockAudio },
+    { title: 'Night Mood', artist: 'Dark Beats', bgColor: 'bg-gradient-to-br from-purple-600 to-pink-500', audioUrl: mockAudio },
+    { title: 'Energy Flow', artist: 'Power House', bgColor: 'bg-gradient-to-br from-red-500 to-orange-600', audioUrl: mockAudio }
   ];
 
   const moodOptions = [
@@ -278,32 +304,97 @@ const MobileApp = () => {
     { name: 'Funk Pulse', color: 'bg-yellow-500', image: 'nour-album' }
   ];
 
+  useEffect(() => {
+    if (selectedCannabisType === "Indica") {
+      setEqValues(indicaData);
+    } else if (selectedCannabisType === "Sativa") {
+      setEqValues(sattivaData);
+    } else if (selectedCannabisType === "Hybrid") {
+      setEqValues(hybridData);
+    }
+
+    if (currentSong && audioRef.current) {
+      const variant = selectedCannabisType.toLowerCase();
+      const newSrc = currentSong.audioUrls[variant] || currentSong.audioUrl; // Fallback to default audioUrl
+
+      if (audioRef.current.src !== newSrc) {
+        const currentTime = audioRef.current.currentTime;
+        const wasPlaying = isPlaying;
+
+        // Pause only if playing to avoid unnecessary state changes
+        if (isPlaying) {
+          audioRef.current.pause();
+        }
+
+        audioRef.current.src = newSrc;
+        audioRef.current.currentTime = currentTime;
+
+        // Wait for the audio to be ready before playing
+        const onCanPlay = () => {
+          if (wasPlaying) {
+            audioRef.current.play().then(() => {
+              setIsPlaying(true);
+            }).catch((error: any) => {
+              console.error('Audio play failed:', error);
+              setIsPlaying(false);
+            });
+          }
+          // Clean up the event listener
+          audioRef.current.removeEventListener('canplay', onCanPlay);
+        };
+
+        audioRef.current.addEventListener('canplay', onCanPlay);
+        audioRef.current.load(); // Load the new source
+      }
+    }
+  }, [selectedCannabisType, currentSong]);
+
   const playSong = (song: any) => {
     if (audioRef.current && song.audioUrl) {
       setCurrentSong(song);
-      audioRef.current.src = song.audioUrl;
-      audioRef.current.play().then(() => {
-        setIsPlaying(true);
-      }).catch((error: any) => {
-        console.log('Audio play failed:', error);
-        const audioContext = new (window.AudioContext || window.AudioContext)();
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
 
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
+      // Ensure any existing playback is stopped
+      if (isPlaying) {
+        audioRef.current.pause();
+      }
 
-        oscillator.frequency.value = 440;
-        oscillator.type = 'sine';
-        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
+      const variant = selectedCannabisType.toLowerCase();
+      audioRef.current.src = song.audioUrls[variant] || song.audioUrl; // Use variant or default audioUrl
+      audioRef.current.currentTime = 0; // Reset to start
 
-        oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + 1);
+      const onCanPlay = () => {
+        audioRef.current.play().then(() => {
+          setIsPlaying(true);
+          // Update duration once metadata is loaded
+          audioRef.current.addEventListener('loadedmetadata', () => {
+            setDuration(audioRef.current.duration);
+          });
+        }).catch((error: any) => {
+          console.error('Audio play failed:', error);
+          setIsPlaying(false);
+          // Fallback to test tone
+          const audioContext = new (window.AudioContext || window.AudioContext)();
+          const oscillator = audioContext.createOscillator();
+          const gainNode = audioContext.createGain();
 
-        setIsPlaying(true);
-        setDuration(60); // Mock duration
-      });
+          oscillator.connect(gainNode);
+          gainNode.connect(audioContext.destination);
+
+          oscillator.frequency.value = 440;
+          oscillator.type = 'sine';
+          gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
+
+          oscillator.start(audioContext.currentTime);
+          oscillator.stop(audioContext.currentTime + 1);
+
+          setDuration(60); // Mock duration
+        });
+        audioRef.current.removeEventListener('canplay', onCanPlay);
+      };
+
+      audioRef.current.addEventListener('canplay', onCanPlay);
+      audioRef.current.load();
     }
   };
 
@@ -316,57 +407,181 @@ const MobileApp = () => {
         audioRef.current.play().then(() => {
           setIsPlaying(true);
         }).catch((error: any) => {
-          console.log('Audio play failed:', error);
+          console.error('Audio play failed:', error);
+          setIsPlaying(false);
         });
       }
     }
   };
 
-  const formatTime = (time: number) => {
+  const handleSongClick = (song: any) => {
+    if (demoStep === 1) {
+      playSong(song);
+      setDemoStep(2);
+    } else {
+      playSong(song);
+    }
+  };
+
+  // Modify handleSoundEQClick function
+  const handleSoundEQClick = () => {
+    if (demoStep === 2) {
+      setActiveTab('Sound (EQ)');
+      setDemoStep(3);
+    } else {
+      setActiveTab('Sound (EQ)');
+    }
+  };
+
+  // Modify handleCannabisTypeClick function
+  const handleCannabisTypeClick = (type: any) => {
+    if (demoStep === 3) {
+      setSelectedCannabisType(type);
+      setEqActiveTab('Soundscape');
+    } else {
+      setSelectedCannabisType(type);
+      setEqActiveTab('Soundscape');
+    }
+  };
+
+  // Add event listener to update currentTime
+  useEffect(() => {
+    const audio = audioRef.current;
+    const updateTime = () => {
+      setCurrentTime(audio.currentTime);
+    };
+    if (audio) {
+      audio.addEventListener('timeupdate', updateTime);
+      audio.addEventListener('loadedmetadata', () => {
+        setDuration(audio.duration);
+      });
+    }
+    return () => {
+      if (audio) {
+        audio.removeEventListener('timeupdate', updateTime);
+        audio.removeEventListener('loadedmetadata', () => { });
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (modalOpen) {
+      setDemoStep(0);
+    } else {
+      setDemoStep(1);
+    }
+  }, [modalOpen]);
+
+  useEffect(() => {
+    if (selectedCannabisType && demoStep === 3) {
+      setTimeout(() => {
+        setShowThankYouModal(true);
+        setDemoStep(4);
+      }, 1000);
+    }
+  }, [selectedCannabisType, demoStep]);
+
+  const formatTime = (time: any) => {
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (audio) {
-      const updateTime = () => setCurrentTime(audio.currentTime);
-      const updateDuration = () => setDuration(audio.duration);
-      const handleEnded = () => setIsPlaying(false);
-
-      audio.addEventListener('timeupdate', updateTime);
-      audio.addEventListener('loadedmetadata', updateDuration);
-      audio.addEventListener('ended', handleEnded);
-
-      return () => {
-        audio.removeEventListener('timeupdate', updateTime);
-        audio.removeEventListener('loadedmetadata', updateDuration);
-        audio.removeEventListener('ended', handleEnded);
-      };
+  const skipForward = () => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = Math.min(audioRef.current.currentTime + 10, audioRef.current.duration);
+      setCurrentTime(audioRef.current.currentTime);
     }
-  }, [currentSong]);
+  };
 
+  const skipBackward = () => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = Math.max(audioRef.current.currentTime - 10, 0);
+      setCurrentTime(audioRef.current.currentTime);
+    }
+  };
+
+  const playNextSong = () => {
+    if (currentSong) {
+      const currentIndex = freshlyRolledBeats.findIndex(song => song.title === currentSong.title);
+      const nextIndex = (currentIndex + 1) % freshlyRolledBeats.length;
+      const nextSong = freshlyRolledBeats[nextIndex];
+      playSong(nextSong);
+    }
+  };
+
+  const playPrevSong = () => {
+    if (currentSong) {
+      const currentIndex = freshlyRolledBeats.findIndex(song => song.title === currentSong.title);
+      const prevIndex = (currentIndex - 1 + freshlyRolledBeats.length) % freshlyRolledBeats.length; // Loop to last song if at first
+      const prevSong = freshlyRolledBeats[prevIndex];
+      playSong(prevSong);
+    }
+  };
+
+  const renderDemoOverlay = () => {
+    if (demoStep === 0 || demoStep === 4) return null;
+
+    let message, position;
+    if (demoStep === 1) {
+      message = 'Click the first song under Freshly Rolled Beats';
+      position = 'top-24 left-4';
+    } else if (demoStep === 2) {
+      message = 'Click Sound (EQ) on the bottom navbar';
+      position = 'bottom-16 left-1/2 transform -translate-x-1/2';
+    } else if (demoStep === 3) {
+      message = 'Select a cannabis type (Indica, Sativa, or Hybrid)';
+      position = 'top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2';
+    }
+
+    return (
+      <div className="absolute inset-0 bg-black/60 z-40 pointer-events-none">
+        <div className={`absolute ${position} bg-purple-600 text-white text-xs p-2 rounded-lg max-w-xs text-center animate-pulse`}>
+          {message}
+          <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-purple-600"></div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderThankYouModal = () => (
+    <div className={`absolute inset-0 ${theme.modalOverlay} flex items-center justify-center z-50 p-4`}>
+      <div className={`${theme.modalBg} ${theme.shadow} rounded-[12px] px-4 py-6 w-full max-w-sm`}>
+        <h2 className={`${theme.text} text-sm font-bold mb-2`}>Thank You for Trying the Demo!</h2>
+        <p className={`${theme.textSecondary} text-[10px] mb-4`}>
+          Experience the full power of cannabis-inspired audio with our app. Download now to explore more!
+        </p>
+        <a
+          href="https://yourappdownloadlink.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-purple-600 text-white px-3 py-1 rounded-[5px] text-[9px] font-semibold hover:bg-purple-700 transition-colors"
+        >
+          Download the App
+        </a>
+      </div>
+    </div>
+  );
 
   const renderMoodModal = () => (
-    <div className="absolute inset-0 bg-black/40 bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div className={`absolute inset-0 ${theme.modalOverlay} flex items-center justify-center z-50 p-4`}>
       <div
         ref={modalRef}
-        className="bg-gray-900 rounded-[12px] p-3 w-full max-w-sm"
+        className={`${theme.modalBg} ${theme.shadow} rounded-[12px] p-3 w-full max-w-sm`}
       >
-        <h2 className="text-white text-[13px] font-bold mb-2">Good to see you, Baddie</h2>
-        <p className="text-gray-300 text-[10px] mb-3 w-[50%]">What mood are we channeling today?</p>
+        <h2 className={`${theme.text} text-[13px] font-bold mb-2`}>Good to see you, Baddie</h2>
+        <p className={`${theme.textSecondary} text-[10px] mb-3 w-[50%]`}>What mood are we channeling today?</p>
 
         <div className="grid grid-cols-4 gap-x-1.5 gap-y-3 mb-4">
           {moodOptions.map((mood, index) => (
             <div key={index} className='flex flex-col items-center gap-1'>
               <div
-                className={`bg-gray-800 rounded-[5px] flex flex-col items-center justify-center aspect-square cursor-pointer hover:opacity-80 transition-opacity w-full`}
+                className={`${isOnDarkMode ? 'bg-gray-800' : 'bg-gray-100'} rounded-[5px] flex flex-col items-center justify-center aspect-square cursor-pointer hover:opacity-80 transition-opacity w-full`}
                 onClick={() => setModalOpen(false)}
               >
                 <div className="text-[25px]">{mood.icon}</div>
               </div>
-              <div className="text-white text-[7px] font-medium">{mood.name}</div>
+              <div className={`${theme.text} text-[7px] font-medium`}>{mood.name}</div>
             </div>
           ))}
         </div>
@@ -375,33 +590,33 @@ const MobileApp = () => {
   );
 
   const renderSoundEQPage = () => (
-    <div className="h-[515px] overflow-auto scrollbar-none bg-gray-900">
+    <div className={`h-[515px] overflow-auto scrollbar-none ${theme.bg}`}>
       {/* Header */}
       <div className="flex items-center justify-between mb-6 px-3 pt-6">
         <div className="flex items-center gap-3">
-          <ArrowLeft className="w-5 h-5 text-white cursor-pointer" onClick={() => setActiveTab('Home')} />
-          <h1 className="text-white text-base font-bold">Cannabis Sound</h1>
+          <ArrowLeft className={`w-5 h-5 ${theme.text} cursor-pointer`} onClick={() => setActiveTab('Home')} />
+          <h1 className={`${theme.text} text-base font-bold`}>Cannabis Sound</h1>
         </div>
       </div>
 
       {/* Search Bar */}
-      <div className="bg-gray-800 rounded-[12px] px-4 py-3 mb-4 flex items-center gap-2 mx-3">
-        <Search className="w-4 h-4 text-gray-400" />
+      <div className={`${theme.input} rounded-[12px] px-4 py-3 mb-4 flex items-center gap-2 mx-3 ${theme.shadow}`}>
+        <Search className={`w-4 h-4 ${theme.textTertiary}`} />
         <input
           type="text"
           placeholder="Search for a Cannabis Profile"
-          className="bg-transparent text-white text-[10px] flex-1 outline-none placeholder-gray-400"
+          className={`bg-transparent ${theme.text} text-[10px] flex-1 outline-none placeholder-${isOnDarkMode ? 'gray-400' : 'gray-500'}`}
         />
       </div>
 
-      <div className=' bg-gray-800 rounded-[12px] px-3.5 pt-3 pb-3 mx-3 mb-4 h-[250px] overflow-y-auto scrollbar-none'>
+      <div className={`${theme.cardBg} ${theme.shadow} rounded-[12px] px-3.5 pt-3 pb-3 mx-3 mb-4 h-[250px] overflow-y-auto scrollbar-none`}>
         {/* Tab Selector */}
         <div className="flex mb-4">
           <button
             onClick={() => setEqActiveTab('Description')}
             className={`flex-1 py-2 px-4 text-xs font-medium cursor-pointer transition-colors ${eqActiveTab === 'Description'
               ? 'text-purple-600 border-b-2 border-purple-600'
-              : 'text-gray-300'
+              : theme.textSecondary
               }`}
           >
             Description
@@ -410,7 +625,7 @@ const MobileApp = () => {
             onClick={() => setEqActiveTab('Soundscape')}
             className={`flex-1 py-2 px-4 text-xs font-medium cursor-pointer transition-colors ${eqActiveTab === 'Soundscape'
               ? 'text-purple-600 border-b-2 border-purple-600'
-              : 'text-gray-300'
+              : theme.textSecondary
               }`}
           >
             Soundscape
@@ -419,7 +634,7 @@ const MobileApp = () => {
 
         {eqActiveTab === 'Description' ? (
           <div className="h-[200px] overflow-y-auto scrollbar-none">
-            <h2 className="text-white text-xs font-semibold mb-1">3 Bears Og</h2>
+            <h2 className={`${theme.text} text-xs font-semibold mb-1`}>3 Bears Og</h2>
             <p className="text-purple-400 text-[10px] mb-3">indica</p>
 
             {/* Mood Icons */}
@@ -428,44 +643,44 @@ const MobileApp = () => {
                 <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center mb-2">
                   <span className="text-2xl">🌊</span>
                 </div>
-                <p className="text-white text-[6px]">Relaxing/Calming</p>
+                <p className={`${theme.text} text-[6px]`}>Relaxing/Calming</p>
               </div>
               <div className="text-center">
                 <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center mb-2">
                   <span className="text-2xl">😊</span>
                 </div>
-                <p className="text-white text-[6px]">Happy</p>
+                <p className={`${theme.text} text-[6px]`}>Happy</p>
               </div>
               <div className="text-center">
                 <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center mb-2">
                   <span className="text-2xl">💤</span>
                 </div>
-                <p className="text-white text-[6px]">Sedative/Sleepy</p>
+                <p className={`${theme.text} text-[6px]`}>Sedative/Sleepy</p>
               </div>
               <div className="text-center">
                 <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center mb-2">
                   <span className="text-2xl">💡</span>
                 </div>
-                <p className="text-white text-[6px]">Creative</p>
+                <p className={`${theme.text} text-[6px]`}>Creative</p>
               </div>
               <div className="text-center">
                 <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center mb-2">
                   <span className="text-2xl">💡</span>
                 </div>
-                <p className="text-white text-[6px]">Creative</p>
+                <p className={`${theme.text} text-[6px]`}>Creative</p>
               </div>
             </div>
 
-            <h3 className="text-white text-xs font-bold mb-4">Sweet, Pungent, Earthy</h3>
+            <h3 className={`${theme.text} text-xs font-bold mb-4`}>Sweet, Pungent, Earthy</h3>
 
-            <p className="text-gray-300 text-[9px] leading-relaxed mb-6">
+            <p className={`${theme.textSecondary} text-[9px] leading-relaxed mb-6`}>
               3 Bears OG by Mephisto Genetics is an excellent auto-cross of Bear OG x Karma OG. As a smaller autoflower, this makes it an excellent choice for beginner growers who prefer indica effects. This strain features a...
             </p>
           </div>
         ) : (
           <div className="">
             {/* EQ Controls */}
-            <div className="bg-gray-800 rounded-[12px] px-3">
+            <div className={`${theme.cardBg} rounded-[12px] px-3`}>
               <CustomBarChart data={eqValues} />
             </div>
           </div>
@@ -477,51 +692,55 @@ const MobileApp = () => {
         {['Indica', 'Sativa', 'Hybrid'].map((type) => (
           <button
             key={type}
-            onClick={() => {
-              setSelectedCannabisType(type);
-              setEqActiveTab('Soundscape');
-            }}
-            className={`cursor-pointer px-5 py-[6px] rounded-full text-[10px] font-medium transition-colors ${selectedCannabisType === type
+            onClick={() => handleCannabisTypeClick(type)}
+            className={`cursor-pointer px-5 py-[4px] rounded-full text-[10px] font-medium transition-colors ${selectedCannabisType === type
               ? 'bg-purple-600 text-white'
-              : 'bg-gray-800 text-gray-300'
-              }`}
+              : `${theme.cardBg} ${theme.textSecondary} ${theme.shadow}`
+              } ${demoStep === 3 ? 'ring-4 ring-purple-600' : ''}`}
           >
             {type}
           </button>
         ))}
       </div>
 
-      <div className="flex justify-between items-center bg-gray-800 rounded-[12px] p-4 mb-6 mx-3">
-        <h3 className="text-white text-xs font-bold">Comments</h3>
-        <button className="text-purple-400 text-[10px]">See All</button>
-      </div>
+      <div className={`flex flex-col justify-between ${theme.cardBg} ${theme.shadow} rounded-[12px] p-4 mb-6 mx-3`}>
+        <div className='flex justify-between w-full'>
+          <h3 className={`${theme.text} text-xs font-bold`}>Comments</h3>
+          <button className="text-purple-400 text-[10px]">See All</button>
+        </div>
 
+        <div className='my-4'>
+          <p className={`${theme.textSecondary} text-[9px] leading-relaxed text-center`}>
+            No comments yet. Be the first to share your thoughts!
+          </p>
+        </div>
+      </div>
     </div>
   );
 
   const renderCannabisSound = () => (
-    <div className="absolute inset-0 bg-black/40 bg-opacity-50 flex items-center justify-center z-50">
+    <div className={`absolute inset-0 ${theme.modalOverlay} flex items-center justify-center z-50`}>
       <div
         ref={soundModalRef}
-        className="bg-gray-900 rounded-[12px] py-5 w-[90%] mx-auto"
+        className={`${theme.modalBg} ${theme.shadow} rounded-[12px] py-5 w-[90%] mx-auto`}
       >
         <div className="flex items-center justify-between mb-4 mx-3">
-          <h2 className="text-white text-base font-bold">Cannabis Sound</h2>
+          <h2 className={`${theme.text} text-base font-bold`}>Cannabis Sound</h2>
           <div className="flex items-center gap-3">
-            <Home className="w-3.5 h-3.5 text-gray-400 cursor-pointer" />
+            <Home className={`w-3.5 h-3.5 ${theme.textTertiary} cursor-pointer`} />
             <button onClick={() => setSoundModalOpen(false)}>
-              <X className="w-4 h-4 text-gray-400 cursor-pointer" />
+              <X className={`w-4 h-4 ${theme.textTertiary} cursor-pointer`} />
             </button>
           </div>
         </div>
 
         {/* Search Bar */}
-        <div className="bg-gray-800 rounded-[12px] px-4 py-3 mb-4 flex items-center gap-2 mx-3">
-          <Search className="w-4 h-4 text-gray-400" />
+        <div className={`${theme.input} rounded-[12px] px-4 py-3 mb-4 flex items-center gap-2 mx-3`}>
+          <Search className={`w-4 h-4 ${theme.textTertiary}`} />
           <input
             type="text"
             placeholder="Search"
-            className="bg-transparent text-white text-[10px] flex-1 outline-none placeholder-gray-400"
+            className={`bg-transparent ${theme.text} text-[10px] flex-1 outline-none placeholder-${isOnDarkMode ? 'gray-400' : 'gray-500'}`}
           />
         </div>
 
@@ -538,7 +757,7 @@ const MobileApp = () => {
               }}
               className={`cursor-pointer px-4 py-[4px] rounded-full text-[10px] font-medium transition-colors ${selectedCannabisType === type
                 ? 'bg-purple-600 text-white'
-                : 'bg-gray-800 text-gray-300'
+                : `${theme.cardBg} ${theme.textSecondary}`
                 }`}
             >
               {type}
@@ -549,7 +768,7 @@ const MobileApp = () => {
         {/* Strain Tags */}
         <div className="flex gap-2 overflow-x-auto scrollbar-none pl-3">
           {strainTags.map((strain, index) => (
-            <div key={index} className="bg-gray-800 text-white px-2 py-1 rounded-full text-[10px] whitespace-nowrap">
+            <div key={index} className={`${theme.cardBg} ${theme.text} px-2 py-1 rounded-full text-[10px] whitespace-nowrap ${theme.shadow}`}>
               {strain}
             </div>
           ))}
@@ -600,22 +819,21 @@ const MobileApp = () => {
         </div>
       </div>
 
-      {/* Controls */}
       <div className="flex items-center justify-between px-8 mb-8">
-        <img src={Previous} alt="previous icon" className="w-5 h-5 text-black fill-current cursor-pointer" />
-        <img src={BackwardsTen} alt="backwards icon" className="w-6 h-6 text-black fill-current cursor-pointer" />
+        <img src={Previous} alt="previous icon" className="w-5 h-5 text-black fill-current cursor-pointer" onClick={playPrevSong} />
+        <img src={BackwardsTen} alt="backwards icon" className="w-6 h-6 text-black fill-current cursor-pointer" onClick={skipBackward} />
         {!isPlaying ?
-          <img onClick={togglePlayPause} src={Play} alt="Pause" className="w-12 h-12 text-black fill-current cursor-pointer" />
+          <img onClick={togglePlayPause} src={Play} alt="Play" className="w-12 h-12 text-black fill-current cursor-pointer" />
           : (
             <button
               onClick={togglePlayPause}
               className="w-12 h-12 flex-shrink-0 bg-green-500 rounded-full flex items-center justify-center cursor-pointer hover:bg-green-600 transition-colors"
             >
-
               <Pause className="w-6 h-6 text-black fill-current cursor-pointer" />
-            </button>)}
-        <img src={ForwardsTen} alt="forwards icon" className="w-6 h-6 text-black fill-current cursor-pointer" />
-        <img src={Next} alt="next icon" className="w-5 h-5 text-black fill-current cursor-pointer" />
+            </button>
+          )}
+        <img src={ForwardsTen} alt="forwards icon" className="w-6 h-6 text-black fill-current cursor-pointer" onClick={skipForward} />
+        <img src={Next} alt="next icon" className="w-5 h-5 text-black fill-current cursor-pointer" onClick={playNextSong} />
       </div>
 
       {/* Additional Controls */}
@@ -628,42 +846,52 @@ const MobileApp = () => {
     </div>
   );
 
-  const renderCard = (item: any, index: number, showArtist = true) => (
+  const renderCard = (item: any, index: any, showArtist = true) => (
     <div key={index} className="flex-shrink-0 text-center">
       <div
-        className={`w-22 h-20 ${item.bgColor} rounded-[12px] mb-2 relative overflow-hidden flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity`}
+        className={`w-22 h-20 rounded-[12px] mb-2 relative overflow-hidden flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity`}
         onClick={() => playSong(item)}
       >
-        {item.title === 'Amasosha' || item.title === 'That heat' ? (
-          <div className="text-center">
-            <div className="text-white font-bold text-lg mb-1">SHAYA</div>
-            <div className="flex items-center justify-center">
-              <div className="w-6 h-6 bg-black rounded-full flex items-center justify-center mr-2">
-                <div className="w-4 h-4 bg-orange-400 rounded-full"></div>
-              </div>
-              <div className="w-4 h-4 bg-white rounded-sm"></div>
-            </div>
-          </div>
-        ) : item.title === 'Un dos Tres' || item.title === 'Yara' ? (
-          <div className="text-center">
-            <div className="text-white font-bold text-sm mb-1">IRAWO</div>
-            <div className="w-8 h-8 bg-orange-400 rounded-full flex items-center justify-center">
-              <div className="text-black text-xs font-bold">Ψ</div>
-            </div>
-          </div>
-        ) : item.title === 'Summer Chill' ? (
-          <div className="text-white text-4xl">🏖️</div>
-        ) : item.title === 'Lotus Dreams' ? (
-          <div className="text-white text-4xl">🪷</div>
+        {item.image ? (
+          <img
+            src={item.image}
+            alt={item.title}
+            className="w-full h-full object-cover"
+          />
         ) : (
-          <div className="w-16 h-16 bg-white/20 rounded-lg flex items-center justify-center">
-            <PlayIcon className="w-6 h-6 text-white fill-current" />
-          </div>
+          <>
+            {item.title === 'Amasosha' || item.title === 'That heat' ? (
+              <div className="text-center">
+                <div className="text-white font-bold text-lg mb-1">SHAYA</div>
+                <div className="flex items-center justify-center">
+                  <div className="w-6 h-6 bg-black rounded-full flex items-center justify-center mr-2">
+                    <div className="w-4 h-4 bg-orange-400 rounded-full"></div>
+                  </div>
+                  <div className="w-4 h-4 bg-white rounded-sm"></div>
+                </div>
+              </div>
+            ) : item.title === 'Un dos Tres' || item.title === 'Yara' ? (
+              <div className="text-center">
+                <div className="text-white font-bold text-sm mb-1">IRAWO</div>
+                <div className="w-8 h-8 bg-orange-400 rounded-full flex items-center justify-center">
+                  <div className="text-black text-xs font-bold">Ψ</div>
+                </div>
+              </div>
+            ) : item.title === 'Summer Chill' ? (
+              <div className="text-white text-4xl">🏖️</div>
+            ) : item.title === 'Lotus Dreams' ? (
+              <div className="text-white text-4xl">🪷</div>
+            ) : (
+              <div className={`w-22 h-20 ${item.bgColor ?? 'bg-gradient-to-br from-gray-500 to-gray-700'} rounded-[12px] flex items-center justify-center`}>
+                <PlayIcon className="w-6 h-6 text-white fill-current" />
+              </div>
+            )}
+          </>
         )}
       </div>
-      <h3 className="text-white font-medium text-[10px] mb-1">{item.title}</h3>
+      <h3 className={`${theme.text} font-medium text-[10px] mb-1`}>{item.title}</h3>
       {showArtist && item.artist && (
-        <p className="text-gray-400 text-[9px]">{item.artist}</p>
+        <p className={`${theme.textTertiary} text-[9px]`}>{item.artist}</p>
       )}
     </div>
   );
@@ -671,23 +899,38 @@ const MobileApp = () => {
   const renderHomeContent = () => (
     <div className="h-[515px] overflow-auto scrollbar-none">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4 px-3">
-        <div className="flex items-center gap-3 pt-6">
-          <div className="w-8 h-8 flex-shrink-0 bg-gray-600 rounded-full flex items-center justify-center">
-            <User className="w-4 h-4 text-gray-300" />
+      <div className="flex flex-col mb-4 px-3 relative pt-6">
+        <img src={`${isOnDarkMode ? '/logo-white.avif' : '/logo.avif'}`} alt='logo icon' className='w-[70px] h-auto mb-3' />
+        <div className="flex items-center gap-3">
+          <div className={`w-8 h-8 flex-shrink-0 ${isOnDarkMode ? 'bg-gray-600' : 'bg-gray-300'} rounded-full flex items-center justify-center`}>
+            <User className={`w-4 h-4 ${isOnDarkMode ? 'text-gray-300' : 'text-gray-600'}`} />
           </div>
           <div>
-            <h1 className="text-xs font-semibold">Baddie</h1>
-            <p className="text-gray-400 text-[10px] w-[70%]">Your vibe is chill. Stay easy today.</p>
+            <h1 className={`${theme.text} text-xs font-semibold`}>Baddie</h1>
+            <p className={`${theme.textTertiary} text-[10px] w-[70%]`}>Your vibe is chill. Stay easy today.</p>
           </div>
         </div>
-        <Headphones className="w-4 h-4 text-gray-400 cursor-pointer" onClick={() => setSoundModalOpen(true)} />
+        <div className='flex gap-2 text-[7px] absolute top-6 right-4'>
+          <div className='flex flex-col items-center'>
+            <Sliders className={`w-3 h-3 ${theme.textTertiary} cursor-pointer`} onClick={() => setSoundModalOpen(true)} />
+            Sound (EQ)
+          </div>
+          <div className='flex flex-col items-center'>
+            <BookOpen className={`w-3 h-3 ${theme.textTertiary} cursor-pointer`} onClick={() => setActiveTab('Library')} />
+            Library
+          </div>
+          <div className='flex flex-col items-center'>
+            <BellIcon className={`w-3 h-3 ${theme.textTertiary} cursor-pointer`} onClick={() => { }} />
+            Alerts
+          </div>
+        </div>
+
       </div>
 
       {/* Strain Tags */}
-      <div className="flex gap-2 pl-2 mb-6 overflow-x-auto scrollbar-none">
+      <div className="flex gap-2 pl-2 pb-6 overflow-x-auto scrollbar-none">
         {strainTags.map((strain, index) => (
-          <div key={index} className="bg-gray-800 text-white px-2 py-1 rounded-full whitespace-nowrap text-[9px]">
+          <div key={index} className={`${theme.cardBg} ${theme.text} ${theme.shadow} px-2 py-1 rounded-full whitespace-nowrap text-[9px]`}>
             {strain}
           </div>
         ))}
@@ -696,18 +939,29 @@ const MobileApp = () => {
       {/* Freshly Rolled Beats */}
       <div className="mb-4">
         <div className="flex justify-between items-center mb-2 px-3">
-          <h2 className="text-[13px] font-bold">Freshly Rolled Beats</h2>
+          <h2 className={`${theme.text} text-[13px] font-bold`}>Freshly Rolled Beats</h2>
           <button className="text-purple-400 text-[11px] font-medium cursor-pointer">See All</button>
         </div>
         <div className="flex gap-2 overflow-x-auto scrollbar-none pl-3">
-          {freshlyRolledBeats.map((beat, index) => renderCard(beat, index))}
+          {freshlyRolledBeats.map((beat, index) => (
+            <div key={index} className="flex-shrink-0 text-center">
+              <div
+                className={`w-22 h-20 rounded-[12px] mb-2 relative overflow-hidden flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity ${demoStep === 1 && index === 0 ? 'ring-4 ring-purple-600 z-50' : ''}`}
+                onClick={() => handleSongClick(beat)}
+              >
+                {/* ... (rest of the card content remains unchanged) */}
+              </div>
+              <h3 className={`${theme.text} font-medium text-[10px] mb-1`}>{beat.title}</h3>
+              <p className={`${theme.textTertiary} text-[9px]`}>{beat.artist}</p>
+            </div>
+          ))}
         </div>
       </div>
 
       {/* Guided Sessions */}
       <div className="mb-4">
         <div className="flex justify-between items-center mb-2 px-3">
-          <h2 className="text-[13px] font-bold">Guided Sessions</h2>
+          <h2 className={`${theme.text} text-[13px] font-bold`}>Guided Sessions</h2>
           <button className="text-purple-400 text-[11px] font-medium cursor-pointer">See All</button>
         </div>
         <div className="flex pl-3 gap-2 overflow-x-auto scrollbar-none">
@@ -730,7 +984,7 @@ const MobileApp = () => {
       {/* Zizling Podcasts */}
       <div className="mb-4">
         <div className="flex justify-between items-center mb-2 px-3">
-          <h2 className="text-[13px] font-bold">Zizling Podcasts</h2>
+          <h2 className={`${theme.text} text-[13px] font-bold`}>Zizling Podcasts</h2>
           <button className="text-purple-400 text-[11px] font-medium cursor-pointer">See All</button>
         </div>
         <div className="flex gap-2 overflow-x-auto scrollbar-none pl-3">
@@ -750,7 +1004,7 @@ const MobileApp = () => {
                   <div className="w-16 h-16 bg-white/20 rounded-lg"></div>
                 )}
               </div>
-              <h3 className="text-white font-medium text-[10px]">{podcast.title}</h3>
+              <h3 className={`${theme.text} font-medium text-[10px]`}>{podcast.title}</h3>
             </div>
           ))}
         </div>
@@ -759,7 +1013,7 @@ const MobileApp = () => {
       {/* Lit Hits of the Week */}
       <div className="mb-4">
         <div className="flex justify-between items-center mb-2 px-3">
-          <h2 className="text-[13px] font-bold">Lit Hits of the Week</h2>
+          <h2 className={`${theme.text} text-[13px] font-bold`}>Lit Hits of the Week</h2>
           <button className="text-purple-400 text-[11px] font-medium cursor-pointer">See All</button>
         </div>
         <div className="flex gap-2 overflow-x-auto scrollbar-none pl-3">
@@ -770,7 +1024,7 @@ const MobileApp = () => {
       {/* Blunt Bangers */}
       <div className="mb-4">
         <div className="flex justify-between items-center mb-2 px-3">
-          <h2 className="text-[13px] font-bold">Blunt Bangers</h2>
+          <h2 className={`${theme.text} text-[13px] font-bold`}>Blunt Bangers</h2>
           <button className="text-purple-400 text-[11px] font-medium cursor-pointer">See All</button>
         </div>
         <div className="flex gap-2 overflow-x-auto scrollbar-none pl-3">
@@ -784,10 +1038,10 @@ const MobileApp = () => {
     <div className="h-[515px] overflow-auto scrollbar-none">
       {/* Header */}
       <div className="flex items-center justify-between mb-6 px-4 pt-6">
-        <h1 className="text-white text-xl font-bold">Explore</h1>
+        <h1 className={`${theme.text} text-xl font-bold`}>Explore</h1>
         <div className="flex items-center gap-4">
-          <Search className="w-5 h-5 text-white" />
-          <Headphones className="w-5 h-5 text-white" />
+          <Search className={`w-5 h-5 ${theme.text}`} />
+          <Headphones className={`w-5 h-5 ${theme.text}`} />
         </div>
       </div>
 
@@ -807,17 +1061,17 @@ const MobileApp = () => {
     <div className="h-[515px] overflow-auto scrollbar-none">
       {/* Header */}
       <div className="flex items-center justify-between mb-6 px-4 pt-6">
-        <h1 className="text-white text-xl font-bold">Library</h1>
+        <h1 className={`${theme.text} text-xl font-bold`}>Library</h1>
         <div className="flex items-center gap-4">
-          <Search className="w-5 h-5 text-white" />
-          <Headphones className="w-5 h-5 text-white" />
+          <Search className={`w-5 h-5 ${theme.text}`} />
+          <Headphones className={`w-5 h-5 ${theme.text}`} />
         </div>
       </div>
 
       {/* Your History Section */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4 px-4">
-          <h2 className="text-white text-base font-bold">Your History</h2>
+          <h2 className={`${theme.text} text-base font-bold`}>Your History</h2>
           <button className="text-purple-400 text-xs font-medium cursor-pointer">See All</button>
         </div>
 
@@ -827,7 +1081,7 @@ const MobileApp = () => {
               <div className="w-20 aspect-square bg-gradient-to-br from-orange-500 to-red-600 rounded-[13px] mb-2 flex items-center justify-center">
                 <div className="text-white font-bold text-xs">{song.artist}</div>
               </div>
-              <p className="text-white text-xs font-medium text-left pl-2">{song.title}</p>
+              <p className={`${theme.text} text-xs font-medium text-left pl-2`}>{song.title}</p>
             </div>
           ))}
         </div>
@@ -838,13 +1092,13 @@ const MobileApp = () => {
         <div className="flex items-center justify-between py-3">
           <div className="flex items-center gap-3">
             <div className="w-6 h-6 flex items-center justify-center">
-              <div className="w-4 h-3 border border-white rounded-sm flex items-center justify-center">
-                <PlayIcon className="w-2 h-2 text-white fill-current" />
+              <div className={`w-4 h-3 border ${isOnDarkMode ? 'border-white' : 'border-gray-900'} rounded-sm flex items-center justify-center`}>
+                <PlayIcon className={`w-2 h-2 ${theme.text} fill-current`} />
               </div>
             </div>
-            <span className="text-white text-base font-medium">Playlists</span>
+            <span className={`${theme.text} text-base font-medium`}>Playlists</span>
           </div>
-          <div className="text-gray-400">
+          <div className={theme.textTertiary}>
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
@@ -854,13 +1108,13 @@ const MobileApp = () => {
         <div className="flex items-center justify-between py-3">
           <div className="flex items-center gap-3">
             <div className="w-6 h-6 flex items-center justify-center">
-              <div className="w-4 h-4 rounded-full border-2 border-white flex items-center justify-center">
-                <div className="w-1 h-1 bg-white rounded-full"></div>
+              <div className={`w-4 h-4 rounded-full border-2 ${isOnDarkMode ? 'border-white' : 'border-gray-900'} flex items-center justify-center`}>
+                <div className={`w-1 h-1 ${isOnDarkMode ? 'bg-white' : 'bg-gray-900'} rounded-full`}></div>
               </div>
             </div>
-            <span className="text-white text-base font-medium">Podcasts</span>
+            <span className={`${theme.text} text-base font-medium`}>Podcasts</span>
           </div>
-          <div className="text-gray-400">
+          <div className={theme.textTertiary}>
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
@@ -870,11 +1124,11 @@ const MobileApp = () => {
         <div className="flex items-center justify-between py-3">
           <div className="flex items-center gap-3">
             <div className="w-6 h-6 flex items-center justify-center">
-              <div className="w-4 h-3 border border-white rounded-sm"></div>
+              <div className={`w-4 h-3 border ${isOnDarkMode ? 'border-white' : 'border-gray-900'} rounded-sm`}></div>
             </div>
-            <span className="text-white text-base font-medium">Albums</span>
+            <span className={`${theme.text} text-base font-medium`}>Albums</span>
           </div>
-          <div className="text-gray-400">
+          <div className={theme.textTertiary}>
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
@@ -884,13 +1138,13 @@ const MobileApp = () => {
         <div className="flex items-center justify-between py-3">
           <div className="flex items-center gap-3">
             <div className="w-6 h-6 flex items-center justify-center">
-              <div className="w-3 h-3 rounded-full border border-white flex items-center justify-center">
-                <div className="w-1 h-1 bg-white rounded-full"></div>
+              <div className={`w-3 h-3 rounded-full border ${isOnDarkMode ? 'border-white' : 'border-gray-900'} flex items-center justify-center`}>
+                <div className={`w-1 h-1 ${isOnDarkMode ? 'bg-white' : 'bg-gray-900'} rounded-full`}></div>
               </div>
             </div>
-            <span className="text-white text-base font-medium">Songs</span>
+            <span className={`${theme.text} text-base font-medium`}>Songs</span>
           </div>
-          <div className="text-gray-400">
+          <div className={theme.textTertiary}>
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
@@ -904,18 +1158,18 @@ const MobileApp = () => {
     <div className="h-[515px] overflow-auto scrollbar-none">
       {/* Header */}
       <div className="flex items-center justify-between mb-6 px-4 pt-6">
-        <h1 className="text-white text-xl font-bold">Profile</h1>
-        <Headphones className="w-5 h-5 text-white" />
+        <h1 className={`${theme.text} text-xl font-bold`}>Profile</h1>
+        <Headphones className={`w-5 h-5 ${theme.text}`} />
       </div>
 
       {/* Profile Info */}
       <div className="flex items-center gap-4 px-4 mb-6">
-        <div className="w-12 h-12 flex-shrink-0 bg-gray-600 rounded-full flex items-center justify-center">
-          <User className="w-4 h-4 text-gray-300" />
+        <div className={`w-12 h-12 flex-shrink-0 ${isOnDarkMode ? 'bg-gray-600' : 'bg-gray-300'} rounded-full flex items-center justify-center`}>
+          <User className={`w-4 h-4 ${isOnDarkMode ? 'text-gray-300' : 'text-gray-600'}`} />
         </div>
         <div>
-          <h2 className="text-white text-xs font-semibold">baddie</h2>
-          <p className="text-gray-400 text-[10px]">Crushokoro@gmail.com</p>
+          <h2 className={`${theme.text} text-xs font-semibold`}>baddie</h2>
+          <p className={`${theme.textTertiary} text-[10px]`}>Crushokoro@gmail.com</p>
         </div>
       </div>
 
@@ -941,10 +1195,10 @@ const MobileApp = () => {
       <div className="px-4">
         <div className="flex items-center justify-between py-3">
           <div className="flex items-center gap-3">
-            <User className="w-5 h-5 text-gray-400" />
-            <span className="text-white text-sm font-medium">Profile</span>
+            <User className={`w-5 h-5 ${theme.textTertiary}`} />
+            <span className={`${theme.text} text-sm font-medium`}>Profile</span>
           </div>
-          <div className="text-gray-400">
+          <div className={theme.textTertiary}>
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
@@ -954,11 +1208,11 @@ const MobileApp = () => {
         <div className="flex items-center justify-between py-3">
           <div className="flex items-center gap-3">
             <div className="w-5 h-5 flex items-center justify-center">
-              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className={`w-4 h-4 ${theme.textTertiary}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-5 5h5m-10-1V4a2 2 0 112 2v11" />
               </svg>
             </div>
-            <span className="text-white text-sm font-medium">Notification</span>
+            <span className={`${theme.text} text-sm font-medium`}>Notification</span>
           </div>
           <Toggle isOn={isOnNotification} setIsOn={setIsOnNotification} />
         </div>
@@ -966,11 +1220,11 @@ const MobileApp = () => {
         <div className="flex items-center justify-between py-3">
           <div className="flex items-center gap-3">
             <div className="w-5 h-5 flex items-center justify-center">
-              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className={`w-4 h-4 ${theme.textTertiary}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
               </svg>
             </div>
-            <span className="text-white text-sm font-medium">Dark Mode</span>
+            <span className={`${theme.text} text-sm font-medium`}>Dark Mode</span>
           </div>
           <Toggle isOn={isOnDarkMode} setIsOn={setIsOnDarkMode} />
         </div>
@@ -978,13 +1232,13 @@ const MobileApp = () => {
         <div className="flex items-center justify-between py-3">
           <div className="flex items-center gap-3">
             <div className="w-5 h-5 flex items-center justify-center">
-              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className={`w-4 h-4 ${theme.textTertiary}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
               </svg>
             </div>
-            <span className="text-white text-sm font-medium">Sync Music</span>
+            <span className={`${theme.text} text-sm font-medium`}>Sync Music</span>
           </div>
-          <div className="text-gray-400">
+          <div className={theme.textTertiary}>
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
@@ -994,15 +1248,15 @@ const MobileApp = () => {
         <div className="flex items-center justify-between py-3">
           <div className="flex items-center gap-3">
             <div className="w-5 h-5 flex items-center justify-center">
-              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className={`w-4 h-4 ${theme.textTertiary}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
               </svg>
             </div>
-            <span className="text-white text-sm font-medium">Language</span>
+            <span className={`${theme.text} text-sm font-medium`}>Language</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-gray-400 text-sm">Language</span>
-            <div className="text-gray-400">
+            <span className={`${theme.textTertiary} text-sm`}>English</span>
+            <div className={theme.textTertiary}>
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
@@ -1027,8 +1281,8 @@ const MobileApp = () => {
         return (
           <div className="h-[515px] flex items-center justify-center">
             <div className="text-center">
-              <h2 className="text-white text-base font-bold mb-2">{tabName}</h2>
-              <p className="text-gray-400 text-xs">Content coming soon...</p>
+              <h2 className={`${theme.text} text-base font-bold mb-2`}>{tabName}</h2>
+              <p className={`${theme.textTertiary} text-xs`}>Content coming soon...</p>
             </div>
           </div>
         );
@@ -1036,87 +1290,105 @@ const MobileApp = () => {
   };
 
   return (
-    <div className='relative bg-[#181A20] text-white max-w-md mx-auto'>
+    <div className={`relative ${theme.bg} ${theme.text} max-w-md mx-auto`}>
       <audio ref={audioRef} />
 
-      <div className={`bg-[#181A20] sticky top-0 z-50 rounded-top-[40px] pl-[7%] pr-[5%] pt-1.5 flex justify-between items-center ${showNowPlaying && 'bg-gradient-to-b bg-green-900'}`}>
-        <div className='font-bold'>{time}</div>
-        <div className='flex gap-1.5'>
-          <div className='flex font-bold items-center gap-[1px]'>
-            <img src={Signal} className='w-4' stroke-width={3} />
+      <div className={`${theme.bg} sticky top-0 z-50 rounded-top-[40px] pl-[7%] pr-[5%] pt-1.5 flex justify-between items-center ${showNowPlaying && 'bg-gradient-to-b bg-green-900'}`}>
+        <div className="font-bold">{time}</div>
+        <div className="flex gap-1.5">
+          <div className="flex font-bold items-center gap-[1px]">
+            <IconSignal
+              className={`w-4 h-4 ${theme.text}`}
+            />
           </div>
-          <img src={Wifi} className='w-4' stroke-width={3} />
-          <img src={Battery} className='w-6' stroke-width={3} />
+          <IconWifi
+            className={`w-4 h-4 ${theme.text}`}
+          />
+          <IconBattery
+            className={`w-6 h-4 ${theme.text}`}
+          />
         </div>
       </div>
 
       {/* Main Content */}
       <div className="relative">
+        {!showThankYouModal && renderDemoOverlay()}
         {showNowPlaying ? renderNowPlayingScreen() : (
           <>
             {activeTab === 'Home' ? renderHomeContent() : renderOtherContent(activeTab)}
 
             {currentSong && (
-              <div className='bg-gray-800 px-3 py-1.5 absolute w-full bottom-[42px] flex items-center bg-gradient-to-r from-purple-600 to-pink-600' onClick={() => setShowNowPlaying(true)}>
+              <div className='bg-gradient-to-r from-purple-600 to-pink-600 px-3 py-1.5 absolute w-full bottom-[46px] flex items-center' onClick={() => setShowNowPlaying(true)}>
                 <div className="w-6 h-6 bg-gradient-to-br mr-3 from-orange-500 to-red-600 rounded-sm flex items-center justify-center flex-shrink-0">
                   <span className="text-white font-bold text-xs">
-                    {currentSong.artist?.substring(0, 2) || 'SH'}
+                    {currentSong?.artist?.substring(0, 2) || 'SH'}
                   </span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h4 className="text-white font-medium text-[11px] truncate">{currentSong.title}</h4>
-                  <p className="text-white/80 text-[8px] truncate">{currentSong.artist}</p>
+                  <h4 className="text-white font-medium text-[10px] truncate">{currentSong?.title}</h4>
+                  <p className="text-white/80 text-[8px] truncate">{currentSong?.artist}</p>
                 </div>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    togglePlayPause();
-                  }}
-                  className="w-fit h-fit flex-shrink-0 flex items-center justify-center cursor-pointer hover:scale-110 transition-all mr-2"
-                >
-                  {!isPlaying ?
-                    <PlayIcon className="w-4 h-4 text-[#ffffffa7] cursor-pointer" /> : <Pause className="w-4 h-4 text-[#ffffffa7] cursor-pointer" />}
-                </button>
+                <div className='flex gap-2 items-center mr-5'>
+                  <img src={Previous} alt="previous icon" className="w-4 h-4 text-gray-500 cursor-pointer" onClick={() => {
+                    playPrevSong();
+                    setShowNowPlaying(false);
+                  }} />
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      togglePlayPause();
+                    }}
+                    className="w-fit h-fit flex-shrink-0 flex items-center justify-center cursor-pointer hover:scale-110 transition-all"
+                  >
+                    {!isPlaying ?
+                      <PlayIcon className="w-4 h-4 text-[#ffffffa7] cursor-pointer" /> : <Pause className="w-4 h-4 text-[#ffffffa7] cursor-pointer" />}
+                  </button>
+                  <img src={Next} alt="next icon" className="w-4 h-4 text-gray-500 cursor-pointer" onClick={playNextSong} />
+                </div>
 
-                <X
-                  className="w-4 h-4 text-white/60 cursor-pointer hover:scale-110 transition-all"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setCurrentSong(null);
-                    setIsPlaying(false);
-                    if (audioRef.current) {
-                      audioRef.current?.pause();
-                    }
-                  }}
-                />
+
+                <div className={`w-5 h-5 rounded-full absolute right-3 -top-[6px] z-[999999] text-white/60 cursor-pointer hover:scale-110 transition-all grid place-content-center bg-gray-600`}>
+                  <X
+                    className="w-3 h-3 text-white/60 cursor-pointer hover:scale-110 transition-all"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setCurrentSong(null);
+                      setIsPlaying(false);
+                      if (audioRef.current) {
+                        audioRef.current?.pause();
+                      }
+                    }}
+                  />
+                </div>
+
               </div>
-
             )}
 
-            <div className="bg-[#1a1a1a] border-t border-gray-800">
-              <div className="flex justify-around items-center pt-1 pb-3">
+            <div className={`${isOnDarkMode ? 'bg-[#1a1a1a] border-gray-800' : 'bg-white border-gray-200'} border-t ${theme.shadow}`}>
+              <div className="flex justify-around items-center pt-2 pb-3">
                 {navItems.map((item, index) => {
                   const IconComponent = item.icon;
                   const isActive = activeTab === item.name;
                   return (
                     <div
                       key={index}
-                      className="flex flex-col items-center gap-[2px] cursor-pointer"
-                      onClick={() => setActiveTab(item.name)}
+                      className={`flex flex-col items-center gap-[2px] cursor-pointer ${demoStep === 2 && item.name === 'Sound (EQ)' ? 'ring-4 ring-purple-600 rounded-lg p-1' : ''}`}
+                      onClick={() => item.name === 'Sound (EQ)' ? handleSoundEQClick() : setActiveTab(item.name)}
                     >
-                      <IconComponent className={`w-3 h-3 ${isActive ? 'text-purple-500' : 'text-gray-500'}`} />
-                      <span className={`text-[6px] ${isActive ? 'text-purple-500 font-medium' : 'text-gray-500'}`}>
+                      <IconComponent className={`w-3 h-3 ${isActive ? 'text-purple-500' : isOnDarkMode ? 'text-gray-500' : 'text-gray-400'}`} />
+                      <span className={`text-[7px] ${isActive ? 'text-purple-500 font-medium' : isOnDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
                         {item.name}
                       </span>
                     </div>
                   );
                 })}
               </div>
-              <div className="h-1 bg-white rounded-full mx-auto w-[40%] mb-2"></div>
+              <div className={`h-1 ${isOnDarkMode ? 'bg-white' : 'bg-gray-900'} rounded-full mx-auto w-[40%] mb-2`}></div>
             </div>
 
             {modalOpen && renderMoodModal()}
             {soundModalOpen && renderCannabisSound()}
+            {showThankYouModal && renderThankYouModal()}
           </>
         )}
       </div>
@@ -1124,4 +1396,4 @@ const MobileApp = () => {
   )
 }
 
-export { MobileApp }
+export { MobileApp };
