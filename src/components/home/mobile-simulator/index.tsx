@@ -8,10 +8,10 @@ const MobileSimulator = () => {
         <h5 className='xl:text-[40px] md:text-[35px] mt-1 mb-8 leading-[110%] font-medium text-gray-300'>
           Tune your music to your state of mind
         </h5>
-        <p className="text-[#ffffff] text-xl">
+        <p className="text-[#ffffff] sm:text-xl text-base">
           Step into a world where music adapts to you. Our headphones sync with the mobile app to shift each track in real-time, inspired by the subtle nuances of your mood. Choose your vibe—Indica, Sativa, Hybrid, or Og Kush—and watch the sound transform before your ears.
         </p>
-        <p className='text-[#ffffff] text-xl mt-[30px]'>
+        <p className='text-[#ffffff] sm:text-xl text-base mt-[30px]'>
           Feel deeper bass, brighter highs, or warm undertones exactly when you want them. Every note, every beat, tuned to match your senses. Sign up with your email to unlock exclusive drops and step fully into the experience—where music meets the high.
         </p>
       </div>

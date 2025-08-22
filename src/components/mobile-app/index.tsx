@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Home, Search, Sliders, BookOpen, User, Star, Pause, Headphones, X, ArrowLeft, MoreVertical, PlayIcon, BellDotIcon, BellIcon } from 'lucide-react';
+import { Home, Search, Sliders, BookOpen, User, Star, Pause, Headphones, X, ArrowLeft, MoreVertical, PlayIcon, BellDotIcon, BellIcon, Pointer } from 'lucide-react';
 import { IconBattery, IconSignal, IconWifi } from '../icons';
 import {
   FouramImage, OwnTheNightImage, KeepingItRealImage, LeVibeImage, FourAm, GetOverIt, KeepingItReal, LeVibe, OverIt, OwnTheNight, BackwardsTen, Battery, Clock, ForwardsTen, Meter, Next, Play, Previous, Select, ShareScreen, Signal, Wifi, FourAmIndica,
@@ -21,6 +21,7 @@ import {
 import { useClickOutside } from '../../hooks';
 import { CustomBarChart } from '../bar-chart';
 import { Toggle } from '../toggle';
+import { set } from 'react-hook-form';
 
 const mockAudio = "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav";
 
@@ -29,9 +30,10 @@ const MobileApp = () => {
   const [modalOpen, setModalOpen] = useState(true);
   const [soundModalOpen, setSoundModalOpen] = useState(false);
   const [isOnNotification, setIsOnNotification] = useState(true);
-  const [isOnDarkMode, setIsOnDarkMode] = useState(false); // Changed to false for light mode
+  const [isOnDarkMode, setIsOnDarkMode] = useState(false);
   const [currentSong, setCurrentSong] = useState<any>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [stepsOpen, setStepsOpen] = useState<boolean>(true);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
   const [showNowPlaying, setShowNowPlaying] = useState<boolean>(false);
@@ -97,9 +99,13 @@ const MobileApp = () => {
   const audioRef = useRef<any>(null);
   const modalRef = useRef<any>(null);
   const soundModalRef = useRef<any>(null);
+  const stepsRef = useRef<any>(null);
+  const thankYouModalRef = useRef<any>(null);
 
   useClickOutside(modalRef, modalRef, () => setModalOpen(false));
   useClickOutside(soundModalRef, soundModalRef, () => setSoundModalOpen(false));
+  useClickOutside(stepsRef, stepsRef, () => setStepsOpen(false));
+  useClickOutside(thankYouModalRef, thankYouModalRef, () => setShowThankYouModal(false));
 
   const now = new Date();
   const hours = now.getHours().toString().padStart(2, '0');
@@ -473,6 +479,18 @@ const MobileApp = () => {
   }, [modalOpen]);
 
   useEffect(() => {
+    if (demoStep === 4) {
+      const interval = setInterval(() => {
+        setShowThankYouModal(true);
+      }, 15000);
+
+      return () => clearInterval(interval);
+    }
+  }, [demoStep]);
+
+
+
+  useEffect(() => {
     if (selectedCannabisType && demoStep === 3) {
       setTimeout(() => {
         setShowThankYouModal(true);
@@ -524,29 +542,34 @@ const MobileApp = () => {
 
     let message, position;
     if (demoStep === 1) {
-      message = 'Click the first song under Freshly Rolled Beats';
-      position = 'top-24 left-4';
+      message = 'Click the first song here';
+      position = 'top-[230px] left-14';
     } else if (demoStep === 2) {
       message = 'Click Sound (EQ) on the bottom navbar';
-      position = 'bottom-16 left-1/2 transform -translate-x-1/2';
+      position = 'bottom-1 left-30';
     } else if (demoStep === 3) {
       message = 'Select a cannabis type (Indica, Sativa, or Hybrid)';
-      position = 'top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2';
+      position = 'top-[72%] left-8';
     }
 
     return (
-      <div className="absolute inset-0 bg-black/60 z-40 pointer-events-none">
-        <div className={`absolute ${position} bg-purple-600 text-white text-xs p-2 rounded-lg max-w-xs text-center animate-pulse`}>
-          {message}
-          <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-purple-600"></div>
+      stepsOpen ? <div className="absolute bg-black/10 inset-0 z-[99999] pointer-events-none">
+        <div className={`absolute ${position} ${demoStep === 2 && 'flex gap-1'}`}>
+          <Pointer color="white" fill='white' className={` ${demoStep === 2 ? 'w-8' : 'animate-pulse w-7'} h-auto duration-1000 ml-2.5`} />
+          {demoStep === 1 && <div className={`${theme.bg} w-2.5 h-2.5 rotate-45 -mb-2 ml-5 mt-1.5`} />}
+          {demoStep === 2 && <div className={`${theme.bg} w-2.5 h-2.5 rotate-45 -mt-1 -mr-3`} />}
+          {demoStep === 3 && <div className={`${theme.bg} w-2.5 h-2.5 rotate-45 mt-1.5 ml-4`} />}
+          {demoStep === 1 && <p className={`${theme.text} text-[8px] ${theme.bg} rounded-[4px] py-1.5 px-2`}>{message}</p>}
+          {demoStep === 2 && <p className={`${theme.text} text-[8px] w-[90px] -mt-4 h-fit ${theme.bg} rounded-[4px] py-1.5 px-2`}>{message}</p>}
+          {demoStep === 3 && <p className={`${theme.text} text-[8px] ${theme.bg} -mt-2 h-fit rounded-[4px] py-1.5 px-2`}>{message}</p>}
         </div>
-      </div>
+      </div> : <div></div>
     );
   };
 
   const renderThankYouModal = () => (
     <div className={`absolute inset-0 ${theme.modalOverlay} flex items-center justify-center z-50 p-4`}>
-      <div className={`${theme.modalBg} ${theme.shadow} rounded-[12px] px-4 py-6 w-full max-w-sm`}>
+      <div ref={thankYouModalRef} className={`${theme.modalBg} ${theme.shadow} rounded-[12px] px-4 py-6 w-full max-w-sm`}>
         <h2 className={`${theme.text} text-sm font-bold mb-2`}>Thank You for Trying the Demo!</h2>
         <p className={`${theme.textSecondary} text-[10px] mb-4`}>
           Experience the full power of cannabis-inspired audio with our app. Download now to explore more!
@@ -555,6 +578,7 @@ const MobileApp = () => {
           href="https://yourappdownloadlink.com"
           target="_blank"
           rel="noopener noreferrer"
+          onClick={() => { setStepsOpen(false); setShowThankYouModal(false); }}
           className="bg-purple-600 text-white px-3 py-1 rounded-[5px] text-[9px] font-semibold hover:bg-purple-700 transition-colors"
         >
           Download the App
@@ -614,18 +638,14 @@ const MobileApp = () => {
         <div className="flex mb-4">
           <button
             onClick={() => setEqActiveTab('Description')}
-            className={`flex-1 py-2 px-4 text-xs font-medium cursor-pointer transition-colors ${eqActiveTab === 'Description'
-              ? 'text-purple-600 border-b-2 border-purple-600'
-              : theme.textSecondary
+            className={`flex-1 py-2 px-4 text-xs font-medium cursor-pointer transition-colors ${theme.textSecondary
               }`}
           >
             Description
           </button>
           <button
             onClick={() => setEqActiveTab('Soundscape')}
-            className={`flex-1 py-2 px-4 text-xs font-medium cursor-pointer transition-colors ${eqActiveTab === 'Soundscape'
-              ? 'text-purple-600 border-b-2 border-purple-600'
-              : theme.textSecondary
+            className={`flex-1 py-2 px-4 text-xs font-medium cursor-pointer transition-colors ${theme.textSecondary
               }`}
           >
             Soundscape
@@ -696,7 +716,7 @@ const MobileApp = () => {
             className={`cursor-pointer px-5 py-[4px] rounded-full text-[10px] font-medium transition-colors ${selectedCannabisType === type
               ? 'bg-purple-600 text-white'
               : `${theme.cardBg} ${theme.textSecondary} ${theme.shadow}`
-              } ${demoStep === 3 ? 'ring-4 ring-purple-600' : ''}`}
+              }`}
           >
             {type}
           </button>
@@ -850,7 +870,10 @@ const MobileApp = () => {
     <div key={index} className="flex-shrink-0 text-center">
       <div
         className={`w-22 h-20 rounded-[12px] mb-2 relative overflow-hidden flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity`}
-        onClick={() => playSong(item)}
+        onClick={() => {
+          playSong(item);
+          handleSongClick(item);
+        }}
       >
         {item.image ? (
           <img
@@ -899,7 +922,7 @@ const MobileApp = () => {
   const renderHomeContent = () => (
     <div className="h-[515px] overflow-auto scrollbar-none">
       {/* Header */}
-      <div className="flex flex-col mb-4 px-3 relative pt-6">
+      <div className="flex flex-col mb-4 px-3 relative pt-5">
         <img src={`${isOnDarkMode ? '/logo-white.avif' : '/logo.avif'}`} alt='logo icon' className='w-[70px] h-auto mb-3' />
         <div className="flex items-center gap-3">
           <div className={`w-8 h-8 flex-shrink-0 ${isOnDarkMode ? 'bg-gray-600' : 'bg-gray-300'} rounded-full flex items-center justify-center`}>
@@ -910,16 +933,16 @@ const MobileApp = () => {
             <p className={`${theme.textTertiary} text-[10px] w-[70%]`}>Your vibe is chill. Stay easy today.</p>
           </div>
         </div>
-        <div className='flex gap-2 text-[7px] absolute top-6 right-4'>
-          <div className='flex flex-col items-center'>
+        <div className='flex gap-2 text-[6.5px] absolute top-6 right-4'>
+          <div className='flex flex-col gap-[2px] items-center'>
             <Sliders className={`w-3 h-3 ${theme.textTertiary} cursor-pointer`} onClick={() => setSoundModalOpen(true)} />
             Sound (EQ)
           </div>
-          <div className='flex flex-col items-center'>
+          <div className='flex flex-col gap-[2px] items-center'>
             <BookOpen className={`w-3 h-3 ${theme.textTertiary} cursor-pointer`} onClick={() => setActiveTab('Library')} />
             Library
           </div>
-          <div className='flex flex-col items-center'>
+          <div className='flex flex-col gap-[2px] items-center'>
             <BellIcon className={`w-3 h-3 ${theme.textTertiary} cursor-pointer`} onClick={() => { }} />
             Alerts
           </div>
@@ -943,18 +966,7 @@ const MobileApp = () => {
           <button className="text-purple-400 text-[11px] font-medium cursor-pointer">See All</button>
         </div>
         <div className="flex gap-2 overflow-x-auto scrollbar-none pl-3">
-          {freshlyRolledBeats.map((beat, index) => (
-            <div key={index} className="flex-shrink-0 text-center">
-              <div
-                className={`w-22 h-20 rounded-[12px] mb-2 relative overflow-hidden flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity ${demoStep === 1 && index === 0 ? 'ring-4 ring-purple-600 z-50' : ''}`}
-                onClick={() => handleSongClick(beat)}
-              >
-                {/* ... (rest of the card content remains unchanged) */}
-              </div>
-              <h3 className={`${theme.text} font-medium text-[10px] mb-1`}>{beat.title}</h3>
-              <p className={`${theme.textTertiary} text-[9px]`}>{beat.artist}</p>
-            </div>
-          ))}
+          {freshlyRolledBeats.map((beat, index) => renderCard(beat, index))}
         </div>
       </div>
 
@@ -1368,15 +1380,21 @@ const MobileApp = () => {
               <div className="flex justify-around items-center pt-2 pb-3">
                 {navItems.map((item, index) => {
                   const IconComponent = item.icon;
-                  const isActive = activeTab === item.name;
                   return (
                     <div
                       key={index}
-                      className={`flex flex-col items-center gap-[2px] cursor-pointer ${demoStep === 2 && item.name === 'Sound (EQ)' ? 'ring-4 ring-purple-600 rounded-lg p-1' : ''}`}
-                      onClick={() => item.name === 'Sound (EQ)' ? handleSoundEQClick() : setActiveTab(item.name)}
+                      className={`flex flex-col items-center gap-[2px] cursor-pointer `}
+                      onClick={() => {
+                        if (item.name === 'Sound (EQ)') {
+                          handleSoundEQClick();
+                        } else {
+                          setActiveTab(item.name);
+                          setStepsOpen(false);
+                        }
+                      }}
                     >
-                      <IconComponent className={`w-3 h-3 ${isActive ? 'text-purple-500' : isOnDarkMode ? 'text-gray-500' : 'text-gray-400'}`} />
-                      <span className={`text-[7px] ${isActive ? 'text-purple-500 font-medium' : isOnDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                      <IconComponent className={`w-3 h-3 ${isOnDarkMode ? 'text-gray-500' : 'text-gray-400'}`} />
+                      <span className={`text-[7px] ${isOnDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
                         {item.name}
                       </span>
                     </div>

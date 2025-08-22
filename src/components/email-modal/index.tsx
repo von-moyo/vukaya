@@ -55,7 +55,7 @@ const SoundVibeModal: React.FC = () => {
       <div className="absolute inset-0 bg-black/60" />
       <div
         ref={modalRef}
-        className="bg-white rounded-2xl max-w-md w-full max-h-[500px] overflow-y-auto scrollbar-hidden relative"
+        className="bg-white rounded-2xl max-w-md w-full max-h-[600px] overflow-y-auto scrollbar-hidden relative"
       >
         {/* Close button */}
         <button
@@ -83,16 +83,16 @@ const SoundVibeModal: React.FC = () => {
         {/* Body */}
         <div className="p-6">
           <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
-              What's your Sound Vibe?
+            <h2 className="sm:text-2xl text-xl font-bold text-gray-900 mb-2">
+              Try Out Our Mobile App Demo!
             </h2>
             <div className="flex items-center justify-center gap-2 text-gray-600">
-              <Headphones className="w-5 h-5" />
-              <span className="italic">
-                Discover EQ soundscapes that match your mood in under 3 secs
+              <span className="italic sm:text-base text-sm">
+                Experience different EQs and soundscapes instantly  <br /> We just need your email to get started.
               </span>
             </div>
           </div>
+
 
           {/* Email Input */}
           <input
@@ -100,82 +100,20 @@ const SoundVibeModal: React.FC = () => {
             placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all mb-6"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-0  outline-none transition-all mb-6"
             required
           />
-
-          {/* Vibe */}
-          <h3 className="text-lg font-semibold text-gray-900 mb-3">
-            What's your current vibe?
-          </h3>
-          <div className="space-y-3 mb-6">
-            <label className="flex items-center gap-3 cursor-pointer">
-              <input
-                type="radio"
-                name="vibe"
-                value="calm"
-                checked={selectedVibe === "calm"}
-                onChange={(e) => setSelectedVibe(e.target.value)}
-                className="w-4 h-4 text-blue-600"
-              />
-              <span className="text-2xl">🌿</span>
-              <span className="text-gray-700">Calm & grounded</span>
-            </label>
-            <label className="flex items-center gap-3 cursor-pointer">
-              <input
-                type="radio"
-                name="vibe"
-                value="energized"
-                checked={selectedVibe === "energized"}
-                onChange={(e) => setSelectedVibe(e.target.value)}
-                className="w-4 h-4 text-blue-600"
-              />
-              <span className="text-2xl">🔥</span>
-              <span className="text-gray-700">Energized & upbeat</span>
-            </label>
-          </div>
-
-          {/* Need */}
-          <h3 className="text-lg font-semibold text-gray-900 mb-3">
-            What do you need most from your sound today?
-          </h3>
-          <div className="space-y-3 mb-6">
-            <label className="flex items-center gap-3 cursor-pointer">
-              <input
-                type="radio"
-                name="need"
-                value="focus"
-                checked={selectedNeed === "focus"}
-                onChange={(e) => setSelectedNeed(e.target.value)}
-                className="w-4 h-4 text-blue-600"
-              />
-              <span className="text-2xl">🎯</span>
-              <span className="text-gray-700">Focus & clarity</span>
-            </label>
-            <label className="flex items-center gap-3 cursor-pointer">
-              <input
-                type="radio"
-                name="need"
-                value="rest"
-                checked={selectedNeed === "rest"}
-                onChange={(e) => setSelectedNeed(e.target.value)}
-                className="w-4 h-4 text-blue-600"
-              />
-              <span className="text-2xl">🌙</span>
-              <span className="text-gray-700">Rest & recovery</span>
-            </label>
-          </div>
 
           {/* Submit */}
           <button
             onClick={handleSubmit}
-            className="w-full bg-gray-900 text-white py-4 rounded-lg font-semibold text-lg hover:bg-gray-800 transition-colors transform hover:scale-[1.02] active:scale-[0.98]"
+            className="w-full bg-gray-900 cursor-pointer text-white py-4 rounded-lg font-medium sm:text-lg text-base hover:bg-gray-800 transition-colors transform hover:scale-[1.02] active:scale-[0.98]"
           >
             Experience Your Sound
           </button>
 
           {/* Footer */}
-          <div className="text-center text-xs text-gray-500 mt-4 space-y-1">
+          <div className="text-center sm:text-xs text-[10px] text-gray-500 mt-4 space-y-1">
             <p>
               By signing up, you agree to receive updates about new EQ presets.
             </p>
