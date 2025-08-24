@@ -14,15 +14,15 @@ const Footer = () => {
 
             <div className="space-y-3 text-[#999999]">
               <div className="flex items-center gap-3">
-                <PhoneCall stroke-width={2} className="w-5 text-[#ff0030]" />
+                <PhoneCall strokeWidth={2} className="w-5 text-[#ff0030]" />
                 <span>8555390003</span>
               </div>
               <div className="flex items-start gap-3">
-                <MapPin stroke-width={2} className="w-5 text-[#ff0030]" />
+                <MapPin strokeWidth={2} className="w-5 text-[#ff0030]" />
                 <span>115 2nd Ave N, Saskatoon, SK</span>
               </div>
               <div className="flex items-center gap-3">
-                <Mail stroke-width={2} className="w-5 text-[#ff0030]" />
+                <Mail strokeWidth={2} className="w-5 text-[#ff0030]" />
                 <span>store@vukaya.com</span>
               </div>
             </div>

@@ -24,7 +24,7 @@ const MobileSimulator = () => {
             alt="phone image"
             className="w-auto h-[600px] cursor-pointer"
           />
-          <div className="absolute top-[1.5%] h-[97%] left-[4.2%] w-[91.5%] overflow-y-auto scrollbar-none bg-[#181A20] rounded-[40px] cursor-pointer text-xs text-white">
+          <div className="absolute top-[1.5%] h-[97%] left-[4.2%] w-[91.5%] overflow-hidden scrollbar-none bg-[#181A20] rounded-[40px] cursor-pointer text-xs text-white">
             <MobileApp />
           </div>
         </div>

@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Home, Search, Sliders, BookOpen, User, Star, Pause, Headphones, X, ArrowLeft, MoreVertical, PlayIcon, BellDotIcon, BellIcon, Pointer } from 'lucide-react';
+import { Home, Search, Sliders, BookOpen, User, Star, Pause, Headphones, X, ArrowLeft, MoreVertical, PlayIcon, BellIcon } from 'lucide-react';
 import { IconBattery, IconSignal, IconWifi } from '../icons';
 import {
-  FouramImage, OwnTheNightImage, KeepingItRealImage, LeVibeImage, FourAm, GetOverIt, KeepingItReal, LeVibe, OverIt, OwnTheNight, BackwardsTen, Battery, Clock, ForwardsTen, Meter, Next, Play, Previous, Select, ShareScreen, Signal, Wifi, FourAmIndica,
+  FouramImage, OwnTheNightImage, KeepingItRealImage, LeVibeImage, FourAm, GetOverIt, KeepingItReal, LeVibe, OverIt, OwnTheNight, BackwardsTen, Clock, ForwardsTen, Meter, Next, Play, Previous, Select, ShareScreen, FourAmIndica,
   FourAmHybrid,
   GetOverItIndica,
   GetOverItHybrid,
@@ -17,11 +17,11 @@ import {
   OwnTheNightHybrid,
   OwnTheNightIndica,
   OwnTheNightSativa,
+  Pointer,
 } from '../../assets';
 import { useClickOutside } from '../../hooks';
 import { CustomBarChart } from '../bar-chart';
 import { Toggle } from '../toggle';
-import { set } from 'react-hook-form';
 
 const mockAudio = "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav";
 
@@ -40,6 +40,7 @@ const MobileApp = () => {
   const [eqActiveTab, setEqActiveTab] = useState<string>('Soundscape');
   const [demoStep, setDemoStep] = useState(0); // 0: none, 1: click first song, 2: click Sound (EQ), 3: click cannabis type, 4: thank you modal
   const [showThankYouModal, setShowThankYouModal] = useState(false);
+  const progressBarRef = useRef<HTMLDivElement>(null);
 
   const theme = {
     bg: isOnDarkMode ? 'bg-[#181A20]' : 'bg-gray-50',
@@ -165,25 +166,14 @@ const MobileApp = () => {
 
   const freshlyRolledBeats = [
     {
-      title: "4am",
+      title: "Own the Night",
       artist: "Unknown",
-      image: FouramImage,
-      audioUrl: FourAm,
+      image: OwnTheNightImage,
+      audioUrl: OwnTheNight,
       audioUrls: {
-        indica: FourAmIndica,
-        hybrid: FourAmHybrid,
-        // no sativa version in your files
-      },
-    },
-    {
-      title: "Get Over It",
-      artist: "Unknown",
-      image: null,
-      audioUrl: GetOverIt,
-      audioUrls: {
-        indica: GetOverItIndica,
-        hybrid: GetOverItHybrid,
-        // no sativa version in your files
+        indica: OwnTheNightIndica,
+        sativa: OwnTheNightSativa,
+        hybrid: OwnTheNightHybrid,
       },
     },
     {
@@ -198,6 +188,17 @@ const MobileApp = () => {
       },
     },
     {
+      title: "4am",
+      artist: "Unknown",
+      image: FouramImage,
+      audioUrl: FourAm,
+      audioUrls: {
+        indica: FourAmIndica,
+        hybrid: FourAmHybrid,
+        // no sativa version in your files
+      },
+    },
+    {
       title: "Le Vibe",
       artist: "Unknown",
       image: LeVibeImage,
@@ -209,6 +210,17 @@ const MobileApp = () => {
       },
     },
     {
+      title: "Get Over It",
+      artist: "Unknown",
+      image: null,
+      audioUrl: GetOverIt,
+      audioUrls: {
+        indica: GetOverItIndica,
+        hybrid: GetOverItHybrid,
+        // no sativa version in your files
+      },
+    },
+    {
       title: "Over It",
       artist: "Unknown",
       image: null,
@@ -217,17 +229,6 @@ const MobileApp = () => {
         sativa: OverItSativa,
         hybrid: OverItHybrid,
         // no indica version in your files
-      },
-    },
-    {
-      title: "Own the Night",
-      artist: "Unknown",
-      image: OwnTheNightImage,
-      audioUrl: OwnTheNight,
-      audioUrls: {
-        indica: OwnTheNightIndica,
-        sativa: OwnTheNightSativa,
-        hybrid: OwnTheNightHybrid,
       },
     },
   ];
@@ -433,7 +434,7 @@ const MobileApp = () => {
   const handleSoundEQClick = () => {
     if (demoStep === 2) {
       setActiveTab('Sound (EQ)');
-      setDemoStep(3);
+      setDemoStep(demoStep + 1);
     } else {
       setActiveTab('Sound (EQ)');
     }
@@ -441,9 +442,24 @@ const MobileApp = () => {
 
   // Modify handleCannabisTypeClick function
   const handleCannabisTypeClick = (type: any) => {
-    if (demoStep === 3) {
+    if (demoStep === 3 && type === 'Indica') {
       setSelectedCannabisType(type);
       setEqActiveTab('Soundscape');
+      setDemoStep(4);
+    } else if (demoStep === 4 && type === 'Sativa') {
+      setSelectedCannabisType(type);
+      setEqActiveTab('Soundscape');
+      setDemoStep(5);
+    } else if (demoStep === 5 && type === 'Hybrid') {
+      setSelectedCannabisType(type);
+      setEqActiveTab('Soundscape');
+      setDemoStep(6);
+      setTimeout(() => {
+        setShowThankYouModal(true);
+      }, 3000);
+
+      // Only close steps after all cannabis types are selected
+      // setStepsOpen(false); // Comment out or remove this line if it exists
     } else {
       setSelectedCannabisType(type);
       setEqActiveTab('Soundscape');
@@ -479,25 +495,21 @@ const MobileApp = () => {
   }, [modalOpen]);
 
   useEffect(() => {
-    if (demoStep === 4) {
+    if (demoStep === 6) {
       const interval = setInterval(() => {
         setShowThankYouModal(true);
       }, 15000);
-
       return () => clearInterval(interval);
     }
   }, [demoStep]);
 
-
-
   useEffect(() => {
-    if (selectedCannabisType && demoStep === 3) {
-      setTimeout(() => {
-        setShowThankYouModal(true);
-        setDemoStep(4);
-      }, 1000);
+    if (demoStep === 1) {
+      setActiveTab('Home');
+      setShowThankYouModal(false);
+      setShowNowPlaying(false);
     }
-  }, [selectedCannabisType, demoStep]);
+  }, [demoStep]);
 
   const formatTime = (time: any) => {
     const minutes = Math.floor(time / 60);
@@ -538,37 +550,53 @@ const MobileApp = () => {
   };
 
   const renderDemoOverlay = () => {
-    if (demoStep === 0 || demoStep === 4) return null;
+    if (demoStep === 0 || demoStep === 6) return null;
 
     let message, position;
     if (demoStep === 1) {
       message = 'Click the first song here';
-      position = 'top-[230px] left-14';
+      position = 'top-[230px] left-[35px]';
     } else if (demoStep === 2) {
       message = 'Click Sound (EQ) on the bottom navbar';
-      position = 'bottom-1 left-30';
+      position = '-bottom-[40px] left-[110px]';
     } else if (demoStep === 3) {
-      message = 'Select a cannabis type (Indica, Sativa, or Hybrid)';
-      position = 'top-[72%] left-8';
+      message = 'Select Indica to feel that vibe shift';
+      position = 'top-[420px] left-[32px]';
+    } else if (demoStep === 4) {
+      message = 'Feel that shift? Select Sativa to feel that again';
+      position = 'top-[420px] left-[110px]';
+    } else if (demoStep === 5) {
+      message = 'Feel the vibe shift again? Select Hybrid to let that hit';
+      position = 'top-[420px] left-[200px]';
     }
 
     return (
-      stepsOpen ? <div className="absolute bg-black/10 inset-0 z-[99999] pointer-events-none">
-        <div className={`absolute ${position} ${demoStep === 2 && 'flex gap-1'}`}>
-          <Pointer color="white" fill='white' className={` ${demoStep === 2 ? 'w-8' : 'animate-pulse w-7'} h-auto duration-1000 ml-2.5`} />
-          {demoStep === 1 && <div className={`${theme.bg} w-2.5 h-2.5 rotate-45 -mb-2 ml-5 mt-1.5`} />}
-          {demoStep === 2 && <div className={`${theme.bg} w-2.5 h-2.5 rotate-45 -mt-1 -mr-3`} />}
-          {demoStep === 3 && <div className={`${theme.bg} w-2.5 h-2.5 rotate-45 mt-1.5 ml-4`} />}
-          {demoStep === 1 && <p className={`${theme.text} text-[8px] ${theme.bg} rounded-[4px] py-1.5 px-2`}>{message}</p>}
-          {demoStep === 2 && <p className={`${theme.text} text-[8px] w-[90px] -mt-4 h-fit ${theme.bg} rounded-[4px] py-1.5 px-2`}>{message}</p>}
-          {demoStep === 3 && <p className={`${theme.text} text-[8px] ${theme.bg} -mt-2 h-fit rounded-[4px] py-1.5 px-2`}>{message}</p>}
+      stepsOpen ? <div className="absolute bg-black/30 inset-0 z-[999999999999999] h-[590px] -mt-[25px] pointer-events-none">
+        <div className={`absolute ${position} ${demoStep === 2 && 'flex gap-1'} font-semibold text-[10px]`}>
+          <img src={Pointer} color="white" className={` ${demoStep === 2 ? 'w-16' : 'w-14'} h-auto duration-1000`} />
+          {demoStep === 1 && <div className='flex flex-col'>
+            <div className={`${theme.bg} w-3 h-3 rotate-45 -mb-2 ml-6`} />
+            <p className={`${theme.text} ${theme.bg} rounded-[8px] py-2 px-3`}>{message}</p>
+          </div>}
+          {demoStep === 2 && <div className='flex items-end mb-16 -ml-4'>
+            <div className={`${theme.bg} w-3 h-3 rotate-[40deg] mb-1 -mr-2 flex-shrink-0`} />
+            <p className={`${theme.text} ${theme.bg} rounded-[8px] py-2 px-3 w-[96px]`}>{message}</p>
+          </div>}
+          {(demoStep === 3 || demoStep === 4) && <div className='flex flex-col -ml-2.5'>
+            <div className={`${theme.bg} w-3 h-3 rotate-45 -mb-2 ml-8`} />
+            <p className={`${theme.text} ${theme.bg} rounded-[8px] py-2 px-3 w-[150px]`}>{message}</p>
+          </div>}
+          {(demoStep === 5) && <div className='flex flex-col items-end -ml-[100px]'>
+            <div className={`${theme.bg} w-3 h-3 rotate-45 -mb-2 mr-6`} />
+            <p className={`${theme.text} ${theme.bg} rounded-[8px] py-2 px-3 w-[150px]`}>{message}</p>
+          </div>}
         </div>
       </div> : <div></div>
     );
   };
 
   const renderThankYouModal = () => (
-    <div className={`absolute inset-0 ${theme.modalOverlay} flex items-center justify-center z-50 p-4`}>
+    <div className={`absolute inset-0 ${theme.modalOverlay} h-[590px] -mt-[25px] flex items-center justify-center z-50 p-4`}>
       <div ref={thankYouModalRef} className={`${theme.modalBg} ${theme.shadow} rounded-[12px] px-4 py-6 w-full max-w-sm`}>
         <h2 className={`${theme.text} text-sm font-bold mb-2`}>Thank You for Trying the Demo!</h2>
         <p className={`${theme.textSecondary} text-[10px] mb-4`}>
@@ -579,7 +607,7 @@ const MobileApp = () => {
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => { setStepsOpen(false); setShowThankYouModal(false); }}
-          className="bg-purple-600 text-white px-3 py-1 rounded-[5px] text-[9px] font-semibold hover:bg-purple-700 transition-colors"
+          className="bg-purple-600 text-white px-3 py-1.5 rounded-[12px] text-[9px] font-semibold hover:bg-purple-700 transition-colors"
         >
           Download the App
         </a>
@@ -588,7 +616,7 @@ const MobileApp = () => {
   );
 
   const renderMoodModal = () => (
-    <div className={`absolute inset-0 ${theme.modalOverlay} flex items-center justify-center z-50 p-4`}>
+    <div className={`absolute inset-0 ${theme.modalOverlay} h-[590px] -mt-[25px] flex items-center justify-center z-50 p-4`}>
       <div
         ref={modalRef}
         className={`${theme.modalBg} ${theme.shadow} rounded-[12px] p-3 w-full max-w-sm`}
@@ -614,7 +642,7 @@ const MobileApp = () => {
   );
 
   const renderSoundEQPage = () => (
-    <div className={`h-[515px] overflow-auto scrollbar-none ${theme.bg}`}>
+    <div className={`h-[515px] overflow-auto scrollbar-none ${theme.bg} ${currentSong && 'pb-8'}`}>
       {/* Header */}
       <div className="flex items-center justify-between mb-6 px-3 pt-6">
         <div className="flex items-center gap-3">
@@ -797,74 +825,117 @@ const MobileApp = () => {
     </div>
   );
 
-  const renderNowPlayingScreen = () => (
-    <div className="absolute inset-0 bg-gradient-to-b from-green-900 via-green-800 to-black z-50 h-[560px]">
-      {/* Header */}
-      <div className="flex items-center justify-between p-4 pt-6">
-        <ArrowLeft className="w-5 h-auto text-white cursor-pointer" onClick={() => setShowNowPlaying(false)} />
-        <div className="text-center mt-2">
-          <h2 className="text-white text-xs">Playing from playlist</h2>
-          <p className="text-green-400 text-[10px]">Cannabis Vibes</p>
-        </div>
-        <MoreVertical className="w-auto h-4.5 text-white" />
-      </div>
+  const renderNowPlayingScreen = () => {
+    const handleSeek = (e: React.MouseEvent | React.TouchEvent) => {
+      if (!audioRef.current || !progressBarRef.current || !duration) return;
 
-      {/* Album Art */}
-      <div className="flex justify-center pb-4">
-        <div className="w-[90%] h-40 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl relative overflow-hidden flex items-center justify-center  ">
-          <div className="text-center">
-            <div className="text-white font-bold text-xl mb-4">{currentSong?.title || 'Starboy'}</div>
-            <div className="text-yellow-400 font-bold text-lg">{currentSong?.artist || 'The Weeknd'}</div>
+      const rect = progressBarRef.current.getBoundingClientRect();
+      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+      const offsetX = clientX - rect.left;
+      const newTime = (offsetX / rect.width) * duration;
+
+      audioRef.current.currentTime = Math.max(0, Math.min(newTime, duration));
+      setCurrentTime(audioRef.current.currentTime);
+    };
+
+    const handleDrag = (e: MouseEvent | TouchEvent) => {
+      if (!audioRef.current || !progressBarRef.current || !duration) return;
+
+      const rect = progressBarRef.current.getBoundingClientRect();
+      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+      const offsetX = clientX - rect.left;
+      const newTime = (offsetX / rect.width) * duration;
+
+      audioRef.current.currentTime = Math.max(0, Math.min(newTime, duration));
+      setCurrentTime(audioRef.current.currentTime);
+    };
+
+    const startDragging = () => {
+      window.addEventListener('mousemove', handleDrag);
+      window.addEventListener('touchmove', handleDrag);
+      window.addEventListener('mouseup', stopDragging);
+      window.addEventListener('touchend', stopDragging);
+    };
+
+    const stopDragging = () => {
+      window.removeEventListener('mousemove', handleDrag);
+      window.removeEventListener('touchmove', handleDrag);
+      window.removeEventListener('mouseup', stopDragging);
+      window.removeEventListener('touchend', stopDragging);
+    };
+    return (
+      <div className="inset-0 bg-gradient-to-b from-green-900 via-green-800 to-black z-50 top-0 h-[560px]">
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 pt-6">
+          <ArrowLeft className="w-5 h-auto text-white cursor-pointer" onClick={() => setShowNowPlaying(false)} />
+          <div className="text-center mt-2">
+            <h2 className="text-white text-xs">Playing from playlist</h2>
+            <p className="text-green-400 text-[10px]">Cannabis Vibes</p>
+          </div>
+          <MoreVertical className="w-auto h-4.5 text-white" />
+        </div>
+
+        {/* Album Art */}
+        <div className="flex justify-center pb-4 w-[230px] h-[220px] mx-auto rounded-[20px]">
+          <img
+            src={currentSong.image}
+            alt={currentSong.title}
+            className="w-full h-full object-cover rounded-[20px]"
+          />
+        </div>
+
+        {/* Song Info */}
+        <div className="text-center px-8 mb-8">
+          <h1 className="text-white text-lg font-bold mb-1">{currentSong?.title || 'Starboy'}</h1>
+          <p className="text-gray-300 text-sm">{currentSong?.artist || 'The Weeknd, Daft Punk'}</p>
+        </div>
+
+        {/* Progress Bar */}
+        <div className="px-4 mb-8">
+          <div
+            ref={progressBarRef}
+            className="w-full bg-gray-600 rounded-full h-1 mb-2 cursor-pointer"
+            onMouseDown={e => { handleSeek(e); startDragging(); }}
+            onTouchStart={e => { handleSeek(e); startDragging(); }}
+          >
+            <div
+              className="bg-green-500 h-1 rounded-full transition-all duration-50"
+              style={{ width: `${(currentTime / (duration || 210)) * 100}%` }}
+            ></div>
+          </div>
+          <div className="flex justify-between text-white text-sm">
+            <span>{formatTime(currentTime)}</span>
+            <span>{formatTime(duration || 210)}</span>
           </div>
         </div>
-      </div>
 
-      {/* Song Info */}
-      <div className="text-center px-8 mb-8">
-        <h1 className="text-white text-lg font-bold mb-1">{currentSong?.title || 'Starboy'}</h1>
-        <p className="text-gray-300 text-sm">{currentSong?.artist || 'The Weeknd, Daft Punk'}</p>
-      </div>
-
-      {/* Progress Bar */}
-      <div className="px-4 mb-8">
-        <div className="w-full bg-gray-600 rounded-full h-1 mb-2">
-          <div
-            className="bg-green-500 h-1 rounded-full transition-all duration-1000"
-            style={{ width: `${(currentTime / (duration || 210)) * 100}%` }}
-          ></div>
+        <div className="flex items-center justify-between px-8 mb-8">
+          <img src={Previous} alt="previous icon" className="w-5 h-5 text-black fill-current cursor-pointer" onClick={playPrevSong} />
+          <img src={BackwardsTen} alt="backwards icon" className="w-6 h-6 text-black fill-current cursor-pointer" onClick={skipBackward} />
+          {!isPlaying ?
+            <img onClick={togglePlayPause} src={Play} alt="Play" className="w-12 h-12 text-black fill-current cursor-pointer" />
+            : (
+              <button
+                onClick={togglePlayPause}
+                className="w-12 h-12 flex-shrink-0 bg-green-500 rounded-full flex items-center justify-center cursor-pointer hover:bg-green-600 transition-colors"
+              >
+                <Pause className="w-6 h-6 text-black fill-current cursor-pointer" />
+              </button>
+            )}
+          <img src={ForwardsTen} alt="forwards icon" className="w-6 h-6 text-black fill-current cursor-pointer" onClick={skipForward} />
+          <img src={Next} alt="next icon" className="w-5 h-5 text-black fill-current cursor-pointer" onClick={playNextSong} />
         </div>
-        <div className="flex justify-between text-white text-sm">
-          <span>{formatTime(currentTime)}</span>
-          <span>{formatTime(duration || 210)}</span>
+
+        {/* Additional Controls */}
+        <div className="flex items-center justify-between px-8">
+          <img src={Meter} alt="meter icon" className="w-4 h-4 text-black fill-current cursor-pointer" />
+          <img src={Clock} alt="clock icon" className="w-4 h-4 text-black fill-current cursor-pointer" />
+          <img src={ShareScreen} alt="scree share icon" className="w-4 h-4 text-black fill-current cursor-pointer" />
+          <img src={Select} alt="select icon" className="w-4 h-4 text-black fill-current cursor-pointer" />
         </div>
       </div>
-
-      <div className="flex items-center justify-between px-8 mb-8">
-        <img src={Previous} alt="previous icon" className="w-5 h-5 text-black fill-current cursor-pointer" onClick={playPrevSong} />
-        <img src={BackwardsTen} alt="backwards icon" className="w-6 h-6 text-black fill-current cursor-pointer" onClick={skipBackward} />
-        {!isPlaying ?
-          <img onClick={togglePlayPause} src={Play} alt="Play" className="w-12 h-12 text-black fill-current cursor-pointer" />
-          : (
-            <button
-              onClick={togglePlayPause}
-              className="w-12 h-12 flex-shrink-0 bg-green-500 rounded-full flex items-center justify-center cursor-pointer hover:bg-green-600 transition-colors"
-            >
-              <Pause className="w-6 h-6 text-black fill-current cursor-pointer" />
-            </button>
-          )}
-        <img src={ForwardsTen} alt="forwards icon" className="w-6 h-6 text-black fill-current cursor-pointer" onClick={skipForward} />
-        <img src={Next} alt="next icon" className="w-5 h-5 text-black fill-current cursor-pointer" onClick={playNextSong} />
-      </div>
-
-      {/* Additional Controls */}
-      <div className="flex items-center justify-between px-8">
-        <img src={Meter} alt="meter icon" className="w-4 h-4 text-black fill-current cursor-pointer" />
-        <img src={Clock} alt="clock icon" className="w-4 h-4 text-black fill-current cursor-pointer" />
-        <img src={ShareScreen} alt="scree share icon" className="w-4 h-4 text-black fill-current cursor-pointer" />
-        <img src={Select} alt="select icon" className="w-4 h-4 text-black fill-current cursor-pointer" />
-      </div>
-    </div>
-  );
+    );
+  }
 
   const renderCard = (item: any, index: any, showArtist = true) => (
     <div key={index} className="flex-shrink-0 text-center">
@@ -920,7 +991,7 @@ const MobileApp = () => {
   );
 
   const renderHomeContent = () => (
-    <div className="h-[515px] overflow-auto scrollbar-none">
+    <div className={`h-[515px] ${currentSong && 'pb-8'} ${stepsOpen ? ' overflow-hidden' : 'overflow-auto scrollbar-none'}`}>
       {/* Header */}
       <div className="flex flex-col mb-4 px-3 relative pt-5">
         <img src={`${isOnDarkMode ? '/logo-white.avif' : '/logo.avif'}`} alt='logo icon' className='w-[70px] h-auto mb-3' />
@@ -1047,7 +1118,7 @@ const MobileApp = () => {
   );
 
   const renderExploreContent = () => (
-    <div className="h-[515px] overflow-auto scrollbar-none">
+    <div className={`h-[515px] ${currentSong && 'pb-12'} overflow-auto scrollbar-none`}>
       {/* Header */}
       <div className="flex items-center justify-between mb-6 px-4 pt-6">
         <h1 className={`${theme.text} text-xl font-bold`}>Explore</h1>
@@ -1070,7 +1141,7 @@ const MobileApp = () => {
   );
 
   const renderLibraryContent = () => (
-    <div className="h-[515px] overflow-auto scrollbar-none">
+    <div className={`h-[515px] ${currentSong && 'pb-8'} overflow-auto scrollbar-none`}>
       {/* Header */}
       <div className="flex items-center justify-between mb-6 px-4 pt-6">
         <h1 className={`${theme.text} text-xl font-bold`}>Library</h1>
@@ -1167,7 +1238,7 @@ const MobileApp = () => {
   );
 
   const renderProfileContent = () => (
-    <div className="h-[515px] overflow-auto scrollbar-none">
+    <div className={`h-[515px] ${currentSong && 'pb-8'} overflow-auto scrollbar-none`}>
       {/* Header */}
       <div className="flex items-center justify-between mb-6 px-4 pt-6">
         <h1 className={`${theme.text} text-xl font-bold`}>Profile</h1>
@@ -1302,7 +1373,7 @@ const MobileApp = () => {
   };
 
   return (
-    <div className={`relative ${theme.bg} ${theme.text} max-w-md mx-auto`}>
+    <div className={`relative ${theme.bg} ${theme.text} max-w-md mx-auto ${stepsOpen ? ' overflow-hidden' : 'overflow-auto scrollbar-none'}`}>
       <audio ref={audioRef} />
 
       <div className={`${theme.bg} sticky top-0 z-50 rounded-top-[40px] pl-[7%] pr-[5%] pt-1.5 flex justify-between items-center ${showNowPlaying && 'bg-gradient-to-b bg-green-900'}`}>
@@ -1365,6 +1436,7 @@ const MobileApp = () => {
                     onClick={(e) => {
                       e.stopPropagation();
                       setCurrentSong(null);
+                      setSelectedCannabisType('')
                       setIsPlaying(false);
                       if (audioRef.current) {
                         audioRef.current?.pause();

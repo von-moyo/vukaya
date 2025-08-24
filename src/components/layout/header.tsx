@@ -292,7 +292,7 @@ export const Header = () => {
             >
               <div className="h-[calc(100dvh-80px)] flex flex-col overflow-y-auto">
                 <div className='flex justify-items-end gap-1 py-[9.3px] px-4 border-b border-[#e2e2e2]'>
-                  <X stroke-width={1} size={24} className="text-[#333333] cursor-pointer ml-auto" onClick={() => { setIsMenuOpen(false); }} />
+                  <X strokeWidth={1} size={24} className="text-[#333333] cursor-pointer ml-auto" onClick={() => { setIsMenuOpen(false); }} />
                 </div>
                 <div className='flex items-center gap-2 py-[9.3px] px-4 border-b border-[#e2e2e2] font-medium text-[15px]'>
                   <Menu className="w-6 h-auto text-[#333333] cursor-pointer" />  Menu

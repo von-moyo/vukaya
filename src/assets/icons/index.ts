@@ -11,5 +11,6 @@ import Next from "./next.svg";
 import Select from "./select.svg";
 import SelectCircle from "./select-circle.svg";
 import ShareScreen from "./share-screen.svg";
+import Pointer from "./pointer.svg";
 
-export { Battery, Signal, Wifi, BackwardsTen, ForwardsTen, Clock, Meter, Play, Previous, Next, Select, SelectCircle, ShareScreen };
+export { Battery, Signal, Wifi, BackwardsTen, ForwardsTen, Clock, Meter, Play, Previous, Next, Select, SelectCircle, ShareScreen, Pointer };
