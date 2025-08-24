@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Home, Search, Sliders, BookOpen, User, Star, Pause, Headphones, X, ArrowLeft, MoreVertical, PlayIcon, BellIcon } from 'lucide-react';
 import { IconApple, IconBattery, IconSignal, IconWifi } from '../icons';
 import {
-  FouramImage, OwnTheNightImage, KeepingItRealImage, LeVibeImage, FourAm, GetOverIt, KeepingItReal, LeVibe, OverIt, OwnTheNight, BackwardsTen, Clock, ForwardsTen, Meter, Next, Play, Previous, AppStoreIcon, Select, ShareScreen, FourAmIndica,
+  FouramImage, OwnTheNightImage, KeepingItRealImage, LeVibeImage, FourAm, GetOverIt, KeepingItReal, LeVibe, OverIt, OwnTheNight, BackwardsTen, Clock, ForwardsTen, Meter, Next, Play, Previous, Select, ShareScreen, FourAmIndica,
   FourAmHybrid,
   GetOverItIndica,
   GetOverItHybrid,
