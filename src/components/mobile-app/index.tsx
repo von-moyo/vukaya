@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Home, Search, Sliders, BookOpen, User, Star, Pause, Headphones, X, ArrowLeft, MoreVertical, PlayIcon, BellIcon } from 'lucide-react';
-import { IconBattery, IconSignal, IconWifi } from '../icons';
+import { IconApple, IconBattery, IconSignal, IconWifi } from '../icons';
 import {
-  FouramImage, OwnTheNightImage, KeepingItRealImage, LeVibeImage, FourAm, GetOverIt, KeepingItReal, LeVibe, OverIt, OwnTheNight, BackwardsTen, Clock, ForwardsTen, Meter, Next, Play, Previous, Select, ShareScreen, FourAmIndica,
+  FouramImage, OwnTheNightImage, KeepingItRealImage, LeVibeImage, FourAm, GetOverIt, KeepingItReal, LeVibe, OverIt, OwnTheNight, BackwardsTen, Clock, ForwardsTen, Meter, Next, Play, Previous, AppStoreIcon, Select, ShareScreen, FourAmIndica,
   FourAmHybrid,
   GetOverItIndica,
   GetOverItHybrid,
@@ -430,7 +430,6 @@ const MobileApp = () => {
     }
   };
 
-  // Modify handleSoundEQClick function
   const handleSoundEQClick = () => {
     if (demoStep === 2) {
       setActiveTab('Sound (EQ)');
@@ -440,7 +439,6 @@ const MobileApp = () => {
     }
   };
 
-  // Modify handleCannabisTypeClick function
   const handleCannabisTypeClick = (type: any) => {
     if (demoStep === 3 && type === 'Indica') {
       setSelectedCannabisType(type);
@@ -466,7 +464,6 @@ const MobileApp = () => {
     }
   };
 
-  // Add event listener to update currentTime
   useEffect(() => {
     const audio = audioRef.current;
     const updateTime = () => {
@@ -603,13 +600,17 @@ const MobileApp = () => {
           Experience the full power of cannabis-inspired audio with our app. Download now to explore more!
         </p>
         <a
-          href="https://yourappdownloadlink.com"
+          href="https://apps.apple.com/ca/app/vukaya/id6468777028"
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => { setStepsOpen(false); setShowThankYouModal(false); }}
-          className="bg-purple-600 text-white px-3 py-1.5 rounded-[12px] text-[9px] font-semibold hover:bg-purple-700 transition-colors"
+          className="bg-black text-white px-3 py-1.5 rounded-[9px] font-semibold hover:bg-black/80 transition-colors flex items-center w-fit gap-1"
         >
-          Download the App
+          <IconApple size={25} color="white" />
+          <div className="flex flex-col leading-none">
+            <span className="text-[9px]">Download on the</span>
+            <span className="text-[13px] font-semibold">App Store</span>
+          </div>
         </a>
       </div>
     </div>
