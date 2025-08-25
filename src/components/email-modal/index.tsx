@@ -5,6 +5,7 @@ import { ModalImage } from '../../assets';
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 
 interface SoundVibeModalProps {
   isOpen: boolean;
@@ -47,7 +48,7 @@ const SoundVibeModal: React.FC<SoundVibeModalProps> = ({ isOpen, onClose }) => {
   const onSubmit = (data: FormValues) => {
     setIsSubmitted(true);
     setTimeout(() => {
-      alert(`Welcome, ${data.email}! Your personalized sound experience awaits.`);
+      toast.success(`Welcome, ${data.email}! Your personalized sound experience awaits.`);
       setIsSubmitted(false);
       onClose();
     }, 1500);
