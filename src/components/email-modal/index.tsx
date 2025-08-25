@@ -1,38 +1,59 @@
 import React, { useRef, useState, useEffect } from "react";
-import { Headphones, Volume2, X } from "lucide-react";
+import { X } from "lucide-react";
 import { useClickOutside } from "../../hooks";
+import { ModalImage } from '../../assets';
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-const SoundVibeModal: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [selectedVibe, setSelectedVibe] = useState("");
-  const [selectedNeed, setSelectedNeed] = useState("");
+interface SoundVibeModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+interface FormValues {
+  email: string;
+}
+
+// ✅ Yup validation schema
+const schema = z.object({
+  email: z.string().email("Please enter a valid email"),
+});
+
+const SoundVibeModal: React.FC<SoundVibeModalProps> = ({ isOpen, onClose }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [emailModalOpen, setEmailModalOpen] = useState(true);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>({
+    resolver: zodResolver(schema),
+  });
+
 
   const modalRef = useRef<HTMLDivElement | null>(null);
 
-  // Close modal when clicking outside
-  useClickOutside(modalRef, modalRef, () => setEmailModalOpen(false));
+  useClickOutside(modalRef, modalRef, () => onClose());
 
-  // Close modal on Esc
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setEmailModalOpen(false);
+      if (e.key === "Escape") onClose();
     };
     document.addEventListener("keydown", handleEsc);
     return () => document.removeEventListener("keydown", handleEsc);
-  }, []);
+  }, [onClose]);
 
-  const handleSubmit = () => {
-    if (email) {
-      setIsSubmitted(true);
-      setTimeout(() => {
-        alert("Welcome to your personalized sound experience!");
-        setIsSubmitted(false);
-        setEmailModalOpen(false);
-      }, 1500);
-    }
+  const onSubmit = (data: FormValues) => {
+    setIsSubmitted(true);
+    setTimeout(() => {
+      alert(`Welcome, ${data.email}! Your personalized sound experience awaits.`);
+      setIsSubmitted(false);
+      onClose();
+    }, 1500);
   };
+
+  if (!isOpen) return null;
 
   if (isSubmitted) {
     return (
@@ -50,7 +71,7 @@ const SoundVibeModal: React.FC = () => {
     );
   }
 
-  return emailModalOpen ? (
+  return (
     <div className="fixed inset-0 flex items-center justify-center p-4 z-[9999999]">
       <div className="absolute inset-0 bg-black/60" />
       <div
@@ -59,57 +80,50 @@ const SoundVibeModal: React.FC = () => {
       >
         {/* Close button */}
         <button
-          onClick={() => setEmailModalOpen(false)}
+          onClick={onClose}
           className="absolute top-3 right-3 text-gray-500 hover:text-gray-800 transition"
         >
           <X className="w-5 h-5" />
         </button>
 
         {/* Header */}
-        <div className="relative h-48 bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 rounded-t-2xl overflow-hidden">
-          <div className="absolute inset-0 bg-black bg-opacity-20"></div>
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="relative">
-              <div className="w-24 h-24 bg-white bg-opacity-20 rounded-full flex items-center justify-center backdrop-blur-sm">
-                <Headphones className="w-12 h-12 text-white" />
-              </div>
-              <div className="absolute -top-2 -right-2 w-8 h-8 bg-white bg-opacity-30 rounded-full flex items-center justify-center">
-                <Volume2 className="w-4 h-4 text-white" />
-              </div>
-            </div>
-          </div>
+        <div className="relative h-48 rounded-t-2xl overflow-hidden">
+          <img src={ModalImage} alt="Modal" className="absolute inset-0 w-full h-full object-cover" />
         </div>
 
         {/* Body */}
         <div className="p-6">
           <div className="text-center mb-6">
             <h2 className="sm:text-2xl text-xl font-bold text-gray-900 mb-2">
-              Try Out Our Mobile App Demo!
+              Get Early Access to Sound Drops!
             </h2>
             <div className="flex items-center justify-center gap-2 text-gray-600">
               <span className="italic sm:text-base text-sm">
-                Experience different EQs and soundscapes instantly  <br /> We just need your email to get started.
+                Before we drop you into the sound, we need one thing, <b className="text-black">your email.</b> We’ll send you exclusive sound drops and unlock deeper vibes as they arrive. Enter your email to start the experience
               </span>
             </div>
           </div>
 
 
           {/* Email Input */}
-          <input
-            type="email"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-0  outline-none transition-all mb-6"
-            required
-          />
+            <input
+              type="email"
+              placeholder="Enter your email"
+              {...register("email")}
+              className={`w-full px-4 py-3 border rounded-lg outline-none transition-all mb-2 ${
+                errors.email ? "border-red-500" : "border-gray-300"
+              }`}
+            />
+            {errors.email && (
+              <p className="text-red-500 text-sm mb-4">{errors.email.message}</p>
+            )}
 
           {/* Submit */}
           <button
-            onClick={handleSubmit}
+            onClick={handleSubmit(onSubmit)}
             className="w-full bg-gray-900 cursor-pointer text-white py-4 rounded-lg font-medium sm:text-lg text-base hover:bg-gray-800 transition-colors transform hover:scale-[1.02] active:scale-[0.98]"
           >
-            Experience Your Sound
+            Subscribe to sound drops
           </button>
 
           {/* Footer */}
@@ -122,7 +136,7 @@ const SoundVibeModal: React.FC = () => {
         </div>
       </div>
     </div>
-  ) : null;
+  );
 };
 
 export { SoundVibeModal };

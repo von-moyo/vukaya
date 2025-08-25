@@ -27,7 +27,7 @@ const mockAudio = "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav";
 
 const MobileApp = () => {
   const [activeTab, setActiveTab] = useState('Home');
-  const [modalOpen, setModalOpen] = useState(true);
+  const [moodModalOpen, setMoodModalOpen] = useState(true);
   const [soundModalOpen, setSoundModalOpen] = useState(false);
   const [isOnNotification, setIsOnNotification] = useState(true);
   const [isOnDarkMode, setIsOnDarkMode] = useState(false);
@@ -54,6 +54,20 @@ const MobileApp = () => {
     shadow: isOnDarkMode ? '' : 'shadow-sm',
     modalOverlay: isOnDarkMode ? 'bg-black/40' : 'bg-black/20'
   };
+
+  const defaultData = [
+    { name: '20', max: 100, value: 65 },
+    { name: '62', max: 100, value: 70 },
+    { name: '125', max: 100, value: 60 },
+    { name: '255', max: 100, value: 55 },
+    { name: '500', max: 100, value: 50 },
+    { name: '1k', max: 100, value: 45 },
+    { name: '2k', max: 100, value: 55 },
+    { name: '4k', max: 100, value: 60 },
+    { name: '8k', max: 100, value: 50 },
+    { name: '16k', max: 100, value: 40 },
+  ];
+
 
   const indicaData = [
     { name: '31', max: 100, value: 80 },
@@ -94,16 +108,16 @@ const MobileApp = () => {
     { name: '16k', max: 100, value: 55 },
   ];
 
-  const [eqValues, setEqValues] = useState(indicaData);
+  const [eqValues, setEqValues] = useState(defaultData);
   const [selectedCannabisType, setSelectedCannabisType] = useState<string>('');
 
   const audioRef = useRef<any>(null);
-  const modalRef = useRef<any>(null);
+  const moodModalRef = useRef<any>(null);
   const soundModalRef = useRef<any>(null);
   const stepsRef = useRef<any>(null);
   const thankYouModalRef = useRef<any>(null);
 
-  useClickOutside(modalRef, modalRef, () => setModalOpen(false));
+  useClickOutside(moodModalRef, moodModalRef, () => setMoodModalOpen(false));
   useClickOutside(soundModalRef, soundModalRef, () => setSoundModalOpen(false));
   useClickOutside(stepsRef, stepsRef, () => setStepsOpen(false));
   useClickOutside(thankYouModalRef, thankYouModalRef, () => setShowThankYouModal(false));
@@ -320,41 +334,53 @@ const MobileApp = () => {
       setEqValues(hybridData);
     }
 
-    if (currentSong && audioRef.current) {
+    if (currentSong && audioRef.current && selectedCannabisType) {
       const variant = selectedCannabisType.toLowerCase();
-      const newSrc = currentSong.audioUrls[variant] || currentSong.audioUrl; // Fallback to default audioUrl
+      const newSrc = currentSong.audioUrls?.[variant] || currentSong.audioUrl;
+      const currentSrc = audioRef.current.src;
 
-      if (audioRef.current.src !== newSrc) {
-        const currentTime = audioRef.current.currentTime;
-        const wasPlaying = isPlaying;
+      if (currentSrc !== newSrc) {
+        const savedTime = audioRef.current.currentTime;
+        const wasPlaying = !audioRef.current.paused;
 
-        // Pause only if playing to avoid unnecessary state changes
-        if (isPlaying) {
-          audioRef.current.pause();
-        }
+        // Always pause first to prevent glitches
+        audioRef.current.pause();
+        setIsPlaying(false);
 
-        audioRef.current.src = newSrc;
-        audioRef.current.currentTime = currentTime;
-
-        // Wait for the audio to be ready before playing
-        const onCanPlay = () => {
-          if (wasPlaying) {
-            audioRef.current.play().then(() => {
-              setIsPlaying(true);
-            }).catch((error: any) => {
-              console.error('Audio play failed:', error);
-              setIsPlaying(false);
-            });
-          }
-          // Clean up the event listener
-          audioRef.current.removeEventListener('canplay', onCanPlay);
+        // Clear any existing event listeners
+        const cleanup = () => {
+          audioRef.current.removeEventListener('canplaythrough', onCanPlayThrough);
+          audioRef.current.removeEventListener('error', onError);
         };
 
-        audioRef.current.addEventListener('canplay', onCanPlay);
-        audioRef.current.load(); // Load the new source
+        const onCanPlayThrough = () => {
+          cleanup();
+          if (audioRef.current) {
+            audioRef.current.currentTime = savedTime;
+            if (wasPlaying) {
+              audioRef.current.play().then(() => {
+                setIsPlaying(true);
+              }).catch((error: any) => {
+                console.error('Audio play failed:', error);
+                setIsPlaying(false);
+              });
+            }
+          }
+        };
+
+        const onError = () => {
+          cleanup();
+          console.error('Audio loading failed');
+          setIsPlaying(false);
+        };
+
+        audioRef.current.addEventListener('canplaythrough', onCanPlayThrough);
+        audioRef.current.addEventListener('error', onError);
+        audioRef.current.src = newSrc;
+        audioRef.current.load();
       }
     }
-  }, [selectedCannabisType, currentSong]);
+  }, [selectedCannabisType]);
 
   const playSong = (song: any) => {
     if (audioRef.current && song.audioUrl) {
@@ -484,12 +510,12 @@ const MobileApp = () => {
   }, []);
 
   useEffect(() => {
-    if (modalOpen) {
+    if (moodModalOpen) {
       setDemoStep(0);
     } else {
       setDemoStep(1);
     }
-  }, [modalOpen]);
+  }, [moodModalOpen]);
 
   useEffect(() => {
     if (demoStep === 6) {
@@ -597,21 +623,36 @@ const MobileApp = () => {
       <div ref={thankYouModalRef} className={`${theme.modalBg} ${theme.shadow} rounded-[12px] px-4 py-6 w-full max-w-sm`}>
         <h2 className={`${theme.text} text-sm font-bold mb-2`}>Thank You for Trying the Demo!</h2>
         <p className={`${theme.textSecondary} text-[10px] mb-4`}>
-          Experience the full power of cannabis-inspired audio with our app. Download now to explore more!
+          You just felt a hint of what this can do. To unlock every Soundscape Shift, you need two things: the App + The headphones we designed this for
         </p>
-        <a
-          href="https://apps.apple.com/ca/app/vukaya/id6468777028"
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={() => { setStepsOpen(false); setShowThankYouModal(false); }}
-          className="bg-black text-white px-3 py-1.5 rounded-[9px] font-semibold hover:bg-black/80 transition-colors flex items-center w-fit gap-1"
-        >
-          <IconApple size={25} color="white" />
-          <div className="flex flex-col leading-none">
-            <span className="text-[9px]">Download on the</span>
-            <span className="text-[13px] font-semibold">App Store</span>
-          </div>
-        </a>
+        <div className='flex gap-2'>
+          <a
+            href="https://apps.apple.com/ca/app/vukaya/id6468777028"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => { setStepsOpen(false); setShowThankYouModal(false); }}
+            className="bg-black text-white px-2 py-1 rounded-[5px] font-semibold hover:bg-black/80 transition-colors flex items-center w-fit gap-1"
+          >
+            <IconApple size={16} color="white" />
+            <div className="flex flex-col leading-none">
+              <span className="text-[6px]">Download on the</span>
+              <span className="text-[9px] font-semibold">App Store</span>
+            </div>
+          </a>
+          <a
+            href="https://vukaya.com/collections/all"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => { setStepsOpen(false); setShowThankYouModal(false); }}
+            className="bg-black text-white px-2 py-1 rounded-[5px] font-semibold hover:bg-black/80 transition-colors flex items-center w-fit gap-1"
+          >
+            <Headphones className='w-3.5 h-3.5' />
+            <div className="flex flex-col leading-none">
+              <span className="text-[6px]">Get the headphones</span>
+              <span className="text-[9px] font-semibold">from Our Store</span>
+            </div>
+          </a>
+        </div>
       </div>
     </div>
   );
@@ -619,7 +660,7 @@ const MobileApp = () => {
   const renderMoodModal = () => (
     <div className={`absolute inset-0 ${theme.modalOverlay} h-[590px] -mt-[25px] flex items-center justify-center z-50 p-4`}>
       <div
-        ref={modalRef}
+        ref={moodModalRef}
         className={`${theme.modalBg} ${theme.shadow} rounded-[12px] p-3 w-full max-w-sm`}
       >
         <h2 className={`${theme.text} text-[13px] font-bold mb-2`}>Good to see you, Baddie</h2>
@@ -630,7 +671,7 @@ const MobileApp = () => {
             <div key={index} className='flex flex-col items-center gap-1'>
               <div
                 className={`${isOnDarkMode ? 'bg-gray-800' : 'bg-gray-100'} rounded-[5px] flex flex-col items-center justify-center aspect-square cursor-pointer hover:opacity-80 transition-opacity w-full`}
-                onClick={() => setModalOpen(false)}
+                onClick={() => setMoodModalOpen(false)}
               >
                 <div className="text-[25px]">{mood.icon}</div>
               </div>
@@ -1477,7 +1518,7 @@ const MobileApp = () => {
               <div className={`h-1 ${isOnDarkMode ? 'bg-white' : 'bg-gray-900'} rounded-full mx-auto w-[40%] mb-2`}></div>
             </div>
 
-            {modalOpen && renderMoodModal()}
+            {moodModalOpen && renderMoodModal()}
             {soundModalOpen && renderCannabisSound()}
             {showThankYouModal && renderThankYouModal()}
           </>

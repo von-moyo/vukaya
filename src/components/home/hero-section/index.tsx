@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Banner1, Banner2, Banner4 } from '../../../assets';
 import { MobileSimulator } from '../mobile-simulator';
 import { SoundVibeModal } from '../../email-modal';
+import { WelcomeModal } from '../..';
 
 interface HeroSlide {
   id: number;
@@ -42,10 +43,22 @@ const heroSlides: HeroSlide[] = [
 
 const HeroCarousel: React.FC = () => {
   const currentSlideData = heroSlides[2];
+  const [isSoundVibeModalOpen, setIsSoundVibeModalOpen] = useState(false);
+  const [isWelcomeModalOpen, setIsWelcomeModalOpen] = useState(true);
 
   return (
     <>
-      <SoundVibeModal />
+      <WelcomeModal
+        isOpen={isWelcomeModalOpen}
+        onClose={() => {
+          setIsWelcomeModalOpen(false);
+          setIsSoundVibeModalOpen(true);
+        }}
+      />
+      <SoundVibeModal
+        isOpen={isSoundVibeModalOpen}
+        onClose={() => setIsSoundVibeModalOpen(false)}
+      />
       <div className="relative overflow-hidden bg-gray-900">
         <motion.div
           className="absolute inset-0"

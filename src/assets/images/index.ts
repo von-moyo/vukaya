@@ -12,5 +12,6 @@ import KeepingItRealImage from "./keeping-it-real.jpeg";
 import OwnTheNightImage from "./own-the-night.jpeg";
 import FouramImage from "./song1.jpeg";
 import LeVibeImage from "./song2.jpeg";
+import ModalImage from "./modal-image.jpeg";
 
-export { NoPfp, Banner1, Banner2, Banner3, Banner4, Banner5, Headphones1, Headphones2, Headphones3, Phone, KeepingItRealImage, OwnTheNightImage, FouramImage, LeVibeImage };
+export { NoPfp, Banner1, Banner2, Banner3, Banner4, Banner5, Headphones1, Headphones2, Headphones3, Phone, KeepingItRealImage, OwnTheNightImage, FouramImage, LeVibeImage, ModalImage };
