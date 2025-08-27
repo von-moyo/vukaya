@@ -96,7 +96,7 @@ const SoundVibeModal: React.FC<SoundVibeModalProps> = ({ isOpen, onClose }) => {
         <div className="p-6">
           <div className="text-center mb-6">
             <h2 className="sm:text-2xl text-xl font-bold text-gray-900 mb-2">
-              Get Early Access to Sound Drops!
+              One Thing before the Vibes Begin
             </h2>
             <div className="flex items-center justify-center gap-2 text-gray-600">
               <span className="italic sm:text-base text-sm">
@@ -124,7 +124,7 @@ const SoundVibeModal: React.FC<SoundVibeModalProps> = ({ isOpen, onClose }) => {
             onClick={handleSubmit(onSubmit)}
             className="w-full bg-gray-900 cursor-pointer text-white py-4 rounded-lg font-medium sm:text-lg text-base hover:bg-gray-800 transition-colors transform hover:scale-[1.02] active:scale-[0.98]"
           >
-            Subscribe to sound drops
+            Enter your email to start the experience
           </button>
 
           {/* Footer */}

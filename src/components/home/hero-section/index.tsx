@@ -4,6 +4,8 @@ import { Banner1, Banner2, Banner4 } from '../../../assets';
 import { MobileSimulator } from '../mobile-simulator';
 import { SoundVibeModal } from '../../email-modal';
 import { WelcomeModal } from '../..';
+import { ThankYouModal } from '../../thank-you-modal';
+import { useModal } from '../../../context/modalContext';
 
 interface HeroSlide {
   id: number;
@@ -45,39 +47,45 @@ const HeroCarousel: React.FC = () => {
   const currentSlideData = heroSlides[2];
   const [isSoundVibeModalOpen, setIsSoundVibeModalOpen] = useState(false);
   const [isWelcomeModalOpen, setIsWelcomeModalOpen] = useState(true);
+  const { showModal, setShowModal } = useModal();
 
-  return (
-    <>
-      <WelcomeModal
-        isOpen={isWelcomeModalOpen}
-        onClose={() => {
-          setIsWelcomeModalOpen(false);
-          setIsSoundVibeModalOpen(true);
-        }}
-      />
-      <SoundVibeModal
-        isOpen={isSoundVibeModalOpen}
-        onClose={() => setIsSoundVibeModalOpen(false)}
-      />
-      <div className="relative overflow-hidden bg-gray-900">
-        <motion.div
-          className="absolute inset-0"
-        >
-          <div
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-1000 ease-in-out"
-            style={{
-              backgroundImage: `url(${currentSlideData.image})`,
-            }}
-          />
-        </motion.div>
+return (
+  <>
+    <WelcomeModal
+      isOpen={isWelcomeModalOpen}
+      onClose={() => {
+        setIsWelcomeModalOpen(false);
+        setIsSoundVibeModalOpen(true);
+      }}
+    />
+    <SoundVibeModal
+      isOpen={isSoundVibeModalOpen}
+      onClose={() => setIsSoundVibeModalOpen(false)}
+    />
 
-        <div className="relative z-10 lg:h-full h-fit flex items-center justify-center px-[5%]">
-          <MobileSimulator />
-        </div>
+    <ThankYouModal
+      isOpen={showModal}
+      onClose={() => setShowModal(false)}
+    />
+    <div className="relative overflow-hidden bg-gray-900">
+      <motion.div
+        className="absolute inset-0"
+      >
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-1000 ease-in-out"
+          style={{
+            backgroundImage: `url(${currentSlideData.image})`,
+          }}
+        />
+      </motion.div>
+
+      <div className="relative z-10 lg:h-full h-fit flex items-center justify-center px-[5%]">
+        <MobileSimulator />
       </div>
-    </>
+    </div>
+  </>
 
-  );
+);
 };
 
 export { HeroCarousel };

@@ -22,6 +22,7 @@ import {
 import { useClickOutside } from '../../hooks';
 import { CustomBarChart } from '../bar-chart';
 import { Toggle } from '../toggle';
+import { useModal } from '../../context/modalContext';
 
 const mockAudio = "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav";
 
@@ -39,7 +40,7 @@ const MobileApp = () => {
   const [showNowPlaying, setShowNowPlaying] = useState<boolean>(false);
   const [eqActiveTab, setEqActiveTab] = useState<string>('Soundscape');
   const [demoStep, setDemoStep] = useState(0); // 0: none, 1: click first song, 2: click Sound (EQ), 3: click cannabis type, 4: thank you modal
-  const [showThankYouModal, setShowThankYouModal] = useState(false);
+  const { showModal: showThankYouModal, setShowModal: setShowThankYouModal } = useModal();
   const progressBarRef = useRef<HTMLDivElement>(null);
 
   const theme = {
@@ -67,7 +68,6 @@ const MobileApp = () => {
     { name: '8k', max: 100, value: 50 },
     { name: '16k', max: 100, value: 40 },
   ];
-
 
   const indicaData = [
     { name: '31', max: 100, value: 80 },
@@ -115,12 +115,10 @@ const MobileApp = () => {
   const moodModalRef = useRef<any>(null);
   const soundModalRef = useRef<any>(null);
   const stepsRef = useRef<any>(null);
-  const thankYouModalRef = useRef<any>(null);
 
   useClickOutside(moodModalRef, moodModalRef, () => setMoodModalOpen(false));
   useClickOutside(soundModalRef, soundModalRef, () => setSoundModalOpen(false));
   useClickOutside(stepsRef, stepsRef, () => setStepsOpen(false));
-  useClickOutside(thankYouModalRef, thankYouModalRef, () => setShowThankYouModal(false));
 
   const now = new Date();
   const hours = now.getHours().toString().padStart(2, '0');
@@ -617,45 +615,6 @@ const MobileApp = () => {
       </div> : <div></div>
     );
   };
-
-  const renderThankYouModal = () => (
-    <div className={`absolute inset-0 ${theme.modalOverlay} h-[590px] -mt-[25px] flex items-center justify-center z-50 p-4`}>
-      <div ref={thankYouModalRef} className={`${theme.modalBg} ${theme.shadow} rounded-[12px] px-4 py-6 w-full max-w-sm`}>
-        <h2 className={`${theme.text} text-sm font-bold mb-2`}>Thank You for Trying the Demo!</h2>
-        <p className={`${theme.textSecondary} text-[10px] mb-4`}>
-          You just felt a hint of what this can do. To unlock every Soundscape Shift, you need two things: the App + The headphones we designed this for
-        </p>
-        <div className='flex gap-2'>
-          <a
-            href="https://apps.apple.com/ca/app/vukaya/id6468777028"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => { setStepsOpen(false); setShowThankYouModal(false); }}
-            className="bg-black text-white px-2 py-1 rounded-[5px] font-semibold hover:bg-black/80 transition-colors flex items-center w-fit gap-1"
-          >
-            <IconApple size={16} color="white" />
-            <div className="flex flex-col leading-none">
-              <span className="text-[6px]">Download on the</span>
-              <span className="text-[9px] font-semibold">App Store</span>
-            </div>
-          </a>
-          <a
-            href="https://vukaya.com/collections/all"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => { setStepsOpen(false); setShowThankYouModal(false); }}
-            className="bg-black text-white px-2 py-1 rounded-[5px] font-semibold hover:bg-black/80 transition-colors flex items-center w-fit gap-1"
-          >
-            <Headphones className='w-3.5 h-3.5' />
-            <div className="flex flex-col leading-none">
-              <span className="text-[6px]">Get the headphones</span>
-              <span className="text-[9px] font-semibold">from Our Store</span>
-            </div>
-          </a>
-        </div>
-      </div>
-    </div>
-  );
 
   const renderMoodModal = () => (
     <div className={`absolute inset-0 ${theme.modalOverlay} h-[590px] -mt-[25px] flex items-center justify-center z-50 p-4`}>
@@ -1520,7 +1479,6 @@ const MobileApp = () => {
 
             {moodModalOpen && renderMoodModal()}
             {soundModalOpen && renderCannabisSound()}
-            {showThankYouModal && renderThankYouModal()}
           </>
         )}
       </div>
