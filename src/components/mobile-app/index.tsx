@@ -205,6 +205,7 @@ const MobileApp = () => {
       audioUrl: FourAm,
       audioUrls: {
         indica: FourAmIndica,
+        sativa: FourAm,
         hybrid: FourAmHybrid,
       },
     },
@@ -226,6 +227,7 @@ const MobileApp = () => {
       audioUrl: GetOverIt,
       audioUrls: {
         indica: GetOverItIndica,
+        sativa: GetOverIt,
         hybrid: GetOverItHybrid,
       },
     },
@@ -235,6 +237,7 @@ const MobileApp = () => {
       image: null,
       audioUrl: OverIt,
       audioUrls: {
+        indica: OverIt,
         sativa: OverItSativa,
         hybrid: OverItHybrid,
       },
