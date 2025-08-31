@@ -1,7 +1,5 @@
 import React, { useRef } from "react";
-import { Headphones, X } from "lucide-react";
 import { useClickOutside } from "../../hooks";
-import { IconApple } from "../icons";
 
 interface ThankYouModalProps {
   isOpen: boolean;

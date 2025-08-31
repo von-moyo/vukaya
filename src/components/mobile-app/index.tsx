@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Home, Search, Sliders, BookOpen, User, Star, Pause, Headphones, X, ArrowLeft, MoreVertical, PlayIcon, BellIcon } from 'lucide-react';
-import { IconApple, IconBattery, IconSignal, IconWifi } from '../icons';
+import { IconBattery, IconSignal, IconWifi } from '../icons';
 import {
   FouramImage, OwnTheNightImage, KeepingItRealImage, LeVibeImage, FourAm, GetOverIt, KeepingItReal, LeVibe, OverIt, OwnTheNight, BackwardsTen, Clock, ForwardsTen, Meter, Next, Play, Previous, Select, ShareScreen, FourAmIndica,
   FourAmHybrid,
@@ -42,6 +42,14 @@ const MobileApp = () => {
   const [demoStep, setDemoStep] = useState(0); // 0: none, 1: click first song, 2: click Sound (EQ), 3: click cannabis type, 4: thank you modal
   const { showModal: showThankYouModal, setShowModal: setShowThankYouModal } = useModal();
   const progressBarRef = useRef<HTMLDivElement>(null);
+  const audioRefs = useRef<{ [key: string]: HTMLAudioElement | null }>({});
+  const moodModalRef = useRef<any>(null);
+  const soundModalRef = useRef<any>(null);
+  const stepsRef = useRef<any>(null);
+
+  useClickOutside(moodModalRef, moodModalRef, () => setMoodModalOpen(false));
+  useClickOutside(soundModalRef, soundModalRef, () => setSoundModalOpen(false));
+  useClickOutside(stepsRef, stepsRef, () => setStepsOpen(false));
 
   const theme = {
     bg: isOnDarkMode ? 'bg-[#181A20]' : 'bg-gray-50',
@@ -110,15 +118,6 @@ const MobileApp = () => {
 
   const [eqValues, setEqValues] = useState(defaultData);
   const [selectedCannabisType, setSelectedCannabisType] = useState<string>('');
-
-  const audioRef = useRef<any>(null);
-  const moodModalRef = useRef<any>(null);
-  const soundModalRef = useRef<any>(null);
-  const stepsRef = useRef<any>(null);
-
-  useClickOutside(moodModalRef, moodModalRef, () => setMoodModalOpen(false));
-  useClickOutside(soundModalRef, soundModalRef, () => setSoundModalOpen(false));
-  useClickOutside(stepsRef, stepsRef, () => setStepsOpen(false));
 
   const now = new Date();
   const hours = now.getHours().toString().padStart(2, '0');
@@ -207,7 +206,6 @@ const MobileApp = () => {
       audioUrls: {
         indica: FourAmIndica,
         hybrid: FourAmHybrid,
-        // no sativa version in your files
       },
     },
     {
@@ -229,7 +227,6 @@ const MobileApp = () => {
       audioUrls: {
         indica: GetOverItIndica,
         hybrid: GetOverItHybrid,
-        // no sativa version in your files
       },
     },
     {
@@ -240,7 +237,6 @@ const MobileApp = () => {
       audioUrls: {
         sativa: OverItSativa,
         hybrid: OverItHybrid,
-        // no indica version in your files
       },
     },
   ];
@@ -332,116 +328,145 @@ const MobileApp = () => {
       setEqValues(hybridData);
     }
 
-    if (currentSong && audioRef.current && selectedCannabisType) {
-      const variant = selectedCannabisType.toLowerCase();
-      const newSrc = currentSong.audioUrls?.[variant] || currentSong.audioUrl;
-      const currentSrc = audioRef.current.src;
+    if (currentSong && Object.keys(audioRefs.current).length > 0) {
+      const variant = selectedCannabisType.toLowerCase() || 'indica';
+      console.log('Switching to variant:', variant);
 
-      if (currentSrc !== newSrc) {
-        const savedTime = audioRef.current.currentTime;
-        const wasPlaying = !audioRef.current.paused;
+      Object.keys(audioRefs.current).forEach((v) => {
+        if (audioRefs.current[v]) {
+          audioRefs.current[v]!.muted = v !== variant;
+        }
+      });
 
-        // Always pause first to prevent glitches
-        audioRef.current.pause();
-        setIsPlaying(false);
+      const activeAudio = audioRefs.current[variant];
+      if (activeAudio) {
+        const currentTime = activeAudio.currentTime;
+        setCurrentTime(currentTime);
+        setDuration(activeAudio.duration || 0);
 
-        // Clear any existing event listeners
-        const cleanup = () => {
-          audioRef.current.removeEventListener('canplaythrough', onCanPlayThrough);
-          audioRef.current.removeEventListener('error', onError);
-        };
-
-        const onCanPlayThrough = () => {
-          cleanup();
-          if (audioRef.current) {
-            audioRef.current.currentTime = savedTime;
-            if (wasPlaying) {
-              audioRef.current.play().then(() => {
-                setIsPlaying(true);
-              }).catch((error: any) => {
-                console.error('Audio play failed:', error);
-                setIsPlaying(false);
+        Object.keys(audioRefs.current).forEach((v) => {
+          if (v !== variant && audioRefs.current[v]) {
+            audioRefs.current[v]!.currentTime = currentTime;
+            if (isPlaying && audioRefs.current[v]!.paused) {
+              audioRefs.current[v]!.play().catch((error) => {
+                console.error(`Failed to sync ${v}:`, error);
               });
             }
           }
-        };
-
-        const onError = () => {
-          cleanup();
-          console.error('Audio loading failed');
-          setIsPlaying(false);
-        };
-
-        audioRef.current.addEventListener('canplaythrough', onCanPlayThrough);
-        audioRef.current.addEventListener('error', onError);
-        audioRef.current.src = newSrc;
-        audioRef.current.load();
+        });
+      } else {
+        console.warn(`No audio element for ${variant}`);
       }
     }
-  }, [selectedCannabisType]);
+  }, [selectedCannabisType, currentSong, isPlaying]);
+
+  useEffect(() => {
+    return () => {
+      Object.values(audioRefs.current).forEach((audio) => {
+        if (audio) {
+          audio.pause();
+          audio.src = '';
+        }
+      });
+      audioRefs.current = {};
+    };
+  }, []);
 
   const playSong = (song: any) => {
-    if (audioRef.current && song.audioUrl) {
-      setCurrentSong(song);
+    console.log('Playing song:', song.title);
+    setCurrentSong(song);
+    setCurrentTime(0);
+    setIsPlaying(false);
 
-      // Ensure any existing playback is stopped
-      if (isPlaying) {
-        audioRef.current.pause();
+    Object.values(audioRefs.current).forEach((audio) => {
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+        audio.src = '';
+      }
+    });
+    audioRefs.current = {};
+
+    setTimeout(() => {
+      const variant = selectedCannabisType.toLowerCase() || 'indica';
+      const availableVariants = ['indica', 'sativa', 'hybrid'].filter(
+        (v) => song.audioUrls[v]
+      );
+
+      if (availableVariants.length === 0) {
+        console.error('No valid audio variants for', song.title);
+        setIsPlaying(false);
+        return;
       }
 
-      const variant = selectedCannabisType.toLowerCase();
-      audioRef.current.src = song.audioUrls[variant] || song.audioUrl; // Use variant or default audioUrl
-      audioRef.current.currentTime = 0; // Reset to start
+      let loadedCount = 0;
+      const totalVariants = availableVariants.length;
 
-      const onCanPlay = () => {
-        audioRef.current.play().then(() => {
-          setIsPlaying(true);
-          // Update duration once metadata is loaded
-          audioRef.current.addEventListener('loadedmetadata', () => {
-            setDuration(audioRef.current.duration);
-          });
-        }).catch((error: any) => {
-          console.error('Audio play failed:', error);
-          setIsPlaying(false);
-          // Fallback to test tone
-          const audioContext = new (window.AudioContext || window.AudioContext)();
-          const oscillator = audioContext.createOscillator();
-          const gainNode = audioContext.createGain();
+      availableVariants.forEach((v) => {
+        const audio = audioRefs.current[v];
+        if (audio) {
+          audio.muted = v !== variant;
+          audio.currentTime = 0;
 
-          oscillator.connect(gainNode);
-          gainNode.connect(audioContext.destination);
+          const onCanPlay = () => {
+            console.log(`${v} can play for ${song.title}`);
+            loadedCount++;
+            if (loadedCount === totalVariants && audioRefs.current[v]) {
+              availableVariants.forEach((v2) => {
+                if (audioRefs.current[v2]) {
+                  audioRefs.current[v2]!.play().then(() => {
+                    if (v2 === variant) {
+                      setIsPlaying(true);
+                      setDuration(audioRefs.current[v2]!.duration || 0);
+                      console.log(`Playing ${v2} for ${song.title}`);
+                    }
+                  }).catch((error) => {
+                    console.error(`Play failed for ${v2} in ${song.title}:`, error);
+                    setIsPlaying(false);
+                  });
+                }
+              });
+            }
+            audio.removeEventListener('canplaythrough', onCanPlay);
+          };
 
-          oscillator.frequency.value = 440;
-          oscillator.type = 'sine';
-          gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-          gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
-
-          oscillator.start(audioContext.currentTime);
-          oscillator.stop(audioContext.currentTime + 1);
-
-          setDuration(60); // Mock duration
-        });
-        audioRef.current.removeEventListener('canplay', onCanPlay);
-      };
-
-      audioRef.current.addEventListener('canplay', onCanPlay);
-      audioRef.current.load();
-    }
+          audio.addEventListener('canplaythrough', onCanPlay);
+          audio.load();
+        } else {
+          console.warn(`No audio element for ${v} in ${song.title}`);
+        }
+      });
+    }, 0);
   };
 
   const togglePlayPause = () => {
-    if (audioRef.current) {
+    const variant = selectedCannabisType.toLowerCase() || 'indica';
+    const activeAudio = audioRefs.current[variant];
+
+    if (activeAudio) {
       if (isPlaying) {
-        audioRef.current.pause();
+        console.log('Pausing all variants');
+        Object.values(audioRefs.current).forEach((audio) => {
+          if (audio) audio.pause();
+        });
         setIsPlaying(false);
       } else {
-        audioRef.current.play().then(() => {
-          setIsPlaying(true);
-        }).catch((error: any) => {
-          console.error('Audio play failed:', error);
-          setIsPlaying(false);
+        console.log('Playing all variants');
+        Object.values(audioRefs.current).forEach((audio) => {
+          if (audio) {
+            audio.play().then(() => {
+              if (audio === activeAudio) {
+                setIsPlaying(true);
+              }
+            }).catch((error) => {
+              console.error(`Play failed for ${audio.src}:`, error);
+              setIsPlaying(false);
+            });
+          }
         });
       }
+    } else {
+      console.warn('No active audio element to toggle');
     }
   };
 
@@ -479,33 +504,11 @@ const MobileApp = () => {
       setTimeout(() => {
         setShowThankYouModal(true);
       }, 3000);
-
-      // Only close steps after all cannabis types are selected
-      // setStepsOpen(false); // Comment out or remove this line if it exists
     } else {
       setSelectedCannabisType(type);
       setEqActiveTab('Soundscape');
     }
   };
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    const updateTime = () => {
-      setCurrentTime(audio.currentTime);
-    };
-    if (audio) {
-      audio.addEventListener('timeupdate', updateTime);
-      audio.addEventListener('loadedmetadata', () => {
-        setDuration(audio.duration);
-      });
-    }
-    return () => {
-      if (audio) {
-        audio.removeEventListener('timeupdate', updateTime);
-        audio.removeEventListener('loadedmetadata', () => { });
-      }
-    };
-  }, []);
 
   useEffect(() => {
     if (moodModalOpen) {
@@ -539,16 +542,28 @@ const MobileApp = () => {
   };
 
   const skipForward = () => {
-    if (audioRef.current) {
-      audioRef.current.currentTime = Math.min(audioRef.current.currentTime + 10, audioRef.current.duration);
-      setCurrentTime(audioRef.current.currentTime);
+    const variant = selectedCannabisType.toLowerCase() || 'indica';
+    const activeAudio = audioRefs.current[variant];
+    if (activeAudio) {
+      const newTime = Math.min(activeAudio.currentTime + 10, activeAudio.duration);
+      console.log(`Skipping forward to ${newTime}`);
+      Object.values(audioRefs.current).forEach((audio) => {
+        if (audio) audio.currentTime = newTime;
+      });
+      setCurrentTime(newTime);
     }
   };
 
   const skipBackward = () => {
-    if (audioRef.current) {
-      audioRef.current.currentTime = Math.max(audioRef.current.currentTime - 10, 0);
-      setCurrentTime(audioRef.current.currentTime);
+    const variant = selectedCannabisType.toLowerCase() || 'indica';
+    const activeAudio = audioRefs.current[variant];
+    if (activeAudio) {
+      const newTime = Math.max(activeAudio.currentTime - 10, 0);
+      console.log(`Skipping backward to ${newTime}`);
+      Object.values(audioRefs.current).forEach((audio) => {
+        if (audio) audio.currentTime = newTime;
+      });
+      setCurrentTime(newTime);
     }
   };
 
@@ -557,6 +572,7 @@ const MobileApp = () => {
       const currentIndex = freshlyRolledBeats.findIndex(song => song.title === currentSong.title);
       const nextIndex = (currentIndex + 1) % freshlyRolledBeats.length;
       const nextSong = freshlyRolledBeats[nextIndex];
+      console.log('Playing next song:', nextSong.title);
       playSong(nextSong);
     }
   };
@@ -564,8 +580,9 @@ const MobileApp = () => {
   const playPrevSong = () => {
     if (currentSong) {
       const currentIndex = freshlyRolledBeats.findIndex(song => song.title === currentSong.title);
-      const prevIndex = (currentIndex - 1 + freshlyRolledBeats.length) % freshlyRolledBeats.length; // Loop to last song if at first
+      const prevIndex = (currentIndex - 1 + freshlyRolledBeats.length) % freshlyRolledBeats.length;
       const prevSong = freshlyRolledBeats[prevIndex];
+      console.log('Playing previous song:', prevSong.title);
       playSong(prevSong);
     }
   };
@@ -644,7 +661,6 @@ const MobileApp = () => {
 
   const renderSoundEQPage = () => (
     <div className={`h-[515px] overflow-auto scrollbar-none ${theme.bg} ${currentSong && 'pb-8'}`}>
-      {/* Header */}
       <div className="flex items-center justify-between mb-6 px-3 pt-6">
         <div className="flex items-center gap-3">
           <ArrowLeft className={`w-5 h-5 ${theme.text} cursor-pointer`} onClick={() => setActiveTab('Home')} />
@@ -652,7 +668,6 @@ const MobileApp = () => {
         </div>
       </div>
 
-      {/* Search Bar */}
       <div className={`${theme.input} rounded-[12px] px-4 py-3 mb-4 flex items-center gap-2 mx-3 ${theme.shadow}`}>
         <Search className={`w-4 h-4 ${theme.textTertiary}`} />
         <input
@@ -663,19 +678,16 @@ const MobileApp = () => {
       </div>
 
       <div className={`${theme.cardBg} ${theme.shadow} rounded-[12px] px-3.5 pt-3 pb-3 mx-3 mb-4 h-[250px] overflow-y-auto scrollbar-none`}>
-        {/* Tab Selector */}
         <div className="flex mb-4">
           <button
             onClick={() => setEqActiveTab('Description')}
-            className={`flex-1 py-2 px-4 text-xs font-medium cursor-pointer transition-colors ${theme.textSecondary
-              }`}
+            className={`flex-1 py-2 px-4 text-xs font-medium cursor-pointer transition-colors ${theme.textSecondary}`}
           >
             Description
           </button>
           <button
             onClick={() => setEqActiveTab('Soundscape')}
-            className={`flex-1 py-2 px-4 text-xs font-medium cursor-pointer transition-colors ${theme.textSecondary
-              }`}
+            className={`flex-1 py-2 px-4 text-xs font-medium cursor-pointer transition-colors ${theme.textSecondary}`}
           >
             Soundscape
           </button>
@@ -686,7 +698,6 @@ const MobileApp = () => {
             <h2 className={`${theme.text} text-xs font-semibold mb-1`}>3 Bears Og</h2>
             <p className="text-purple-400 text-[10px] mb-3">indica</p>
 
-            {/* Mood Icons */}
             <div className="flex gap-4 mb-6 overflow-x-auto scrollbar-none">
               <div className="text-center">
                 <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center mb-2">
@@ -728,7 +739,6 @@ const MobileApp = () => {
           </div>
         ) : (
           <div className="">
-            {/* EQ Controls */}
             <div className={`${theme.cardBg} rounded-[12px] px-3`}>
               <CustomBarChart data={eqValues} />
             </div>
@@ -736,7 +746,6 @@ const MobileApp = () => {
         )}
       </div>
 
-      {/* Cannabis Type Selector */}
       <div className="flex justify-between mb-4 mx-3">
         {['Indica', 'Sativa', 'Hybrid'].map((type) => (
           <button
@@ -783,7 +792,6 @@ const MobileApp = () => {
           </div>
         </div>
 
-        {/* Search Bar */}
         <div className={`${theme.input} rounded-[12px] px-4 py-3 mb-4 flex items-center gap-2 mx-3`}>
           <Search className={`w-4 h-4 ${theme.textTertiary}`} />
           <input
@@ -793,7 +801,6 @@ const MobileApp = () => {
           />
         </div>
 
-        {/* Cannabis Type Selector */}
         <div className="flex justify-between mb-4 mx-3">
           {['Indica', 'Sativa', 'Hybrid'].map((type) => (
             <button
@@ -814,7 +821,6 @@ const MobileApp = () => {
           ))}
         </div>
 
-        {/* Strain Tags */}
         <div className="flex gap-2 overflow-x-auto scrollbar-none pl-3">
           {strainTags.map((strain, index) => (
             <div key={index} className={`${theme.cardBg} ${theme.text} px-2 py-1 rounded-full text-[10px] whitespace-nowrap ${theme.shadow}`}>
@@ -828,27 +834,31 @@ const MobileApp = () => {
 
   const renderNowPlayingScreen = () => {
     const handleSeek = (e: React.MouseEvent | React.TouchEvent) => {
-      if (!audioRef.current || !progressBarRef.current || !duration) return;
+      if (!progressBarRef.current || !duration) return;
 
       const rect = progressBarRef.current.getBoundingClientRect();
       const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
       const offsetX = clientX - rect.left;
       const newTime = (offsetX / rect.width) * duration;
 
-      audioRef.current.currentTime = Math.max(0, Math.min(newTime, duration));
-      setCurrentTime(audioRef.current.currentTime);
+      Object.values(audioRefs.current).forEach((audio) => {
+        if (audio) audio.currentTime = Math.max(0, Math.min(newTime, duration));
+      });
+      setCurrentTime(newTime);
     };
 
     const handleDrag = (e: MouseEvent | TouchEvent) => {
-      if (!audioRef.current || !progressBarRef.current || !duration) return;
+      if (!progressBarRef.current || !duration) return;
 
       const rect = progressBarRef.current.getBoundingClientRect();
       const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
       const offsetX = clientX - rect.left;
       const newTime = (offsetX / rect.width) * duration;
 
-      audioRef.current.currentTime = Math.max(0, Math.min(newTime, duration));
-      setCurrentTime(audioRef.current.currentTime);
+      Object.values(audioRefs.current).forEach((audio) => {
+        if (audio) audio.currentTime = Math.max(0, Math.min(newTime, duration));
+      });
+      setCurrentTime(newTime);
     };
 
     const startDragging = () => {
@@ -864,9 +874,9 @@ const MobileApp = () => {
       window.removeEventListener('mouseup', stopDragging);
       window.removeEventListener('touchend', stopDragging);
     };
+
     return (
       <div className="inset-0 bg-gradient-to-b from-green-900 via-green-800 to-black z-50 top-0 h-[560px]">
-        {/* Header */}
         <div className="flex items-center justify-between p-4 pt-6">
           <ArrowLeft className="w-5 h-auto text-white cursor-pointer" onClick={() => setShowNowPlaying(false)} />
           <div className="text-center mt-2">
@@ -876,7 +886,6 @@ const MobileApp = () => {
           <MoreVertical className="w-auto h-4.5 text-white" />
         </div>
 
-        {/* Album Art */}
         <div className="flex justify-center pb-4 w-[230px] h-[220px] mx-auto rounded-[20px]">
           <img
             src={currentSong.image}
@@ -885,13 +894,11 @@ const MobileApp = () => {
           />
         </div>
 
-        {/* Song Info */}
         <div className="text-center px-8 mb-8">
           <h1 className="text-white text-lg font-bold mb-1">{currentSong?.title || 'Starboy'}</h1>
           <p className="text-gray-300 text-sm">{currentSong?.artist || 'The Weeknd, Daft Punk'}</p>
         </div>
 
-        {/* Progress Bar */}
         <div className="px-4 mb-8">
           <div
             ref={progressBarRef}
@@ -927,7 +934,6 @@ const MobileApp = () => {
           <img src={Next} alt="next icon" className="w-5 h-5 text-black fill-current cursor-pointer" onClick={playNextSong} />
         </div>
 
-        {/* Additional Controls */}
         <div className="flex items-center justify-between px-8">
           <img src={Meter} alt="meter icon" className="w-4 h-4 text-black fill-current cursor-pointer" />
           <img src={Clock} alt="clock icon" className="w-4 h-4 text-black fill-current cursor-pointer" />
@@ -993,7 +999,6 @@ const MobileApp = () => {
 
   const renderHomeContent = () => (
     <div className={`h-[515px] ${currentSong && 'pb-8'} ${stepsOpen ? ' overflow-hidden' : 'overflow-auto scrollbar-none'}`}>
-      {/* Header */}
       <div className="flex flex-col mb-4 px-3 relative pt-5">
         <img src={`${isOnDarkMode ? '/logo-white.avif' : '/logo.avif'}`} alt='logo icon' className='w-[70px] h-auto mb-3' />
         <div className="flex items-center gap-3">
@@ -1019,10 +1024,8 @@ const MobileApp = () => {
             Alerts
           </div>
         </div>
-
       </div>
 
-      {/* Strain Tags */}
       <div className="flex gap-2 pl-2 pb-6 overflow-x-auto scrollbar-none">
         {strainTags.map((strain, index) => (
           <div key={index} className={`${theme.cardBg} ${theme.text} ${theme.shadow} px-2 py-1 rounded-full whitespace-nowrap text-[9px]`}>
@@ -1031,7 +1034,6 @@ const MobileApp = () => {
         ))}
       </div>
 
-      {/* Freshly Rolled Beats */}
       <div className="mb-4">
         <div className="flex justify-between items-center mb-2 px-3">
           <h2 className={`${theme.text} text-[13px] font-bold`}>Freshly Rolled Beats</h2>
@@ -1042,7 +1044,6 @@ const MobileApp = () => {
         </div>
       </div>
 
-      {/* Guided Sessions */}
       <div className="mb-4">
         <div className="flex justify-between items-center mb-2 px-3">
           <h2 className={`${theme.text} text-[13px] font-bold`}>Guided Sessions</h2>
@@ -1065,7 +1066,6 @@ const MobileApp = () => {
         </div>
       </div>
 
-      {/* Zizling Podcasts */}
       <div className="mb-4">
         <div className="flex justify-between items-center mb-2 px-3">
           <h2 className={`${theme.text} text-[13px] font-bold`}>Zizling Podcasts</h2>
@@ -1094,7 +1094,6 @@ const MobileApp = () => {
         </div>
       </div>
 
-      {/* Lit Hits of the Week */}
       <div className="mb-4">
         <div className="flex justify-between items-center mb-2 px-3">
           <h2 className={`${theme.text} text-[13px] font-bold`}>Lit Hits of the Week</h2>
@@ -1105,7 +1104,6 @@ const MobileApp = () => {
         </div>
       </div>
 
-      {/* Blunt Bangers */}
       <div className="mb-4">
         <div className="flex justify-between items-center mb-2 px-3">
           <h2 className={`${theme.text} text-[13px] font-bold`}>Blunt Bangers</h2>
@@ -1120,7 +1118,6 @@ const MobileApp = () => {
 
   const renderExploreContent = () => (
     <div className={`h-[515px] ${currentSong && 'pb-12'} overflow-auto scrollbar-none`}>
-      {/* Header */}
       <div className="flex items-center justify-between mb-6 px-4 pt-6">
         <h1 className={`${theme.text} text-xl font-bold`}>Explore</h1>
         <div className="flex items-center gap-4">
@@ -1129,7 +1126,6 @@ const MobileApp = () => {
         </div>
       </div>
 
-      {/* Categories Grid */}
       <div className="grid grid-cols-2 gap-2 px-4">
         {exploreCategories.map((category, index) => (
           <div key={index} className={`${category.color} rounded-[13px] h-20 p-4 relative overflow-hidden`}>
@@ -1143,7 +1139,6 @@ const MobileApp = () => {
 
   const renderLibraryContent = () => (
     <div className={`h-[515px] ${currentSong && 'pb-8'} overflow-auto scrollbar-none`}>
-      {/* Header */}
       <div className="flex items-center justify-between mb-6 px-4 pt-6">
         <h1 className={`${theme.text} text-xl font-bold`}>Library</h1>
         <div className="flex items-center gap-4">
@@ -1152,7 +1147,6 @@ const MobileApp = () => {
         </div>
       </div>
 
-      {/* Your History Section */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4 px-4">
           <h2 className={`${theme.text} text-base font-bold`}>Your History</h2>
@@ -1171,7 +1165,6 @@ const MobileApp = () => {
         </div>
       </div>
 
-      {/* Library Categories */}
       <div className="px-4">
         <div className="flex items-center justify-between py-3">
           <div className="flex items-center gap-3">
@@ -1240,13 +1233,11 @@ const MobileApp = () => {
 
   const renderProfileContent = () => (
     <div className={`h-[515px] ${currentSong && 'pb-8'} overflow-auto scrollbar-none`}>
-      {/* Header */}
       <div className="flex items-center justify-between mb-6 px-4 pt-6">
         <h1 className={`${theme.text} text-xl font-bold`}>Profile</h1>
         <Headphones className={`w-5 h-5 ${theme.text}`} />
       </div>
 
-      {/* Profile Info */}
       <div className="flex items-center gap-4 px-4 mb-6">
         <div className={`w-12 h-12 flex-shrink-0 ${isOnDarkMode ? 'bg-gray-600' : 'bg-gray-300'} rounded-full flex items-center justify-center`}>
           <User className={`w-4 h-4 ${isOnDarkMode ? 'text-gray-300' : 'text-gray-600'}`} />
@@ -1257,7 +1248,6 @@ const MobileApp = () => {
         </div>
       </div>
 
-      {/* Premium Banner */}
       <div className="mx-4 mb-6 bg-gradient-to-r from-purple-600 to-purple-500 rounded-2xl p-4 relative overflow-hidden">
         <div className="flex items-center">
           <div className="flex-1">
@@ -1275,7 +1265,6 @@ const MobileApp = () => {
         </div>
       </div>
 
-      {/* Menu Items */}
       <div className="px-4">
         <div className="flex items-center justify-between py-3">
           <div className="flex items-center gap-3">
@@ -1375,26 +1364,34 @@ const MobileApp = () => {
 
   return (
     <div className={`relative ${theme.bg} ${theme.text} max-w-md mx-auto ${stepsOpen ? ' overflow-hidden' : 'overflow-auto scrollbar-none'}`}>
-      <audio ref={audioRef} />
+      {currentSong && (
+        <div>
+          {['indica', 'sativa', 'hybrid'].map((variant) => (
+            currentSong.audioUrls[variant] && (
+              <audio
+                key={`${currentSong.title}-${variant}`}
+                ref={(el) => { audioRefs.current[variant] = el; }}
+                src={currentSong.audioUrls[variant]}
+                preload="auto"
+                muted={selectedCannabisType.toLowerCase() !== variant}
+                onError={(e) => console.error(`Error loading ${variant} for ${currentSong.title}:`, e)}
+              />
+            )
+          ))}
+        </div>
+      )}
 
       <div className={`${theme.bg} sticky top-0 z-50 rounded-top-[40px] pl-[7%] pr-[5%] pt-1.5 flex justify-between items-center ${showNowPlaying && 'bg-gradient-to-b bg-green-900'}`}>
         <div className="font-bold">{time}</div>
         <div className="flex gap-1.5">
           <div className="flex font-bold items-center gap-[1px]">
-            <IconSignal
-              className={`w-4 h-4 ${theme.text}`}
-            />
+            <IconSignal className={`w-4 h-4 ${theme.text}`} />
           </div>
-          <IconWifi
-            className={`w-4 h-4 ${theme.text}`}
-          />
-          <IconBattery
-            className={`w-6 h-4 ${theme.text}`}
-          />
+          <IconWifi className={`w-4 h-4 ${theme.text}`} />
+          <IconBattery className={`w-6 h-4 ${theme.text}`} />
         </div>
       </div>
 
-      {/* Main Content */}
       <div className="relative">
         {!showThankYouModal && renderDemoOverlay()}
         {showNowPlaying ? renderNowPlayingScreen() : (
@@ -1439,8 +1436,10 @@ const MobileApp = () => {
                       setCurrentSong(null);
                       setSelectedCannabisType('')
                       setIsPlaying(false);
-                      if (audioRef.current) {
-                        audioRef.current?.pause();
+                      if (audioRefs.current) {
+                        Object.values(audioRefs.current).forEach(audio => {
+                          if (audio) audio.pause();
+                        });
                       }
                     }}
                   />

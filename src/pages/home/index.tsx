@@ -5,7 +5,6 @@ export const Home: React.FC = () => {
   return (
     <div className="min-h-screen bg-white">
       <HeroCarousel/>
-      {/* <MobileSimulator/> */}
       <SpectrumVariations/>
       <WellnessCannabisSection/>
       <CannabisSection/>
