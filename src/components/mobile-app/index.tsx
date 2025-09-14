@@ -18,6 +18,21 @@ import {
   OwnTheNightIndica,
   OwnTheNightSativa,
   Pointer,
+  GetOverItSativa,
+  OwnTheNight3bearsog,
+  OwnTheNight3dcbd,
+  KeepingItReal3bearsog,
+  KeepingItReal3dcbd,
+  FourAmSativa,
+  FourAm3dcbd,
+  FourAm3bearsog,
+  LeVibe3dcbd,
+  LeVibe3bearsog,
+  GetOverIt3dcbd,
+  GetOverIt3bearsog,
+  OverIt3bearsog,
+  OverIt3dcbd,
+  OverItIndica,
 } from '../../assets';
 import { useClickOutside } from '../../hooks';
 import { CustomBarChart } from '../bar-chart';
@@ -65,55 +80,82 @@ const MobileApp = () => {
   };
 
   const defaultData = [
-    { name: '20', max: 100, value: 65 },
-    { name: '62', max: 100, value: 70 },
-    { name: '125', max: 100, value: 60 },
-    { name: '255', max: 100, value: 55 },
-    { name: '500', max: 100, value: 50 },
-    { name: '1k', max: 100, value: 45 },
-    { name: '2k', max: 100, value: 55 },
-    { name: '4k', max: 100, value: 60 },
-    { name: '8k', max: 100, value: 50 },
-    { name: '16k', max: 100, value: 40 },
+    { name: '31', max: 6, value: 3 },
+    { name: '62', max: 6, value: 3 },
+    { name: '125', max: 6, value: 3 },
+    { name: '250', max: 6, value: 3 },
+    { name: '500', max: 6, value: 3 },
+    { name: '1k', max: 6, value: 3 },
+    { name: '2k', max: 6, value: 3 },
+    { name: '4k', max: 6, value: 3 },
+    { name: '8k', max: 6, value: 3 },
+    { name: '16k', max: 6, value: 3 },
   ];
 
   const indicaData = [
-    { name: '31', max: 100, value: 80 },
-    { name: '62', max: 100, value: 75 },
-    { name: '125', max: 100, value: 70 },
-    { name: '255', max: 100, value: 75 },
-    { name: '500', max: 100, value: 60 },
-    { name: '1k', max: 100, value: 55 },
-    { name: '2k', max: 100, value: 50 },
-    { name: '4k', max: 100, value: 45 },
-    { name: '8k', max: 100, value: 40 },
-    { name: '16k', max: 100, value: 35 },
+    { name: '31', max: 6, value: 3.2 },
+    { name: '62', max: 6, value: 3.8 },
+    { name: '125', max: 6, value: 3.7 },
+    { name: '250', max: 6, value: 3.1 },
+    { name: '500', max: 6, value: 3 },
+    { name: '1k', max: 6, value: 2.8 },
+    { name: '2k', max: 6, value: 2.6 },
+    { name: '4k', max: 6, value: 2.8 },
+    { name: '8k', max: 6, value: 3 },
+    { name: '16k', max: 6, value: 2.7 },
   ];
 
-  const sattivaData = [
-    { name: '31', max: 100, value: 85 },
-    { name: '62', max: 100, value: 88 },
-    { name: '125', max: 100, value: 90 },
-    { name: '255', max: 100, value: 80 },
-    { name: '500', max: 100, value: 70 },
-    { name: '1k', max: 100, value: 55 },
-    { name: '2k', max: 100, value: 75 },
-    { name: '4k', max: 100, value: 80 },
-    { name: '8k', max: 100, value: 90 },
-    { name: '16k', max: 100, value: 45 },
+  const sativaData = [
+    { name: '31', max: 6, value: 3 },
+    { name: '62', max: 6, value: 3.5 },
+    { name: '125', max: 6, value: 3.5 },
+    { name: '250', max: 6, value: 3 },
+    { name: '500', max: 6, value: 3.5 },
+    { name: '1k', max: 6, value: 4 },
+    { name: '2k', max: 6, value: 3.5 },
+    { name: '4k', max: 6, value: 3.5 },
+    { name: '8k', max: 6, value: 5 },
+    { name: '16k', max: 6, value: 4.5 },
   ];
 
   const hybridData = [
-    { name: '31', max: 100, value: 55 },
-    { name: '62', max: 100, value: 42 },
-    { name: '125', max: 100, value: 53 },
-    { name: '255', max: 100, value: 60 },
-    { name: '500', max: 100, value: 49 },
-    { name: '1k', max: 100, value: 45 },
-    { name: '2k', max: 100, value: 40 },
-    { name: '4k', max: 100, value: 50 },
-    { name: '8k', max: 100, value: 65 },
-    { name: '16k', max: 100, value: 55 },
+    { name: '31', max: 6, value: 3 },
+    { name: '62', max: 6, value: 3.5 },
+    { name: '125', max: 6, value: 3.5 },
+    { name: '250', max: 6, value: 3 },
+    { name: '500', max: 6, value: 3 },
+    { name: '1k', max: 6, value: 3 },
+    { name: '2k', max: 6, value: 3 },
+    { name: '4k', max: 6, value: 3 },
+    { name: '8k', max: 6, value: 3 },
+    { name: '16k', max: 6, value: 3 },
+  ];
+
+
+  const threeBearsOgData = [
+    { name: '31', max: 6, value: 3.8 },
+    { name: '62', max: 6, value: 3.8 },
+    { name: '125', max: 6, value: 3.6 },
+    { name: '250', max: 6, value: 3.4 },
+    { name: '500', max: 6, value: 3.2 },
+    { name: '1k', max: 6, value: 3.2 },
+    { name: '2k', max: 6, value: 3.0 },
+    { name: '4k', max: 6, value: 3.2 },
+    { name: '8k', max: 6, value: 3.2 },
+    { name: '16k', max: 6, value: 3.2 },
+  ];
+
+  const threeDCBDData = [
+    { name: '31', max: 6, value: 3.8 },
+    { name: '62', max: 6, value: 4.0 },
+    { name: '125', max: 6, value: 3.8 },
+    { name: '250', max: 6, value: 3.8 },
+    { name: '500', max: 6, value: 3.6 },
+    { name: '1k', max: 6, value: 3.3 },
+    { name: '2k', max: 6, value: 3.0 },
+    { name: '4k', max: 6, value: 3.0 },
+    { name: '8k', max: 6, value: 2.8 },
+    { name: '16k', max: 6, value: 3.1 },
   ];
 
   const [eqValues, setEqValues] = useState(defaultData);
@@ -177,6 +219,19 @@ const MobileApp = () => {
 
   const freshlyRolledBeats = [
     {
+      title: "4am",
+      artist: "Unknown",
+      image: FouramImage,
+      audioUrl: FourAm,
+      audioUrls: {
+        indica: FourAmIndica,
+        sativa: FourAmSativa,
+        hybrid: FourAmHybrid,
+        threedcbd: FourAm3dcbd,
+        threebearsog: FourAm3bearsog,
+      },
+    },
+    {
       title: "Own the Night",
       artist: "Unknown",
       image: OwnTheNightImage,
@@ -185,6 +240,8 @@ const MobileApp = () => {
         indica: OwnTheNightIndica,
         sativa: OwnTheNightSativa,
         hybrid: OwnTheNightHybrid,
+        threedcbd: OwnTheNight3dcbd,
+        threebearsog: OwnTheNight3bearsog,
       },
     },
     {
@@ -196,17 +253,8 @@ const MobileApp = () => {
         indica: KeepingItRealIndica,
         sativa: KeepingItRealSativa,
         hybrid: KeepingItRealHybrid,
-      },
-    },
-    {
-      title: "4am",
-      artist: "Unknown",
-      image: FouramImage,
-      audioUrl: FourAm,
-      audioUrls: {
-        indica: FourAmIndica,
-        sativa: FourAm,
-        hybrid: FourAmHybrid,
+        threedcbd: KeepingItReal3dcbd,
+        threebearsog: KeepingItReal3bearsog,
       },
     },
     {
@@ -218,6 +266,8 @@ const MobileApp = () => {
         indica: LeVibeIndica,
         sativa: LeVibeSativa,
         hybrid: LeVibeHybrid,
+        threedcbd: LeVibe3dcbd,
+        threebearsog: LeVibe3bearsog,
       },
     },
     {
@@ -227,8 +277,10 @@ const MobileApp = () => {
       audioUrl: GetOverIt,
       audioUrls: {
         indica: GetOverItIndica,
-        sativa: GetOverIt,
+        sativa: GetOverItSativa,
         hybrid: GetOverItHybrid,
+        threedcbd: GetOverIt3dcbd,
+        threebearsog: GetOverIt3bearsog,
       },
     },
     {
@@ -237,9 +289,11 @@ const MobileApp = () => {
       image: null,
       audioUrl: OverIt,
       audioUrls: {
-        indica: OverIt,
+        indica: OverItIndica,
         sativa: OverItSativa,
         hybrid: OverItHybrid,
+        threedcbd: OverIt3dcbd,
+        threebearsog: OverIt3bearsog,
       },
     },
   ];
@@ -322,19 +376,42 @@ const MobileApp = () => {
     { name: 'Funk Pulse', color: 'bg-yellow-500', image: 'nour-album' }
   ];
 
+  const typeToDataMap: { [key: string]: any } = {
+    'Indica': indicaData,
+    'Sativa': sativaData,
+    'Hybrid': hybridData,
+    '3D Cbd': threeDCBDData,
+    '3 Bears Og': threeBearsOgData,
+  };
+
   useEffect(() => {
     if (selectedCannabisType === "Indica") {
       setEqValues(indicaData);
     } else if (selectedCannabisType === "Sativa") {
-      setEqValues(sattivaData);
+      setEqValues(sativaData);
     } else if (selectedCannabisType === "Hybrid") {
       setEqValues(hybridData);
+    } else if (selectedCannabisType === "3D Cbd") {
+      setEqValues(threeDCBDData);
+    } else if (selectedCannabisType === "3 Bears Og") {
+      setEqValues(threeBearsOgData);
+    } else {
+      setEqValues(defaultData); // Fallback to default if no match
     }
 
     if (currentSong && Object.keys(audioRefs.current).length > 0) {
-      const variant = selectedCannabisType.toLowerCase() || 'indica';
+      // Normalize selected type to match audio variant keys
+      const variantMap: { [key: string]: string } = {
+        'Indica': 'indica',
+        'Sativa': 'sativa',
+        'Hybrid': 'hybrid',
+        '3D Cbd': 'threedcbd',
+        '3 Bears Og': 'threebearsog',
+      };
+      const variant = variantMap[selectedCannabisType] || 'indica';
       console.log('Switching to variant:', variant);
 
+      // Mute all audio elements except the selected variant
       Object.keys(audioRefs.current).forEach((v) => {
         if (audioRefs.current[v]) {
           audioRefs.current[v]!.muted = v !== variant;
@@ -347,6 +424,7 @@ const MobileApp = () => {
         setCurrentTime(currentTime);
         setDuration(activeAudio.duration || 0);
 
+        // Sync other variants to the same time
         Object.keys(audioRefs.current).forEach((v) => {
           if (v !== variant && audioRefs.current[v]) {
             audioRefs.current[v]!.currentTime = currentTime;
@@ -391,8 +469,15 @@ const MobileApp = () => {
     audioRefs.current = {};
 
     setTimeout(() => {
-      const variant = selectedCannabisType.toLowerCase() || 'indica';
-      const availableVariants = ['indica', 'sativa', 'hybrid'].filter(
+      const variantMap: { [key: string]: string } = {
+        'Indica': 'indica',
+        'Sativa': 'sativa',
+        'Hybrid': 'hybrid',
+        '3D Cbd': 'threedcbd',
+        '3 Bears Og': 'threebearsog',
+      };
+      const variant = variantMap[selectedCannabisType] || 'indica';
+      const availableVariants = ['indica', 'sativa', 'hybrid', 'threedcbd', 'threebearsog'].filter(
         (v) => song.audioUrls[v]
       );
 
@@ -406,44 +491,48 @@ const MobileApp = () => {
       const totalVariants = availableVariants.length;
 
       availableVariants.forEach((v) => {
-        const audio = audioRefs.current[v];
-        if (audio) {
-          audio.muted = v !== variant;
-          audio.currentTime = 0;
+        const audio = new Audio(song.audioUrls[v]);
+        audioRefs.current[v] = audio;
+        audio.muted = v !== variant;
+        audio.currentTime = 0;
 
-          const onCanPlay = () => {
-            console.log(`${v} can play for ${song.title}`);
-            loadedCount++;
-            if (loadedCount === totalVariants && audioRefs.current[v]) {
-              availableVariants.forEach((v2) => {
-                if (audioRefs.current[v2]) {
-                  audioRefs.current[v2]!.play().then(() => {
-                    if (v2 === variant) {
-                      setIsPlaying(true);
-                      setDuration(audioRefs.current[v2]!.duration || 0);
-                      console.log(`Playing ${v2} for ${song.title}`);
-                    }
-                  }).catch((error) => {
-                    console.error(`Play failed for ${v2} in ${song.title}:`, error);
-                    setIsPlaying(false);
-                  });
-                }
-              });
-            }
-            audio.removeEventListener('canplaythrough', onCanPlay);
-          };
+        const onCanPlay = () => {
+          console.log(`${v} can play for ${song.title}`);
+          loadedCount++;
+          if (loadedCount === totalVariants && audioRefs.current[v]) {
+            availableVariants.forEach((v2) => {
+              if (audioRefs.current[v2]) {
+                audioRefs.current[v2]!.play().then(() => {
+                  if (v2 === variant) {
+                    setIsPlaying(true);
+                    setDuration(audioRefs.current[v2]!.duration || 0);
+                    console.log(`Playing ${v2} for ${song.title}`);
+                  }
+                }).catch((error) => {
+                  console.error(`Play failed for ${v2} in ${song.title}:`, error);
+                  setIsPlaying(false);
+                });
+              }
+            });
+          }
+          audio.removeEventListener('canplaythrough', onCanPlay);
+        };
 
-          audio.addEventListener('canplaythrough', onCanPlay);
-          audio.load();
-        } else {
-          console.warn(`No audio element for ${v} in ${song.title}`);
-        }
+        audio.addEventListener('canplaythrough', onCanPlay);
+        audio.load();
       });
     }, 0);
   };
 
   const togglePlayPause = () => {
-    const variant = selectedCannabisType.toLowerCase() || 'indica';
+    const variantMap: { [key: string]: string } = {
+      'Indica': 'indica',
+      'Sativa': 'sativa',
+      'Hybrid': 'hybrid',
+      '3D Cbd': 'threedcbd',
+      '3 Bears Og': 'threebearsog',
+    };
+    const variant = variantMap[selectedCannabisType] || 'indica';
     const activeAudio = audioRefs.current[variant];
 
     if (activeAudio) {
@@ -504,6 +593,17 @@ const MobileApp = () => {
       setSelectedCannabisType(type);
       setEqActiveTab('Soundscape');
       setDemoStep(6);
+      setTimeout(() => {
+        setShowThankYouModal(true);
+      }, 3000);
+    } else if (demoStep === 6 && type === '3D Cbd') {
+      setSelectedCannabisType(type);
+      setEqActiveTab('Soundscape');
+      setDemoStep(7);
+    } else if (demoStep === 7 && type === '3 Bears Og') {
+      setSelectedCannabisType(type);
+      setEqActiveTab('Soundscape');
+      setDemoStep(8);
       setTimeout(() => {
         setShowThankYouModal(true);
       }, 3000);
@@ -591,7 +691,7 @@ const MobileApp = () => {
   };
 
   const renderDemoOverlay = () => {
-    if (demoStep === 0 || demoStep === 6) return null;
+    if (demoStep === 0 || demoStep >= 6) return null;
 
     let message, position;
     if (demoStep === 1) {
@@ -608,7 +708,13 @@ const MobileApp = () => {
       position = 'top-[420px] left-[110px]';
     } else if (demoStep === 5) {
       message = 'Feel the vibe shift again? Select Hybrid to let that hit';
-      position = 'top-[420px] left-[200px]';
+      position = 'top-[420px] left-[180px]';
+    } else if (demoStep === 6) {
+      message = 'Now try 3D Cbd for a unique vibe';
+      position = 'top-[420px] left-[180px]';
+    } else if (demoStep === 7) {
+      message = 'Finally, select 3 Bears Og to complete the experience';
+      position = 'top-[420px] left-[180px]';
     }
 
     return (
@@ -623,13 +729,9 @@ const MobileApp = () => {
             <div className={`${theme.bg} w-3 h-3 rotate-[40deg] mb-1 -mr-2 flex-shrink-0`} />
             <p className={`${theme.text} ${theme.bg} rounded-[8px] py-2 px-3 w-[96px]`}>{message}</p>
           </div>}
-          {(demoStep === 3 || demoStep === 4) && <div className='flex flex-col -ml-2.5'>
+          {(demoStep >= 3 && demoStep <= 7) && <div className='flex flex-col -ml-2.5'>
             <div className={`${theme.bg} w-3 h-3 rotate-45 -mb-2 ml-8`} />
-            <p className={`${theme.text} ${theme.bg} rounded-[8px] py-2 px-3 w-[150px]`}>{message}</p>
-          </div>}
-          {(demoStep === 5) && <div className='flex flex-col items-end -ml-[100px]'>
-            <div className={`${theme.bg} w-3 h-3 rotate-45 -mb-2 mr-6`} />
-            <p className={`${theme.text} ${theme.bg} rounded-[8px] py-2 px-3 w-[150px]`}>{message}</p>
+            <p className={`${theme.text} ${theme.bg} rounded-[8px] py-2 px-3 w-[150px] ${demoStep === 5 && '-ml-[70px]'}`}>{message}</p>
           </div>}
         </div>
       </div> : <div></div>
@@ -698,8 +800,8 @@ const MobileApp = () => {
 
         {eqActiveTab === 'Description' ? (
           <div className="h-[200px] overflow-y-auto scrollbar-none">
-            <h2 className={`${theme.text} text-xs font-semibold mb-1`}>3 Bears Og</h2>
-            <p className="text-purple-400 text-[10px] mb-3">indica</p>
+            <h2 className={`${theme.text} text-xs font-semibold mb-1`}>{selectedCannabisType || '3 Bears Og'}</h2>
+            <p className="text-purple-400 text-[10px] mb-3">{selectedCannabisType.toLowerCase() || 'indica'}</p>
 
             <div className="flex gap-4 mb-6 overflow-x-auto scrollbar-none">
               <div className="text-center">
@@ -726,18 +828,22 @@ const MobileApp = () => {
                 </div>
                 <p className={`${theme.text} text-[6px]`}>Creative</p>
               </div>
-              <div className="text-center">
-                <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center mb-2">
-                  <span className="text-2xl">💡</span>
-                </div>
-                <p className={`${theme.text} text-[6px]`}>Creative</p>
-              </div>
             </div>
 
             <h3 className={`${theme.text} text-xs font-bold mb-4`}>Sweet, Pungent, Earthy</h3>
 
             <p className={`${theme.textSecondary} text-[9px] leading-relaxed mb-6`}>
-              3 Bears OG by Mephisto Genetics is an excellent auto-cross of Bear OG x Karma OG. As a smaller autoflower, this makes it an excellent choice for beginner growers who prefer indica effects. This strain features a...
+              {selectedCannabisType === '3D Cbd'
+                ? '3D CBD is a high-CBD strain known for its therapeutic properties, offering a balanced and calming experience with minimal psychoactive effects. Ideal for relaxation and stress relief.'
+                : selectedCannabisType === '3 Bears Og'
+                  ? '3 Bears OG by Mephisto Genetics is an excellent auto-cross of Bear OG x Karma OG. As a smaller autoflower, this makes it an excellent choice for beginner growers who prefer indica effects.'
+                  : selectedCannabisType === 'Indica'
+                    ? 'Indica strains are known for their relaxing and sedative effects, perfect for unwinding or promoting sleep.'
+                    : selectedCannabisType === 'Sativa'
+                      ? 'Sativa strains provide uplifting and energizing effects, ideal for creativity and daytime use.'
+                      : selectedCannabisType === 'Hybrid'
+                        ? 'Hybrid strains offer a balanced mix of Indica and Sativa effects, catering to a variety of moods and experiences.'
+                        : 'Select a cannabis type to view its description.'}
             </p>
           </div>
         ) : (
@@ -749,20 +855,23 @@ const MobileApp = () => {
         )}
       </div>
 
-      <div className="flex justify-between mb-4 mx-3">
-        {['Indica', 'Sativa', 'Hybrid'].map((type) => (
-          <button
-            key={type}
-            onClick={() => handleCannabisTypeClick(type)}
-            className={`cursor-pointer px-5 py-[4px] rounded-full text-[10px] font-medium transition-colors ${selectedCannabisType === type
-              ? 'bg-purple-600 text-white'
-              : `${theme.cardBg} ${theme.textSecondary} ${theme.shadow}`
-              }`}
-          >
-            {type}
-          </button>
-        ))}
+      <div className='w-[95%] overflow-x-auto scrollbar-none '>
+        <div className="flex justify-between gap-3 mb-4 mx-3">
+          {['Indica', 'Sativa', 'Hybrid', '3D Cbd', '3 Bears Og'].map((type) => (
+            <button
+              key={type}
+              onClick={() => handleCannabisTypeClick(type)}
+              className={`cursor-pointer px-5 py-[4px] whitespace-nowrap rounded-full text-[10px] font-medium transition-colors ${selectedCannabisType === type
+                ? 'bg-purple-600 text-white'
+                : `${theme.cardBg} ${theme.textSecondary} ${theme.shadow}`
+                }`}
+            >
+              {type}
+            </button>
+          ))}
+        </div>
       </div>
+
 
       <div className={`flex flex-col justify-between ${theme.cardBg} ${theme.shadow} rounded-[12px] p-4 mb-6 mx-3`}>
         <div className='flex justify-between w-full'>
@@ -804,25 +913,28 @@ const MobileApp = () => {
           />
         </div>
 
-        <div className="flex justify-between mb-4 mx-3">
-          {['Indica', 'Sativa', 'Hybrid'].map((type) => (
-            <button
-              key={type}
-              onClick={() => {
-                setSelectedCannabisType(type);
-                setActiveTab('Sound (EQ)');
-                setSoundModalOpen(false);
-                setEqActiveTab('Soundscape');
-              }}
-              className={`cursor-pointer px-4 py-[4px] rounded-full text-[10px] font-medium transition-colors ${selectedCannabisType === type
-                ? 'bg-purple-600 text-white'
-                : `${theme.cardBg} ${theme.textSecondary}`
-                }`}
-            >
-              {type}
-            </button>
-          ))}
+        <div className='w-[95%] overflow-x-auto scrollbar-none'>
+          <div className="flex justify-between mb-4 mx-3">
+            {['Indica', 'Sativa', 'Hybrid', '3D Cbd', '3 Bears Og'].map((type) => (
+              <button
+                key={type}
+                onClick={() => {
+                  setSelectedCannabisType(type);
+                  setActiveTab('Sound (EQ)');
+                  setSoundModalOpen(false);
+                  setEqActiveTab('Soundscape');
+                }}
+                className={`cursor-pointer px-4 py-[4px] rounded-full whitespace-nowrap text-[10px] font-medium transition-colors ${selectedCannabisType === type
+                  ? 'bg-purple-600 text-white'
+                  : `${theme.cardBg} ${theme.textSecondary}`
+                  }`}
+              >
+                {type}
+              </button>
+            ))}
+          </div>
         </div>
+
 
         <div className="flex gap-2 overflow-x-auto scrollbar-none pl-3">
           {strainTags.map((strain, index) => (
@@ -1368,20 +1480,23 @@ const MobileApp = () => {
   return (
     <div className={`relative ${theme.bg} ${theme.text} max-w-md mx-auto ${stepsOpen ? ' overflow-hidden' : 'overflow-auto scrollbar-none'}`}>
       {currentSong && (
-        <div>
-          {['indica', 'sativa', 'hybrid'].map((variant) => (
-            currentSong.audioUrls[variant] && (
-              <audio
-                key={`${currentSong.title}-${variant}`}
-                ref={(el) => { audioRefs.current[variant] = el; }}
-                src={currentSong.audioUrls[variant]}
-                preload="auto"
-                muted={selectedCannabisType.toLowerCase() !== variant}
-                onError={(e) => console.error(`Error loading ${variant} for ${currentSong.title}:`, e)}
-              />
-            )
-          ))}
+        <div className='w-full overflow-x-auto scrollbar-none'>
+          <div>
+            {['indica', 'sativa', 'hybrid', 'threedcbd', 'threebearsog'].map((variant) => (
+              currentSong.audioUrls[variant] && (
+                <audio
+                  key={`${currentSong.title}-${variant}`}
+                  ref={(el) => { audioRefs.current[variant] = el; }}
+                  src={currentSong.audioUrls[variant]}
+                  preload="auto"
+                  muted={selectedCannabisType.toLowerCase() !== variant}
+                  onError={(e) => console.error(`Error loading ${variant} for ${currentSong.title}:`, e)}
+                />
+              )
+            ))}
+          </div>
         </div>
+
       )}
 
       <div className={`${theme.bg} sticky top-0 z-50 rounded-top-[40px] pl-[7%] pr-[5%] pt-1.5 flex justify-between items-center ${showNowPlaying && 'bg-gradient-to-b bg-green-900'}`}>

@@ -14,16 +14,17 @@ const CustomBarChart: React.FC<{ data: any }> = React.memo(({ data }) => {
       <YAxis
         axisLine={false}
         tickLine={false}
-        domain={[0, 100]}
+        domain={[0, 6]}
+        ticks={[0, 3, 6]}
         tickFormatter={(value) => {
           if (value === 0) return 'Low';
-          if (value === 50) return 'Mid';
-          if (value === 100) return 'High';
+          if (value === 3) return 'Mid';
+          if (value === 6) return 'High';
           return '';
         }}
         style={{ fontSize: '10px' }}
       />
-      <Bar dataKey="max" fill="#90EE90" isAnimationActive={false} radius={[10, 10, 10, 10]} className="value-bar" />
+      <Bar dataKey="max" fill="#9d9d9d" isAnimationActive={false} radius={[10, 10, 10, 10]} className="value-bar" />
       <Bar dataKey="value" fill="#9370DB" radius={[10, 10, 10, 10]} />
     </BarChart>
   );

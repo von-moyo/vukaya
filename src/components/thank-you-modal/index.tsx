@@ -27,7 +27,7 @@ const ThankYouModal: React.FC<ThankYouModalProps> = ({ isOpen, onClose }) => {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => { onClose(); }}
-            className="bg-black text-white px-6 py-4 rounded-lg font-semibold hover:bg-black/80 transition-colors flex items-center w-fit gap-1"
+            className="bg-black text-white sm:px-6 px-4 py-4 rounded-lg font-semibold hover:bg-black/80 transition-colors flex items-center w-fit gap-1 sm:text-base text-sm whitespace-nowrap"
           >
             {/* <IconApple size={16} color="white" /> */}
             <div className="flex flex-col leading-none">
@@ -39,7 +39,7 @@ const ThankYouModal: React.FC<ThankYouModalProps> = ({ isOpen, onClose }) => {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => { onClose(); }}
-            className="bg-black text-white px-6 py-4 rounded-lg font-semibold hover:bg-black/80 transition-colors flex items-center w-fit gap-1"
+            className="bg-black text-white sm:px-6 px-4 py-4 rounded-lg font-semibold hover:bg-black/80 transition-colors flex items-center w-fit gap-1 sm:text-base text-sm"
           >
             {/* <Headphones className='w-3.5 h-3.5' /> */}
             <div className="flex flex-col leading-none">
