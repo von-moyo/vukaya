@@ -53,6 +53,7 @@ const MobileApp = () => {
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
   const [showNowPlaying, setShowNowPlaying] = useState<boolean>(false);
+  const [showSearch, setShowSearch] = useState<boolean>(false);
   const [eqActiveTab, setEqActiveTab] = useState<string>('Soundscape');
   const [demoStep, setDemoStep] = useState(0); // 0: none, 1: click first song, 2: click Sound (EQ), 3: click cannabis type, 4: thank you modal
   const { showModal: showThankYouModal, setShowModal: setShowThankYouModal } = useModal();
@@ -174,6 +175,22 @@ const MobileApp = () => {
     'Blue Dream',
     'Purple Haze'
   ];
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredStrains, setFilteredStrains] = useState(['3 Bears Og', '3D Cbd']);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const term = e.target.value.toLowerCase();
+    setSearchTerm(term);
+    if (term === '') {
+      setFilteredStrains(['3 Bears Og', '3D Cbd']);
+    } else {
+      const filtered = ['3 Bears Og', '3D Cbd'].filter(strain =>
+        strain.toLowerCase().includes(term) && ['3D Cbd', '3 Bears Og'].includes(strain)
+      );
+      setFilteredStrains(filtered);
+    }
+  };
 
   const guidedSessions = [
     { title: 'Clear Start', rating: 4.8, gradient: 'from-yellow-400 via-pink-400 to-purple-500' },
@@ -764,6 +781,48 @@ const MobileApp = () => {
     </div>
   );
 
+  const renderSearchPage = () => (
+    <div className={`pt-4 h-[560px] ${theme.bg}`}>
+      <div className='flex gap-4 px-3 mb-4'>
+        <ArrowLeft className={`w-5 h-auto ${theme.text} cursor-pointer`} onClick={() => setShowSearch(false)} />
+        <div onClick={() => setShowSearch(true)} className={`${theme.input} rounded-[12px] px-4 py-3.5 flex items-center gap-2 w-full`}>
+          <input
+            type="text"
+            placeholder="Search Here"
+            className={`bg-transparent ${theme.text} text-[10px] flex-1 outline-none placeholder-${isOnDarkMode ? 'gray-400' : 'gray-500'}`}
+            onChange={handleSearchChange}
+          />
+        </div>
+      </div>
+      <div className={`mx-2 overflow-y-auto scrollbar-none`}>
+        {filteredStrains.map((strain) => (
+          <div
+            key={strain}
+            onClick={() => {
+              if (['3D Cbd', '3 Bears Og'].includes(strain)) {
+                handleCannabisTypeClick(strain);
+                setActiveTab('Sound (EQ)');
+                setSoundModalOpen(false);
+                setEqActiveTab('Soundscape');
+                setTimeout(() => {
+                  setShowSearch(false);
+                }, 1000);
+              }
+            }}
+            className={`${theme.text} border-b ${theme.border} px-2 py-2  text-[10px] whitespace-nowrap mb-2 cursor-pointer ${['3D Cbd', '3 Bears Og'].includes(strain)
+              ? selectedCannabisType === strain
+                ? 'bg-purple-600 text-white'
+                : `${theme.textSecondary}`
+              : `${theme.textSecondary} opacity-50 cursor-not-allowed`
+              }`}
+          >
+            {strain}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+
   const renderSoundEQPage = () => (
     <div className={`h-[515px] overflow-auto scrollbar-none ${theme.bg} ${currentSong && 'pb-8'}`}>
       <div className="flex items-center justify-between mb-6 px-3 pt-6">
@@ -773,12 +832,13 @@ const MobileApp = () => {
         </div>
       </div>
 
-      <div className={`${theme.input} rounded-[12px] px-4 py-3 mb-4 flex items-center gap-2 mx-3 ${theme.shadow}`}>
+      <div onClick={() => setShowSearch(true)} className={`${theme.input} rounded-[12px] px-4 py-3 mb-4 flex items-center gap-2 mx-3 ${theme.shadow}`}>
         <Search className={`w-4 h-4 ${theme.textTertiary}`} />
         <input
           type="text"
           placeholder="Search for a Cannabis Profile"
           className={`bg-transparent ${theme.text} text-[10px] flex-1 outline-none placeholder-${isOnDarkMode ? 'gray-400' : 'gray-500'}`}
+          onChange={handleSearchChange}
         />
       </div>
 
@@ -857,7 +917,7 @@ const MobileApp = () => {
 
       <div className='w-[95%] overflow-x-auto scrollbar-none '>
         <div className="flex justify-between gap-3 mb-4 mx-3">
-          {['Indica', 'Sativa', 'Hybrid', '3D Cbd', '3 Bears Og'].map((type) => (
+          {['Indica', 'Sativa', 'Hybrid'].map((type) => (
             <button
               key={type}
               onClick={() => handleCannabisTypeClick(type)}
@@ -904,18 +964,19 @@ const MobileApp = () => {
           </div>
         </div>
 
-        <div className={`${theme.input} rounded-[12px] px-4 py-3 mb-4 flex items-center gap-2 mx-3`}>
+        <div onClick={()=> setShowSearch(true)} className={`${theme.input} rounded-[12px] px-4 py-3 mb-4 flex items-center gap-2 mx-3`}>
           <Search className={`w-4 h-4 ${theme.textTertiary}`} />
           <input
             type="text"
             placeholder="Search"
             className={`bg-transparent ${theme.text} text-[10px] flex-1 outline-none placeholder-${isOnDarkMode ? 'gray-400' : 'gray-500'}`}
+            onChange={handleSearchChange}
           />
         </div>
 
         <div className='w-[95%] overflow-x-auto scrollbar-none'>
           <div className="flex justify-between mb-4 mx-3">
-            {['Indica', 'Sativa', 'Hybrid', '3D Cbd', '3 Bears Og'].map((type) => (
+            {['Indica', 'Sativa', 'Hybrid'].map((type) => (
               <button
                 key={type}
                 onClick={() => {
@@ -938,7 +999,15 @@ const MobileApp = () => {
 
         <div className="flex gap-2 overflow-x-auto scrollbar-none pl-3">
           {strainTags.map((strain, index) => (
-            <div key={index} className={`${theme.cardBg} ${theme.text} px-2 py-1 rounded-full text-[10px] whitespace-nowrap ${theme.shadow}`}>
+            <div onClick={() => {
+              handleCannabisTypeClick(strain);
+              setActiveTab('Sound (EQ)');
+              setSoundModalOpen(false);
+              setEqActiveTab('Soundscape');
+            }} key={index} className={`${theme.cardBg} ${theme.text} px-2 py-1 rounded-full text-[10px] whitespace-nowrap ${theme.shadow} ${selectedCannabisType === strain
+              ? 'bg-purple-600 text-white'
+              : `${theme.cardBg} ${theme.textSecondary}`
+              }`}>
               {strain}
             </div>
           ))}
@@ -1143,7 +1212,15 @@ const MobileApp = () => {
 
       <div className="flex gap-2 pl-2 pb-6 overflow-x-auto scrollbar-none">
         {strainTags.map((strain, index) => (
-          <div key={index} className={`${theme.cardBg} ${theme.text} ${theme.shadow} px-2 py-1 rounded-full whitespace-nowrap text-[9px]`}>
+          <div onClick={() => {
+            handleCannabisTypeClick(strain)
+            setActiveTab('Sound (EQ)');
+            setSoundModalOpen(false);
+            setEqActiveTab('Soundscape');
+          }} key={index} className={`${theme.cardBg} ${theme.text} ${theme.shadow} px-2 py-1 rounded-full whitespace-nowrap text-[9px] ${selectedCannabisType === strain
+            ? 'bg-purple-600 text-white'
+            : `${theme.cardBg} ${theme.textSecondary}`
+            }`}>
             {strain}
           </div>
         ))}
@@ -1512,7 +1589,9 @@ const MobileApp = () => {
 
       <div className="relative">
         {!showThankYouModal && renderDemoOverlay()}
-        {showNowPlaying ? renderNowPlayingScreen() : (
+        {showNowPlaying ? renderNowPlayingScreen() : showSearch ? (
+          renderSearchPage()
+        ) : (
           <>
             {activeTab === 'Home' ? renderHomeContent() : renderOtherContent(activeTab)}
 
